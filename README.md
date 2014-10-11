@@ -8,9 +8,9 @@ Download the application at http://rlvision.com/photosift
 * Developed with C#, targeting .Net 2.0
 * Multithreaded cache-ahead image loading
 * Various inspection tools (zoom, flip, rotate)
-* Rename or delete files when needed
-* Fullscreen mode for minimal distractions
-* Highly configurable
-* Portable
+* Support fullscreen and multiple monitors
+* Highly configurable using a propertygrid
+* Can rename and delete files if needed
+* Portable, settings are saved as XML in application folder
 
 <img src="http://rlvision.com/photosift/screenshot.png">
