@@ -105,8 +105,10 @@ namespace PhotoSift
 				AppSettings s = new AppSettings();
 				s.FileMode = FileOperations.Move;
 				s.ExistingFiles = ExistingFileOptions.Overwrite;
-				CopyMoveFile( u.dest, u.source, s, -1, false );	// move back file
-			}
+				CopyMoveFile( u.dest, u.source, s, -1, false ); // move back file
+                // implement minor delay as workaround for moved files being occasionally still locked by the AV
+                System.Threading.Thread.Sleep(100);
+            }
 			else if( u.mode == UndoMode.Rename )
 			{
 				RenameFile( u.dest, u.source, -1, false );	// rename back to original filename
