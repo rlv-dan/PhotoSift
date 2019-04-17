@@ -103,19 +103,34 @@ namespace PhotoSift
 		/// <param name="data">CachedImage object containg the filename to load</param>
 		static void LoadImage( object data )
 		{
-			try
-			{
-				CachedImage ci = (CachedImage)data;
+            bool done = false;
+            int retry = 0;
 
-				var ImageData = File.ReadAllBytes( ci.sFilename );
-				ci.img = Bitmap.FromStream( new MemoryStream( ImageData ) );
-			}
-			catch( Exception ex )
-			{
-				System.Console.WriteLine( "ImageCache ERROR: " + ex.ToString() );
-			}
-		}
+            do
+            {
+                try
+                {
+                    CachedImage ci = (CachedImage)data;
 
+                    var ImageData = File.ReadAllBytes(ci.sFilename);
+                    ci.img = Bitmap.FromStream(new MemoryStream(ImageData));
+                    done = true;
+                }
+                catch (Exception ex)
+                {
+                    System.Console.WriteLine("ImageCache ERROR: " + ex.ToString());
+                }
+
+                if (!done)
+                {
+                    retry++;
+                    System.Console.WriteLine(" failed to load image, attempting retry #" + retry);
+                    // minor delay as workaround for moved files being occasionally still locked by the AV
+                    System.Threading.Thread.Sleep(100);
+                    
+                }
+            } while ((retry < 10) && (done == false));
+        }
 	}
 
 	/// <summary>
