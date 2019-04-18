@@ -119,8 +119,19 @@ namespace PhotoSift
                 catch (Exception ex)
                 {
                     System.Console.WriteLine("ImageCache ERROR: " + ex.ToString());
-                }
+                    System.Console.WriteLine("ImageCache exception HResult: " + ex.HResult);
 
+                    // only attempt retries if the reason for the failure was a sharing violation
+                    // otherwise assume the error is permanent
+                    if (ex.HResult == unchecked((int)0x80070020)) // ERROR_SHARING_VIOLATION
+                    {
+                        System.Console.WriteLine(" ==> ERROR_SHARING_VIOLATION.");
+                    }
+                    else
+                    {
+                        done = true;
+                    }
+                }
                 if (!done)
                 {
                     retry++;
