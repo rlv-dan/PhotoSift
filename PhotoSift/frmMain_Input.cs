@@ -410,6 +410,14 @@ namespace PhotoSift
 
 
 		// -- Handle keys (except for shortcut keys handled by menu items) ------------------------------------------
+		private bool IsKeyDown(System.Windows.Input.Key key)
+		{
+			return System.Windows.Input.Keyboard.IsKeyDown(key);
+		}
+		private bool IsWindowsKeyPressed()
+		{
+			return IsKeyDown(System.Windows.Input.Key.LWin) || IsKeyDown(System.Windows.Input.Key.RWin);
+		}
 
 		private void frmMain_KeyUp( object sender, KeyEventArgs e )
 		{
@@ -418,7 +426,7 @@ namespace PhotoSift
 			// First process arrow keys (next/prev image) & delete since they can use Control/Shift/Alt
 			if( pics.Count > 0 )
 			{
-				if( !( e.Control && e.Shift ) )
+				if ( !( e.Control && e.Shift ) && !IsWindowsKeyPressed())
 				{
 					if( e.KeyCode == Keys.Right || e.KeyCode == Keys.Down || e.KeyCode == Keys.PageDown )	// forward
 					{
