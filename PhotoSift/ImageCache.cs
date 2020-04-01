@@ -103,19 +103,46 @@ namespace PhotoSift
 		/// <param name="data">CachedImage object containg the filename to load</param>
 		static void LoadImage( object data )
 		{
-			try
-			{
-				CachedImage ci = (CachedImage)data;
+            bool done = false;
+            int retry = 0;
 
-				var ImageData = File.ReadAllBytes( ci.sFilename );
-				ci.img = Bitmap.FromStream( new MemoryStream( ImageData ) );
-			}
-			catch( Exception ex )
-			{
-				System.Console.WriteLine( "ImageCache ERROR: " + ex.ToString() );
-			}
-		}
+            do
+            {
+                try
+                {
+                    CachedImage ci = (CachedImage)data;
 
+                    var ImageData = File.ReadAllBytes(ci.sFilename);
+                    ci.img = Bitmap.FromStream(new MemoryStream(ImageData));
+                    done = true;
+                }
+                catch (Exception ex)
+                {
+                    System.Console.WriteLine("ImageCache ERROR: " + ex.ToString());
+                    System.Console.WriteLine("ImageCache exception HResult: " + ex.HResult);
+
+                    // only attempt retries if the reason for the failure was a sharing violation
+                    // or a file not found error; otherwise assume the error is permanent
+                    if (ex.HResult == unchecked((int)0x80070020) ||
+                        ex.HResult == unchecked((int)0x80070002)) // ERROR_SHARING_VIOLATION or ERROR_FILE_NOT_FOUND
+                    {
+                        System.Console.WriteLine(" ==> ERROR_SHARING_VIOLATION.");
+                    }
+                    else
+                    {
+                        done = true;
+                    }
+                }
+                if (!done)
+                {
+                    retry++;
+                    System.Console.WriteLine(" failed to load image, attempting retry #" + retry);
+                    // minor delay as workaround for moved files being occasionally still locked by the AV
+                    System.Threading.Thread.Sleep(100);
+                    
+                }
+            } while ((retry < 10) && (done == false));
+        }
 	}
 
 	/// <summary>
