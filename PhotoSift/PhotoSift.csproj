@@ -88,6 +88,7 @@
       <DependentUpon>frmSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="ImageCache.cs" />
+    <Compile Include="WebPWrapper.cs" />
     <Compile Include="WinApi.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -124,6 +125,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="libwebp_x64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="libwebp_x86.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="PhotoSift.ico" />
   </ItemGroup>
   <ItemGroup>
