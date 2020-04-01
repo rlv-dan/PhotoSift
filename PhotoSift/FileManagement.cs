@@ -23,7 +23,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using System.IO;
-
+using Microsoft.VisualBasic.FileIO;
 
 namespace PhotoSift
 {
@@ -226,7 +226,7 @@ namespace PhotoSift
 					if( sendToRecycleBin )
 					{
 						Console.WriteLine( "[RECYCLE] " + filePath );
-						winApi.Recycle( filePath );
+						MoveToRecycle( filePath );
 						AddToUndo( filePath, "", UndoMode.Delete, picIndex );
 					}
 					else
@@ -241,14 +241,18 @@ namespace PhotoSift
 				}
 			} ).Start();	// start thread
 		}
-		private void Undelete( string fileName )
+		private void Undelete(string filePath)
 		{
-			if( !winApi.Restore( fileName ) )
+			if( !winApi.Restore(filePath) )
 			{
-				MessageBox.Show( "Could not restore " + fileName + "...", "Undelete Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
+				MessageBox.Show( "Could not restore " + filePath + "...", "Undelete Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
 			}
 			
 		}
 
+		private void MoveToRecycle(string filePath)
+		{
+			FileSystem.DeleteFile(filePath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+		}
 	}
 }
