@@ -242,10 +242,24 @@ namespace PhotoSift
 			}
 		}
 
-		// Add file to the image pool
-		private bool AddFiles( string[] files )
+		private readonly string[] allowsExts =
 		{
-			if( files.Length == 0 ) return false;
+			".jpg",
+			".jpeg",
+			".tif",
+			".tiff",
+			".png",
+			".gif",
+			".bmp",
+			".ico",
+			".wmf",
+			".emf",
+			".webp"
+		};
+		// Add file to the image pool
+		private bool AddFiles( string[] items )
+		{
+			if( items.Length == 0 ) return false;
 
 			HaltAutoAdvance();
 			this.Text = lblHeader.Text = "Loading...";
@@ -254,22 +268,20 @@ namespace PhotoSift
 
 			// validate files to add
 			List<string> newPics = new List<string>();
-			foreach( string f in files )
+			foreach ( string item in items )
 			{
-				if( System.IO.Directory.Exists( f ) )
+				if( System.IO.Directory.Exists( item ) ) // is Directory
 				{
-					foreach( string f2 in System.IO.Directory.GetFiles( f, "*.*", System.IO.SearchOption.AllDirectories ) )
+					foreach( string file in System.IO.Directory.GetFiles( item, "*.*", System.IO.SearchOption.AllDirectories ) )
 					{
-						string tmp = f2.ToLower();
-						if( tmp.EndsWith( ".jpg" ) || tmp.EndsWith( ".jpeg" ) || tmp.EndsWith( ".tif" ) || tmp.EndsWith( ".tiff" ) || tmp.EndsWith( ".png" ) || tmp.EndsWith( ".gif" ) || tmp.EndsWith( ".bmp" ) || tmp.EndsWith( ".ico" ) || tmp.EndsWith( ".wmf" ) || tmp.EndsWith( ".emf" ) )
-							newPics.Add( f2 );
+						if (Array.IndexOf(allowsExts, Path.GetExtension(file).ToLower()) >= 0)
+							newPics.Add( file );
 					}
 				}
-				else if( System.IO.File.Exists( f ) )
+				else if( System.IO.File.Exists( item ) ) // is File
 				{
-					string tmp = f.ToLower();
-					if( tmp.EndsWith( ".jpg" ) || tmp.EndsWith( ".jpeg" ) || tmp.EndsWith( ".tif" ) || tmp.EndsWith( ".tiff" ) || tmp.EndsWith( ".png" ) || tmp.EndsWith( ".gif" ) || tmp.EndsWith( ".bmp" ) || tmp.EndsWith( ".ico" ) || tmp.EndsWith( ".wmf" ) || tmp.EndsWith( ".emf" ) )
-						newPics.Add( f );
+					if (Array.IndexOf(allowsExts, Path.GetExtension(item).ToLower()) >= 0)
+						newPics.Add( item );
 				}
 
 			}

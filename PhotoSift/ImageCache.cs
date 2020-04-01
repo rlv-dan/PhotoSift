@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 using System.IO;
+using WebPWrapper;
 
 namespace PhotoSift
 {
@@ -109,10 +110,16 @@ namespace PhotoSift
             {
                 try
                 {
-                    CachedImage ci = (CachedImage)data;
+					CachedImage ci = (CachedImage)data;
 
-                    var ImageData = File.ReadAllBytes(ci.sFilename);
-                    ci.img = Bitmap.FromStream(new MemoryStream(ImageData));
+					if (Path.GetExtension(ci.sFilename) == ".webp")
+					{
+						using (WebP webp = new WebP())
+							ci.img = webp.Load(ci.sFilename);
+					}
+					else
+						ci.img = Image.FromFile(ci.sFilename);
+
                     done = true;
                 }
                 catch (Exception ex)
