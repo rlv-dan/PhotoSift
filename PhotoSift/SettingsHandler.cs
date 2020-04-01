@@ -18,8 +18,6 @@
  * */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 using System.IO;
 using System.Windows.Forms;
@@ -27,10 +25,10 @@ using System.Drawing;
 
 namespace PhotoSift
 {
-	/// <summary>
-	/// Helper class for managing settings.
-	/// </summary>
-	public static class SettingsHandler
+    /// <summary>
+    /// Helper class for managing settings.
+    /// </summary>
+    public static class SettingsHandler
 	{
 		public static string SettingsFile = Path.GetDirectoryName(Application.ExecutablePath) + System.IO.Path.DirectorySeparatorChar + "Settings.xml";
 

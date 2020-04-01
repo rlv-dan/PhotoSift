@@ -19,17 +19,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Reflection;
 
 namespace PhotoSift
 {
-	/// <summary>
-	/// This class contains various static methods of generic kind
-	/// </summary>
-	public static class Util
+    /// <summary>
+    /// This class contains various static methods of generic kind
+    /// </summary>
+    public static class Util
 	{
 		public static void CenterControl( Control ctl, int yOffset = 0 )
 		{

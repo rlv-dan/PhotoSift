@@ -18,11 +18,8 @@
  * */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Threading;
 using System.IO;
 using System.Linq;
 using Shell32; //Reference Microsoft Shell Controls And Automation on the COM tab.

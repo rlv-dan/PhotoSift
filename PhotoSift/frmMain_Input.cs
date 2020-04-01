@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
@@ -27,11 +26,11 @@ using System.Reflection;
 
 namespace PhotoSift
 {
-	/// <summary>
-	/// This "partial" collects all input related code for the main form:
-	/// Mouse event, keyboard events & clicking menu items
-	/// </summary>
-	public partial class frmMain : Form
+    /// <summary>
+    /// This "partial" collects all input related code for the main form:
+    /// Mouse event, keyboard events & clicking menu items
+    /// </summary>
+    public partial class frmMain : Form
 	{
 
 		// -- Handle Menu Items -------------------------------------------------------------------------------------

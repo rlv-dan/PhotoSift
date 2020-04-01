@@ -19,19 +19,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using System.Threading;
 using System.IO;
 
 namespace PhotoSift
 {
-	/// <summary>
-	/// Simple class for keeping an image cache
-	/// Images are loaded in a separate thread
-	/// Note that caching must be manually handled by the user by loading and dropping images
-	/// </summary>
-	class ImageCache
+    /// <summary>
+    /// Simple class for keeping an image cache
+    /// Images are loaded in a separate thread
+    /// Note that caching must be manually handled by the user by loading and dropping images
+    /// </summary>
+    class ImageCache
 	{
 		private Dictionary<string, CachedImage> cache;
 		

@@ -18,20 +18,15 @@
  * */
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Globalization;
-using System.Drawing.Design;
-using System.Windows.Forms.Design;
 
 namespace PhotoSift
 {
-	public partial class frmSettings : Form
+    public partial class frmSettings : Form
 	{
 		AppSettings settings;
 

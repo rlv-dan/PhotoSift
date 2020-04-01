@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using System.IO;
@@ -27,10 +26,10 @@ using Microsoft.VisualBasic.FileIO;
 
 namespace PhotoSift
 {
-	/// <summary>
-	/// Contains methods to copy/move/delete files as well as undo previous operations
-	/// </summary>
-	public class FileManagement
+    /// <summary>
+    /// Contains methods to copy/move/delete files as well as undo previous operations
+    /// </summary>
+    public class FileManagement
 	{
 		private WinApi winApi;
 		private frmMain mainForm;

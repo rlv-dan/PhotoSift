@@ -18,8 +18,6 @@
  * */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
@@ -28,10 +26,10 @@ using System.Xml.Serialization;
 
 namespace PhotoSift
 {
-	/// <summary>
-	/// Contains all PhotoSift settings. Most attributes control appearance in the PropertyGrid in frmSettings.
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// Contains all PhotoSift settings. Most attributes control appearance in the PropertyGrid in frmSettings.
+    /// </summary>
+    [Serializable]
 	[DefaultPropertyAttribute( "FileMode" )]
 	public class AppSettings
 	{
