@@ -452,25 +452,25 @@ namespace PhotoSift
 					}
 					else if( e.KeyCode == Keys.Delete )		// Delete
 					{
-						if( !e.Control )	// Cntr+Del --> only remove from list
+						string DropPicPath = pics[iCurrentPic];
+						int DropPicIndex = iCurrentPic;
+						ShowNextPic(settings.OnDeleteStepForward ? 1 : -1);
+
+						if ( !e.Control )	// Ctrl+Del --> only remove from list
 						{
-							if( e.Shift ) fileManagement.DeleteFile( pics[iCurrentPic], false, iCurrentPic );	// Shift+Del --> force delete
-							else if( e.Alt ) fileManagement.DeleteFile( pics[iCurrentPic], true, iCurrentPic );	// Alt+Del --> force recycle
-							else if( settings.DeleteMode == DeleteOptions.RecycleBin ) fileManagement.DeleteFile( pics[iCurrentPic], true, iCurrentPic );
-							else if( settings.DeleteMode == DeleteOptions.Delete ) fileManagement.DeleteFile( pics[iCurrentPic], false, iCurrentPic );
+							if( e.Shift ) fileManagement.DeleteFile(DropPicPath, false, DropPicIndex);	// Shift+Del --> force delete
+							else if( e.Alt ) fileManagement.DeleteFile( DropPicPath, true, DropPicIndex );	// Alt+Del --> force recycle
+							else if( settings.DeleteMode == DeleteOptions.RecycleBin ) fileManagement.DeleteFile( DropPicPath, true, DropPicIndex );
+							else if( settings.DeleteMode == DeleteOptions.Delete ) fileManagement.DeleteFile( DropPicPath, false, DropPicIndex );
 							else if( settings.DeleteMode == DeleteOptions.RemoveFromList ) { } // do nothing
 						}
 
 						Console.WriteLine( ">--> REMOVE FROM LIST" );
-						picCurrent.Image = null;
-						imageCache.DropImage( pics[iCurrentPic] );
-						pics.RemoveAt( iCurrentPic );
-						if( settings.DeleteMode != DeleteOptions.RemoveFromList ) settings.Stats_DeletedPics++;
+						imageCache.DropImage( DropPicPath );
+						pics.RemoveAt( DropPicIndex );
+						iCurrentPic--;
+						if ( settings.DeleteMode != DeleteOptions.RemoveFromList ) settings.Stats_DeletedPics++;
 
-						if( settings.OnDeleteStepForward )
-							ShowNextPic( 0 );
-						else
-							ShowNextPic( -1 );
 						e.Handled = true;
 					}
 				}
