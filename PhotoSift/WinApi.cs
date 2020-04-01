@@ -241,7 +241,7 @@ namespace PhotoSift
 					string FilePath = Recycler.GetDetailsOf( FI, 1 );
 					if( Item == Path.Combine( FilePath, FileName ) )
 					{
-						DoVerb( FI, "ESTORE" );
+						DoVerb( FI, "&E" ); // "R&estore", "还原(&E)", etc.
 						success = true;
 						break;
 					}
