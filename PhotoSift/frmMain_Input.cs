@@ -24,7 +24,6 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
-using Shell32;
 
 namespace PhotoSift
 {
@@ -94,7 +93,7 @@ namespace PhotoSift
 		{
 			ForceShowFullscreenCursor();
 
-			string path = FolderBrowserDialogAPI("Select a folder with images to add:");
+			string path = winApi.FolderBrowserDialogAPI("Select a folder with images to add:");
 			if (path != "")
 			{
 				panelMain.Cursor = Cursors.WaitCursor;
@@ -151,23 +150,11 @@ namespace PhotoSift
 
 		private void mnuSetTargetFolder_Click(object sender, EventArgs e)
 		{
-			string path = FolderBrowserDialogAPI();
+			string path = winApi.FolderBrowserDialogAPI();
 			if (path != "")
 			{
 				settings.TargetFolder = path;
 			}
-		}
-
-		private string FolderBrowserDialogAPI(string title = "Select a folder:")
-		{
-			const int BIF_NEWDIALOGSTYLE = 0x40;
-			const int BIF_VALIDATE = 0x20;
-			const int BIF_EDITBOX = 0x10; // Does not exist in FolderBrowserDialog()
-			const int OPTIONS = BIF_NEWDIALOGSTYLE + BIF_VALIDATE + BIF_EDITBOX;
-			var shell = new Shell();
-			var folder = (Folder2)shell.BrowseForFolder(System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle.ToInt32(), title, OPTIONS);
-			if (folder == null) return "";
-			return folder.Self.Path;
 		}
 
 		private void mnuHideMenu_Click( object sender, EventArgs e )
