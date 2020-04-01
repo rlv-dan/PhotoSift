@@ -52,9 +52,17 @@ namespace PhotoSift
 		public DeleteOptions DeleteMode { get; set; }
 		[Category(" File Operations"), DisplayName("Target Folder"), DescriptionAttribute("Move to the target folder.")]
 		[EditorAttribute(typeof(FolderNameEditor), typeof(UITypeEditor))]
-		public string TargetFolder { get; set; }
+		public string TargetFolderPath { get; set; }
+		[System.Xml.Serialization.XmlIgnore]
+		[Browsable(false)]
+		public string TargetFolder
+		{
+			get => this.TargetFolderPath.Replace("%PhotoSift%",
+					System.Windows.Forms.Application.StartupPath);
+			set => this.TargetFolderPath = SaveRelativePaths ? value.Replace(System.Windows.Forms.Application.StartupPath,
+						   "%PhotoSift%") : value;
+		}
 
-	
 		// Appearance Group
 #if RLVISION
 		[Category( "Appearance" ), DisplayName( "Background color" ), DescriptionAttribute( "Sets the window background color." )]
@@ -320,6 +328,11 @@ namespace PhotoSift
 		public string KeyFolder_9 { get; set; }
 
 
+		// Misc settings
+		[Category("Controls"), DisplayName("Save relative paths"), DescriptionAttribute("Save the path relative to the location of the program, for paths such as the target folder.")]
+		public bool SaveRelativePaths { get; set; }
+
+
 		// Settings located on the GUI menus (not visible in the property grid)
 		[Browsable( false )]
 		public bool AddInRandomOrder { get; set; }
@@ -415,6 +428,9 @@ namespace PhotoSift
 #endif
 			// System Group
 			PreventSleep = false;
+
+			// Misc
+			SaveRelativePaths = true;
 
 			// GUI settings
 			TargetFolder = System.IO.Path.GetDirectoryName( System.Windows.Forms.Application.ExecutablePath );
