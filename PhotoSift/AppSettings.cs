@@ -331,6 +331,8 @@ namespace PhotoSift
 		public Rectangle FormRect_Main { get; set; }
 		[Browsable( false )]
 		public Rectangle FormRect_Settings { get; set; }
+		[Browsable(false)]
+		public System.Windows.Forms.FormWindowState WindowState { get; set; }
 
 		[Browsable( false )]
 		public string LastFolder_AddFolder { get; set; }
