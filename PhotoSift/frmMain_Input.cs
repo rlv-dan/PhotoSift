@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using Shell32;
 
 namespace PhotoSift
 {
@@ -89,23 +90,19 @@ namespace PhotoSift
 			HideFullscreenForcedCursor();
 		}
 
-		private void mnuAddFolder_Click( object sender, EventArgs e )
+		private void mnuAddFolder_Click(object sender, EventArgs e)
 		{
 			ForceShowFullscreenCursor();
 
-			FolderBrowserDialog fb = new FolderBrowserDialog();
-			fb.Description = "Select a folder with images to add:";
-			fb.SelectedPath = settings.LastFolder_AddFolder;
-			fb.ShowDialog();
-			if( fb.SelectedPath != "" )
+			string path = FolderBrowserDialogAPI("Select a folder with images to add:");
+			if (path != "")
 			{
 				panelMain.Cursor = Cursors.WaitCursor;
-				AddFiles( new string[] { fb.SelectedPath } );
-				settings.LastFolder_AddFolder = fb.SelectedPath;
+				AddFiles(new string[] { path });
+				settings.LastFolder_AddFolder = path;
 				panelMain.Cursor = Cursors.Arrow;
 			}
 			HideFullscreenForcedCursor();
-
 		}
 
 		private void mnuAddInRandomOrder_Click( object sender, EventArgs e )
@@ -152,16 +149,25 @@ namespace PhotoSift
 			}
 		}
 
-		private void mnuSetTargetFolder_Click( object sender, EventArgs e )
+		private void mnuSetTargetFolder_Click(object sender, EventArgs e)
 		{
-			FolderBrowserDialog fb = new FolderBrowserDialog();
-			fb.Description = "Select a folder:";
-			fb.SelectedPath = settings.TargetFolder;
-			fb.ShowDialog();
-			if( fb.SelectedPath != "" )
+			string path = FolderBrowserDialogAPI();
+			if (path != "")
 			{
-				settings.TargetFolder = fb.SelectedPath;
+				settings.TargetFolder = path;
 			}
+		}
+
+		private string FolderBrowserDialogAPI(string title = "Select a folder:")
+		{
+			const int BIF_NEWDIALOGSTYLE = 0x40;
+			const int BIF_VALIDATE = 0x20;
+			const int BIF_EDITBOX = 0x10; // Does not exist in FolderBrowserDialog()
+			const int OPTIONS = BIF_NEWDIALOGSTYLE + BIF_VALIDATE + BIF_EDITBOX;
+			var shell = new Shell();
+			var folder = (Folder2)shell.BrowseForFolder(System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle.ToInt32(), title, OPTIONS);
+			if (folder == null) return "";
+			return folder.Self.Path;
 		}
 
 		private void mnuHideMenu_Click( object sender, EventArgs e )
