@@ -50,6 +50,9 @@ namespace PhotoSift
 		[Category( " File Operations" ), DisplayName( "Delete mode" ), DescriptionAttribute( "Determines the action to take when pressing the delete key. You can force different modes with Shift+Del (Delete), Alt+Del (Recycle) and Ctrl+Del (Remove from List)" )]
 		[TypeConverter( typeof( EnumTypeConverter ) )]
 		public DeleteOptions DeleteMode { get; set; }
+		[Category(" File Operations"), DisplayName("Target Folder"), DescriptionAttribute("Move to the target folder.")]
+		[EditorAttribute(typeof(FolderNameEditor), typeof(UITypeEditor))]
+		public string TargetFolder { get; set; }
 
 	
 		// Appearance Group
@@ -320,8 +323,6 @@ namespace PhotoSift
 		// Settings located on the GUI menus (not visible in the property grid)
 		[Browsable( false )]
 		public bool AddInRandomOrder { get; set; }
-		[Browsable( false )]
-		public string TargetFolder { get; set; }
 		[Browsable( false )]
 		public bool ResetViewModeOnPictureChange { get; set; }
 
