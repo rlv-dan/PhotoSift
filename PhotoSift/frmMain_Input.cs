@@ -505,6 +505,9 @@ namespace PhotoSift
 				}
 			}
 
+			if (e.Control && e.KeyCode == Keys.NumPad0) // allow both
+				mnuClearImages_Click(this, e);
+
 #if RLVISION
 			if( e.Control && e.KeyCode == Keys.N )
 			{

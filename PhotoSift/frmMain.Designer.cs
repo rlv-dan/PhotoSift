@@ -568,7 +568,7 @@
 			// mnuClearImages
 			// 
 			this.mnuClearImages.Name = "mnuClearImages";
-			this.mnuClearImages.Size = new System.Drawing.Size(220, 22);
+            this.mnuClearImages.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D0)));
 			this.mnuClearImages.Text = "Clear";
 			this.mnuClearImages.Click += new System.EventHandler(this.mnuClearImages_Click);
 			// 
