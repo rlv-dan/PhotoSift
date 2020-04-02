@@ -48,7 +48,7 @@ namespace PhotoSift
 		[Category( " File Operations" ), DisplayName( "Delete mode" ), DescriptionAttribute( "Determines the action to take when pressing the delete key. You can force different modes with Shift+Del (Delete), Alt+Del (Recycle) and Ctrl+Del (Remove from List)" )]
 		[TypeConverter( typeof( EnumTypeConverter ) )]
 		public DeleteOptions DeleteMode { get; set; }
-		[Category(" File Operations"), DisplayName("Target Folder"), DescriptionAttribute("Move to the target folder.")]
+		[Category(" File Operations"), DisplayName("Target base folder"), DescriptionAttribute("Target base folder. %PhotoSift% will be replaced with the location of the software")]
 		[EditorAttribute(typeof(FolderNameEditor), typeof(UITypeEditor))]
 		public string TargetFolderPath { get; set; }
 		[System.Xml.Serialization.XmlIgnore]
