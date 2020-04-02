@@ -366,7 +366,7 @@ namespace PhotoSift
 				else
 					SetScaleMode( CurrentScaleMode, false );			// keep current view mode
 
-				if( TransformedImage != null ) TransformedImage.Dispose();
+				TransformedImage?.Dispose();
 				TransformedImage = null;
 
 			}
