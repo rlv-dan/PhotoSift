@@ -20,7 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Threading;
+using System.Threading.Tasks;
 using System.IO;
 using WebPWrapper;
 
@@ -48,20 +48,14 @@ namespace PhotoSift
 		/// <returns>Requested image</returns>
 		public Image GetImage( string sFilename )
 		{
-			if( !cache.ContainsKey( sFilename ) )
-			{
-				// Need to load from disk
-				CacheImage( sFilename );
-			}
+			// Check and fill the cache
+			CacheImage( sFilename );
 
 			if( cache.ContainsKey( sFilename ) )
 			{
 				CachedImage ci = cache[sFilename];
-				if( ci.LoadingThread != null )
-				{
-					ci.LoadingThread.Join();	// need to wait for loading thread to finish
-					return ci.img;
-				}
+				ci.LoadingTask?.Wait();
+				return ci.img;
 			}
 
 			return null;
@@ -79,8 +73,7 @@ namespace PhotoSift
 				cache.Add( sFilename, ci );
 
 				// Start loading in a separate thread
-				ci.LoadingThread = new Thread( new ParameterizedThreadStart( LoadImage ) );
-				ci.LoadingThread.Start( ci );
+				ci.LoadingTask = Task.Run(() => LoadImage(ci));
 			}
 		}
 
@@ -101,7 +94,7 @@ namespace PhotoSift
 		/// Loads an image from disk into the supplied CachedImage object
 		/// </summary>
 		/// <param name="data">CachedImage object containg the filename to load</param>
-		static void LoadImage( object data )
+		private static void LoadImage( object data )
 		{
             bool done = false;
             int retry = 0;
@@ -158,13 +151,13 @@ namespace PhotoSift
 	{
 		public string sFilename { get; set; }
 		public Image img { get; set; }
-		public Thread LoadingThread { get; set; }
+		public Task LoadingTask { get; set; }
 
 		public CachedImage( string filename )
 		{
 			sFilename = filename;
 			img = null;
-			LoadingThread = null;
+			LoadingTask = null;
 		}
 	}
 }
