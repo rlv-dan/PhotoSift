@@ -327,13 +327,17 @@ namespace PhotoSift
 		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
 		public string KeyFolder_9 { get; set; }
 
+		// Cache settings
+		[Category("Cache"), DisplayName("Cache Ahead (earlier)"), DescriptionAttribute("Pre-reading x pictures earlier than the current image in image pool.")]
+		public int CacheAhead { get; set; }
+		[Category("Cache"), DisplayName("Cache Behind (later)"), DescriptionAttribute("Pre-reading x pictures later than the current image in image pool.")]
+		public int CacheBehind { get; set; }
 
 		// Misc settings
 		[Category("Misc"), DisplayName("Copy action"), DescriptionAttribute("Sets the action type when you press Ctrl+C or click the \"Copy to clipboard\" menu in this software.")]
 		public CopytoClipboardOptions CopyActionType { get; set; }
 		[Category("Misc"), DisplayName("Save relative paths"), DescriptionAttribute("Save the path relative to the location of the program, for paths such as the target folder.")]
 		public bool SaveRelativePaths { get; set; }
-
 
 		// Settings located on the GUI menus (not visible in the property grid)
 		[Browsable( false )]
@@ -360,11 +364,6 @@ namespace PhotoSift
 
 		[Browsable( false )]
 		public int FullscreenCursorAutoHideTime { get; set; }
-
-		[Browsable( false )]
-		public int CacheAhead { get; set; }
-		[Browsable( false )]
-		public int CacheBehind { get; set; }
 
 		[Browsable( false )]
 		public DateTime Stats_FirstLaunchDate { get; set; }
