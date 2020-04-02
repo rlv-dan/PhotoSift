@@ -439,7 +439,7 @@ namespace PhotoSift
 			CopyActionType = CopytoClipboardOptions.Bitmap;
 
 			// GUI settings
-			TargetFolder = System.IO.Path.GetDirectoryName( System.Windows.Forms.Application.ExecutablePath );
+			TargetFolder = System.Windows.Forms.Application.StartupPath;
 			AddInRandomOrder = false;
 
 			// Hidden settings
