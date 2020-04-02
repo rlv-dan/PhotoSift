@@ -157,6 +157,8 @@ namespace PhotoSift
 		[Category( "Controls" ), DisplayName( "Long jump" ), DescriptionAttribute( "Number of images to skip when doing a long jump. Long jump is invoked by holding Shift and pressing Left/Right." )]
 		public int LargeJump { get; set; }
 
+		[Category("Controls"), DisplayName("Confirm to clear queue if images exceed"), DescriptionAttribute("Confirm to clear queue if the number of images in the queue exceeds this value.")]
+		public long WarnThresholdOnClearQueue { get; set; }
 		[Category( "Controls" ), DisplayName( "Escape to exit" ), DescriptionAttribute( "Allows you to exit the program by pressing the escape key. In fullscreen, escape always reverts back to window mode." )]
 		public bool CloseOnEscape { get; set; }
 
@@ -407,6 +409,7 @@ namespace PhotoSift
 			// Controls Group
 			MediumJump = 10;
 			LargeJump = 25;
+			WarnThresholdOnClearQueue = 20;
 			CloseOnEscape = false;
 			OnDeleteStepForward = true;
 			AutoAdvanceInterval = 4.5;
