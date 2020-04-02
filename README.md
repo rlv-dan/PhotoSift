@@ -5,7 +5,7 @@ PhotoSift is a free utility helping you to quickly organize unsorted image libra
 
 Download the application at http://rlvision.com/photosift
 
-* Developed with C#, targeting .Net 2.0
+* Developed with C#, targeting .NET 3.0
 * Multithreaded cache-ahead image loading
 * Various inspection tools (zoom, flip, rotate)
 * Support fullscreen and multiple monitors

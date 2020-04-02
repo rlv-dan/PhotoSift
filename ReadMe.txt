@@ -180,9 +180,9 @@
 
 --- Requirements --------------------------------------------------------------
 
-  To run PhotoSift you need the ".Net Framework 2.0". If you get the error 
+  To run PhotoSift you need the ".NET Framework 3.0" or later. If you get the error 
   message "The application failed to initialize properly (0xc0000135)" 
-  this means you don't have .Net 2.0 installed.
+  this means you don't have .NET 2.0 installed.
 
   .Net 2.0 is preinstalled on Windows XP (SP3), Vista & 7. Windows 8+ users 
   might need to download or enable it first. Usually Windows will detect and 
