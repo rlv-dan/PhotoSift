@@ -190,11 +190,6 @@ namespace PhotoSift
 
 			if( bFullScreen || this.WindowState == FormWindowState.Maximized)
 				settings.FormRect_Main = new Rectangle( NormalWindowStateFormRect.Left, NormalWindowStateFormRect.Top, NormalWindowStateFormRect.Width, NormalWindowStateFormRect.Height );
-			else if (this.WindowState == FormWindowState.Maximized)
-			{
-				settings.WindowState = this.WindowState;
-				settings.FormRect_Main = new Rectangle(NormalWindowStateFormRect.Left, NormalWindowStateFormRect.Top, NormalWindowStateFormRect.Width, NormalWindowStateFormRect.Height);
-			}
 			else
 				settings.FormRect_Main = new Rectangle( this.Left, this.Top, this.Width, this.Height );
 			SettingsHandler.SaveAppSettings( settings );
