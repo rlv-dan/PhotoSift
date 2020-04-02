@@ -554,7 +554,7 @@
 			this.mnuAddImages.Name = "mnuAddImages";
 			this.mnuAddImages.ShortcutKeys = System.Windows.Forms.Keys.Insert;
 			this.mnuAddImages.Size = new System.Drawing.Size(220, 22);
-			this.mnuAddImages.Text = "Add  Images";
+			this.mnuAddImages.Text = "Add Images";
 			this.mnuAddImages.Click += new System.EventHandler(this.mnuAddImages_Click);
 			// 
 			// mnuAddFolder
