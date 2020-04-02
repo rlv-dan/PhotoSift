@@ -341,6 +341,7 @@ namespace PhotoSift
 			try
 			{
 				picCurrent.Image = imageCache.GetImage( pics[iCurrentPic] );
+				if (picCurrent.Image == null) throw new Exception("Loading image fail: " + pics[iCurrentPic]);
 
 				CurrentAspectRatio = (float)picCurrent.Image.Size.Height / picCurrent.Image.Size.Width;
 
