@@ -64,6 +64,7 @@ namespace PhotoSift
 			else if (settings.CopyActionType == CopytoClipboardOptions.FilePath) {
 				Clipboard.SetText(pics[iCurrentPic]);
 			}
+			// ref: https://stackoverflow.com/questions/2077981/cut-files-to-clipboard-in-c-sharp
 		}
 
 		private void mnuExit_Click( object sender, EventArgs e )
