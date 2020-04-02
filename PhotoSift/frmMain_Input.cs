@@ -508,8 +508,9 @@ namespace PhotoSift
 
 
 			// Process all other keys
-			if( e.KeyCode == Keys.Escape )		// exit
+			if( e.KeyCode == Keys.Escape && bEscIsPassed)		// exit
 			{
+				bEscIsPassed = false;
 				if( bFullScreen )
 					ToggleFullscreen();
 				else if( settings.CloseOnEscape )
@@ -712,6 +713,10 @@ namespace PhotoSift
 			{
 				SetScaleMode( ScaleMode.NormalFitWindow );
 				e.Handled = true;
+			}
+			else if (e.KeyCode == Keys.Escape)
+			{
+				bEscIsPassed = true;
 			}
 		}
 
