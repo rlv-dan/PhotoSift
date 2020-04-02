@@ -4,6 +4,8 @@ using System.Windows.Forms;
 
 // Credit to https://stackoverflow.com/questions/4136477/trying-to-open-a-file-dialog-using-the-new-ifiledialog-and-ifileopendialog-inter
 // https://stackoverflow.com/a/33835934, author: ErikE.
+// Changed to add multi-select property. author: yfdyh000.
+
 namespace Ris.Shuriken
 {
     /// <summary>
@@ -13,7 +15,9 @@ namespace Ris.Shuriken
     {
         private string _initialDirectory;
         private string _title;
-        private string _fileName = "";
+
+        private string _fileName;
+        private string[] _fileNames;
 
         public string InitialDirectory
         {
@@ -25,7 +29,9 @@ namespace Ris.Shuriken
             get { return _title ?? "Select a folder"; }
             set { _title = value; }
         }
+        public bool multiSelect { get; set; } // VistaDialog available only
         public string FileName { get { return _fileName; } }
+        public string[] FileNames { get { return _fileNames; } }
 
         public bool Show() { return Show(IntPtr.Zero); }
 
@@ -34,9 +40,10 @@ namespace Ris.Shuriken
         public bool Show(IntPtr hWndOwner)
         {
             var result = Environment.OSVersion.Version.Major >= 6
-                ? VistaDialog.Show(hWndOwner, InitialDirectory, Title)
+                ? VistaDialog.Show(hWndOwner, InitialDirectory, Title, multiSelect)
                 : ShowXpDialog(hWndOwner, InitialDirectory, Title);
             _fileName = result.FileName;
+            _fileNames = result.FileNames;
             return result.Result;
         }
 
@@ -44,6 +51,7 @@ namespace Ris.Shuriken
         {
             public bool Result { get; set; }
             public string FileName { get; set; }
+            public string[] FileNames { get; set; }
         }
 
         private static ShowDialogResult ShowXpDialog(IntPtr ownerHandle, string initialDirectory, string title)
@@ -85,7 +93,7 @@ namespace Ris.Shuriken
             private readonly static MethodInfo s_unAdviseMethodInfo = s_iFileDialogType.GetMethod("Unadvise");
             private readonly static MethodInfo s_showMethodInfo = s_iFileDialogType.GetMethod("Show");
 
-            public static ShowDialogResult Show(IntPtr ownerHandle, string initialDirectory, string title)
+            public static ShowDialogResult Show(IntPtr ownerHandle, string initialDirectory, string title, bool multiSelect = false)
             {
                 var openFileDialog = new OpenFileDialog
                 {
@@ -94,7 +102,7 @@ namespace Ris.Shuriken
                     DereferenceLinks = true,
                     Filter = c_foldersFilter,
                     InitialDirectory = initialDirectory,
-                    Multiselect = false,
+                    Multiselect = multiSelect,
                     Title = title
                 };
 
@@ -110,7 +118,8 @@ namespace Ris.Shuriken
                     return new ShowDialogResult
                     {
                         Result = retVal == 0,
-                        FileName = openFileDialog.FileName
+                        FileName = openFileDialog.FileName,
+                        FileNames = openFileDialog.FileNames
                     };
                 }
                 finally
