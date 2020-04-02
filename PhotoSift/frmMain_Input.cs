@@ -73,7 +73,7 @@ namespace PhotoSift
 
 		private void mnuHomepage_Click( object sender, EventArgs e )
 		{
-			System.Diagnostics.Process.Start( "http://www.rlvision.com" );
+			System.Diagnostics.Process.Start( "https://www.rlvision.com" );
 		}
 
 		private void mnuAddImages_Click( object sender, EventArgs e )
