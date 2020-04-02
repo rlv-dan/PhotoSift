@@ -36,22 +36,22 @@
 			this.propertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.propertyGrid.Location = new System.Drawing.Point(12, 12);
+            this.propertyGrid.Location = new System.Drawing.Point(12, 11);
 			this.propertyGrid.Name = "propertyGrid";
 			this.propertyGrid.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-			this.propertyGrid.Size = new System.Drawing.Size(378, 411);
+            this.propertyGrid.Size = new System.Drawing.Size(530, 539);
 			this.propertyGrid.TabIndex = 0;
 			this.propertyGrid.ToolbarVisible = false;
 			// 
 			// frmSettings
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(402, 434);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(554, 561);
 			this.Controls.Add(this.propertyGrid);
 			this.KeyPreview = true;
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(320, 240);
+            this.MinimumSize = new System.Drawing.Size(320, 225);
 			this.Name = "frmSettings";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
