@@ -107,12 +107,20 @@ namespace PhotoSift
 		{
 			ForceShowFullscreenCursor();
 
-			string path = winApi.FolderBrowserDialogAPI("Select a folder with images to add:");
-			if (path != "")
+			var dialog = new Ris.Shuriken.FolderSelectDialog
 			{
+				InitialDirectory = settings.LastFolder_AddFolder,
+				Title = "Select a folder with images to add:",
+				multiSelect = true
+			};
+			if (dialog.Show(Handle))
+			{
+				string path = dialog.FileName;
+				string[] paths = dialog.FileNames;
+
 				panelMain.Cursor = Cursors.WaitCursor;
-				AddFiles(new string[] { path });
-				settings.LastFolder_AddFolder = path;
+				AddFiles(paths);
+				settings.LastFolder_AddFolder = paths.Length > 0 ? System.IO.Directory.GetParent(paths[0]).FullName : path;
 				panelMain.Cursor = Cursors.Arrow;
 			}
 			HideFullscreenForcedCursor();
@@ -164,9 +172,14 @@ namespace PhotoSift
 
 		private void mnuSetTargetFolder_Click(object sender, EventArgs e)
 		{
-			string path = winApi.FolderBrowserDialogAPI();
-			if (path != "")
+			var dialog = new Ris.Shuriken.FolderSelectDialog
 			{
+				InitialDirectory = settings.TargetFolder,
+				Title = "Select a folder:"
+			};
+			if (dialog.Show(Handle))
+			{
+				string path = dialog.FileName;
 				settings.TargetFolder = path;
 			}
 		}
