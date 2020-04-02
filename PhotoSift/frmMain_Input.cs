@@ -96,15 +96,17 @@ namespace PhotoSift
 			var dialog = new Ris.Shuriken.FolderSelectDialog
 			{
 				InitialDirectory = settings.LastFolder_AddFolder,
-				Title = "Select a folder with images to add:"
+				Title = "Select a folder with images to add:",
+				multiSelect = true
 			};
 			if (dialog.Show(Handle))
 			{
 				string path = dialog.FileName;
+				string[] paths = dialog.FileNames;
 
 				panelMain.Cursor = Cursors.WaitCursor;
-				AddFiles(new string[] { path });
-				settings.LastFolder_AddFolder = path;
+				AddFiles(paths);
+				settings.LastFolder_AddFolder = paths.Length > 0 ? System.IO.Directory.GetParent(paths[0]).FullName : path;
 				panelMain.Cursor = Cursors.Arrow;
 			}
 			HideFullscreenForcedCursor();
