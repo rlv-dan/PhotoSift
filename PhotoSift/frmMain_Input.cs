@@ -52,9 +52,17 @@ namespace PhotoSift
 
 		private void mnuCopyToClipboard_Click( object sender, EventArgs e )
 		{
-			if( picCurrent.Image != null )
-			{
-				Clipboard.SetImage( picCurrent.Image );
+			if (settings.CopyActionType == CopytoClipboardOptions.Bitmap) {
+				if (picCurrent.Image != null)
+					Clipboard.SetImage(picCurrent.Image);
+			}
+			else if (settings.CopyActionType == CopytoClipboardOptions.File) {
+				System.Collections.Specialized.StringCollection FileCollection = new System.Collections.Specialized.StringCollection();
+				FileCollection.Add(pics[iCurrentPic]);
+				Clipboard.SetFileDropList(FileCollection);
+			}
+			else if (settings.CopyActionType == CopytoClipboardOptions.FilePath) {
+				Clipboard.SetText(pics[iCurrentPic]);
 			}
 		}
 

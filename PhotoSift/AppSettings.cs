@@ -327,7 +327,9 @@ namespace PhotoSift
 
 
 		// Misc settings
-		[Category("Controls"), DisplayName("Save relative paths"), DescriptionAttribute("Save the path relative to the location of the program, for paths such as the target folder.")]
+		[Category("Misc"), DisplayName("Copy action"), DescriptionAttribute("Sets the action type when you press Ctrl+C or click the \"Copy to clipboard\" menu in this software.")]
+		public CopytoClipboardOptions CopyActionType { get; set; }
+		[Category("Misc"), DisplayName("Save relative paths"), DescriptionAttribute("Save the path relative to the location of the program, for paths such as the target folder.")]
 		public bool SaveRelativePaths { get; set; }
 
 
@@ -431,6 +433,7 @@ namespace PhotoSift
 
 			// Misc
 			SaveRelativePaths = true;
+			CopyActionType = CopytoClipboardOptions.Bitmap;
 
 			// GUI settings
 			TargetFolder = System.IO.Path.GetDirectoryName( System.Windows.Forms.Application.ExecutablePath );
@@ -508,6 +511,16 @@ namespace PhotoSift
 		AppendNumber,
 		[Description( "Skip" )]
 		Skip,
+	}
+
+	public enum CopytoClipboardOptions
+	{
+		[Description("Bitmap")]
+		Bitmap,
+		[Description("File")]
+		File,
+		[Description("File Path")]
+		FilePath,
 	}
 
 #if RLVISION
