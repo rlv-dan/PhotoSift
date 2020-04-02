@@ -183,7 +183,7 @@ namespace PhotoSift
 		[TypeConverter( typeof( EnumTypeConverter ) )]
 		public ShowModes ShowInfoLabel { get; set; }
 
-		[Category( "Display" ), DisplayName( "Mode label" ), DescriptionAttribute( "Info label is the one in the bottom left corner. It shows notifications about modes changes and similar. " )]
+		[Category( "Display" ), DisplayName( "Mode label" ), DescriptionAttribute( "Mode label is the one in the bottom left corner. It shows notifications about modes changes and similar. " )]
 		[TypeConverter( typeof( EnumTypeConverter ) )]
 		public ShowModes ShowModeLabel { get; set; }
 
