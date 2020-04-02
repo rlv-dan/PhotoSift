@@ -273,6 +273,17 @@ namespace PhotoSift
 
 		// ----------------------------------------------------------------------------------------------------------
 
+		public string FolderBrowserDialogAPI(string title = "Select a folder:")
+		{
+			const int BIF_NEWDIALOGSTYLE = 0x40;
+			const int BIF_VALIDATE = 0x20;
+			const int BIF_EDITBOX = 0x10; // Does not exist in FolderBrowserDialog()
+			const int OPTIONS = BIF_NEWDIALOGSTYLE + BIF_VALIDATE + BIF_EDITBOX;
+			var shell = new Shell();
+			var folder = (Folder2)shell.BrowseForFolder(System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle.ToInt32(), title, OPTIONS);
+			if (folder == null) return "";
+			return folder.Self.Path;
+		}
 	}
 
 }

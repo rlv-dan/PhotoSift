@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="FolderSelectDialog.cs" />
     <Compile Include="FileManagement.cs" />
     <Compile Include="frmAbout.cs">
       <SubType>Form</SubType>
