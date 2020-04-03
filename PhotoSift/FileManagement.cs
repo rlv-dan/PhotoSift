@@ -153,7 +153,8 @@ namespace PhotoSift
 						int i = 1;
 						while( File.Exists( dest ) )
 						{
-							dest = destDir + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension( fileName ) + " (" + ( i++ ) + ")" + Path.GetExtension( fileName );
+							string filename = Path.GetFileNameWithoutExtension(fileName) + " (" + (i++) + ")" + Path.GetExtension(fileName);
+							dest = Path.Combine(destDir, filename);
 						}
 					}
 

@@ -197,9 +197,11 @@ namespace PhotoSift
 			string path = Path.GetDirectoryName( pics[iCurrentPic] );
 			if( Util.InputBox( "Rename File", "Enter a new name:", ref new_name ) == System.Windows.Forms.DialogResult.OK )
 			{
-				if( fileManagement.RenameFile( path + Path.DirectorySeparatorChar + old_name + ext, path + Path.DirectorySeparatorChar + new_name + ext, iCurrentPic ) )
+				string o = Path.Combine(path, old_name + ext);
+				string n = Path.Combine(path, new_name + ext);
+				if ( fileManagement.RenameFile(o, n, iCurrentPic ) )
 				{
-					UpdatePic( path + Path.DirectorySeparatorChar + old_name + ext, path + Path.DirectorySeparatorChar + new_name + ext, iCurrentPic );
+					UpdatePic(o, n, iCurrentPic);
 					settings.Stats_RenamedPics++;
 				}
 			}
