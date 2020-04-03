@@ -30,7 +30,8 @@ namespace PhotoSift
     /// </summary>
     public static class SettingsHandler
 	{
-		public static string SettingsFile = Path.GetDirectoryName(Application.ExecutablePath) + System.IO.Path.DirectorySeparatorChar + "Settings.xml";
+		public static string SettingsFile = Path.Combine(System.Windows.Forms.Application.StartupPath, "Settings.xml");
+
 
 		/// <summary>
 		/// Load settings from 'SettingsFile' path. Returns an AppSettings object.

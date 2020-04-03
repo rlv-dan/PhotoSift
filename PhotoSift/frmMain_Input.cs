@@ -156,7 +156,7 @@ namespace PhotoSift
 
 		private void mnuShowHelp_Click( object sender, EventArgs e )
 		{
-			string ReadmeFile = System.IO.Path.GetDirectoryName( Application.ExecutablePath ) + System.IO.Path.DirectorySeparatorChar + "ReadMe.txt"; ;
+			string ReadmeFile = Path.Combine(System.Windows.Forms.Application.StartupPath, "ReadMe.txt");
 			if( System.IO.File.Exists( ReadmeFile ) )
 			{
 				System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo( ReadmeFile );
@@ -624,7 +624,7 @@ namespace PhotoSift
 					if( tmp.Trim() != "" ) CustomKeyFolder = tmp.Trim();
 
 					// figure out how to use the custome folder (complete path or relative to base folder)
-					string targetDir = settings.TargetFolder + System.IO.Path.DirectorySeparatorChar + KeyName;		// use keyname as default subfolder name
+					string targetDir = Path.Combine(settings.TargetFolder, KeyName);		// use keyname as default subfolder name
 					if( CustomKeyFolder != "" )
 					{
 						try
@@ -635,7 +635,7 @@ namespace PhotoSift
 							}
 							else
 							{
-								targetDir = settings.TargetFolder + System.IO.Path.DirectorySeparatorChar + CustomKeyFolder;	// folder is relative to base folder
+								targetDir = Path.Combine(settings.TargetFolder, CustomKeyFolder);	// folder is relative to base folder
 							}
 						}
 						catch
@@ -645,8 +645,8 @@ namespace PhotoSift
 					}
 
 					string sourceDir = System.IO.Path.GetDirectoryName( pics[iCurrentPic] );
-					string sourceFile = sourceDir + System.IO.Path.DirectorySeparatorChar + Filename;
-					string targetFil = targetDir + System.IO.Path.DirectorySeparatorChar + Filename;
+					string sourceFile = Path.Combine(sourceDir, Filename);
+					string targetFil = Path.Combine(targetDir, Filename);
 					try
 					{
 						sourceFile = Path.GetFullPath( sourceFile );	// strip double slashes etc
