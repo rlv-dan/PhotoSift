@@ -20,7 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Threading;
+using System.Threading.Tasks;
 using System.IO;
 using Microsoft.VisualBasic.FileIO;
 
@@ -133,8 +133,8 @@ namespace PhotoSift
 		/// <param name="settings">Pass a settings object with FileOperations and ExistingFileOptions set</param>
 		public void CopyMoveFile( string source, string dest, AppSettings settings, int picIndex = -1 , bool bSaveUndo = true )
 		{
-			// launch operation in separate thread (don't want to stop gui thread)
-			new Thread( delegate()
+			// launch operation in separate thread (don't want to stop GUI thread)
+			Task.Run(() => 
 			{
 				try
 				{
@@ -187,7 +187,7 @@ namespace PhotoSift
 				{
 					MessageBox.Show( "Error copying/moving file: \n\n" + ex.Message, "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
 				}
-			} ).Start();	// start thread
+			});
 		}
 
 		/// <summary>
@@ -218,7 +218,7 @@ namespace PhotoSift
 		/// <param name="sendToRecycleBin">Decides if the file is to be permanentely deleted of just send to the Windows recycle bin</param>
 		public void DeleteFile( string filePath, bool sendToRecycleBin, int picIndex = -1 )
 		{
-			new Thread( delegate()
+			Task.Run(() =>
 			{
 				try
 				{
@@ -238,7 +238,7 @@ namespace PhotoSift
 				{
 					MessageBox.Show( "Error deleting file: \n\n" + ex.Message, "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
 				}
-			} ).Start();	// start thread
+			});
 		}
 		private void Undelete(string filePath)
 		{
