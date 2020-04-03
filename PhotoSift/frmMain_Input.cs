@@ -89,10 +89,9 @@ namespace PhotoSift
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Multiselect = true;
 			ofd.Title = "Select images to add...";
-			ofd.Filter = "Images|*.jpg;*.jpeg;*.tif;*.tiff;*.png;*.bmp;*.gif;*.ico;*.wmf;*.emf|All files (*.*)|*.*";
+			ofd.Filter = "Images|*.jpg;*.jpeg;*.tif;*.tiff;*.png;*.bmp;*.gif;*.ico;*.wmf;*.emf;*.webp|All files (*.*)|*.*";
 			ofd.InitialDirectory = settings.LastFolder_AddFiles;
-			DialogResult result = ofd.ShowDialog();
-			if( result == DialogResult.OK ) // Test result.
+			if( ofd.ShowDialog() == DialogResult.OK )
 			{
 				if( ofd.FileNames.Length > 0 )
 				{
