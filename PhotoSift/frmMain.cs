@@ -23,7 +23,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
-
+using System.Linq;
 
 namespace PhotoSift
 {
@@ -240,7 +240,7 @@ namespace PhotoSift
 			}
 		}
 
-		private readonly string[] allowsExts =
+		private readonly List<string> allowsExts = new List<string>()
 		{
 			".jpg",
 			".jpeg",
@@ -272,13 +272,13 @@ namespace PhotoSift
 				{
 					foreach( string file in System.IO.Directory.GetFiles( item, "*.*", System.IO.SearchOption.AllDirectories ) )
 					{
-						if (Array.IndexOf(allowsExts, Path.GetExtension(file).ToLower()) >= 0)
+						if(allowsExts.Contains(Path.GetExtension(file), StringComparer.OrdinalIgnoreCase))
 							newPics.Add( file );
 					}
 				}
 				else if( System.IO.File.Exists( item ) ) // is File
 				{
-					if (Array.IndexOf(allowsExts, Path.GetExtension(item).ToLower()) >= 0)
+					if (allowsExts.Contains(Path.GetExtension(item), StringComparer.OrdinalIgnoreCase))
 						newPics.Add( item );
 				}
 
