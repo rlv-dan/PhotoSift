@@ -45,7 +45,7 @@ namespace PhotoSift
 
 		private void mnuClearImages_Click( object sender, EventArgs e )
 		{
-			if (pics.Count > settings.WarnThresholdOnClearQueue)
+			if ( settings.WarnThresholdOnClearQueue > 0 && pics.Count > settings.WarnThresholdOnClearQueue)
 			{
 				if (MessageBox.Show(string.Format("Confirm to clear the queue with {0} image(s)?", pics.Count),
 								"Clear images queue", MessageBoxButtons.YesNo) != DialogResult.Yes)
