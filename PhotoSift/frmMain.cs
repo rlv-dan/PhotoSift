@@ -272,13 +272,15 @@ namespace PhotoSift
 				{
 					foreach( string file in System.IO.Directory.GetFiles( item, "*.*", System.IO.SearchOption.AllDirectories ) )
 					{
-						if(allowsExts.Contains(Path.GetExtension(file), StringComparer.OrdinalIgnoreCase))
+						if(allowsExts.Contains(Path.GetExtension(file), StringComparer.OrdinalIgnoreCase)
+							&& !pics.Exists(i => i == item))
 							newPics.Add( file );
 					}
 				}
 				else if( System.IO.File.Exists( item ) ) // is File
 				{
-					if (allowsExts.Contains(Path.GetExtension(item), StringComparer.OrdinalIgnoreCase))
+					if (allowsExts.Contains(Path.GetExtension(item), StringComparer.OrdinalIgnoreCase)
+						&& !pics.Exists((i => i == item)))
 						newPics.Add( item );
 				}
 
@@ -288,9 +290,6 @@ namespace PhotoSift
 				ShowNextPic( 0 );
 				return false;
 			}
-
-			// remove duplicates
-			foreach(string p in pics) newPics.Remove(p);
 
 			// add images
 			if( settings.AddInRandomOrder ) Util.Shuffle( newPics );
