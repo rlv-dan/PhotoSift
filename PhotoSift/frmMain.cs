@@ -201,6 +201,11 @@ namespace PhotoSift
 
 		private void frmMain_Resize( object sender, EventArgs e )
 		{
+			if(this.WindowState == FormWindowState.Normal && !bFullScreen)
+			{
+				NormalWindowStateFormRect = new Rectangle( this.Left, this.Top, this.Width, this.Height );
+			}
+
 			SetScaleMode( CurrentScaleMode, false );
 			Util.CenterControl( lblHeader, picLogo.Image.Height / 2 + 20 );
 		}
@@ -517,22 +522,11 @@ namespace PhotoSift
 	
 		private void ToggleFullscreen()
 		{
-			bFullScreen = !bFullScreen;
-
 			if( !bFullScreen )
 			{
-				// Entering normal mode
-				this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
-				ShowMenu();
-				mnuFullscreen.Checked = false;
-				ShowCursor();
-				this.Location = new Point( NormalWindowStateFormRect.Left, NormalWindowStateFormRect.Top );
-				this.ClientSize = new Size( NormalWindowStateFormRect.Width, NormalWindowStateFormRect.Height );
-				this.WindowState = NormalWindowState;
-			}
-			else
-			{
 				// Entering fullscreen mode
+				bFullScreen = true;
+
 				lblInfoLabel.Visible = true;
 				NormalWindowState = this.WindowState;
 				this.WindowState = FormWindowState.Normal;
@@ -547,6 +541,19 @@ namespace PhotoSift
 				HideMenu();
 				mnuFullscreen.Checked = true;
 				if( settings.FullscreenHideCursor ) HideCursor();
+			}
+			else
+			{
+				// Entering normal mode
+				this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+				ShowMenu();
+				mnuFullscreen.Checked = false;
+				ShowCursor();
+				this.Location = new Point( NormalWindowStateFormRect.Left, NormalWindowStateFormRect.Top );
+				this.ClientSize = new Size( NormalWindowStateFormRect.Width, NormalWindowStateFormRect.Height );
+				this.WindowState = NormalWindowState;
+
+				bFullScreen = false;	// because resize event triggers above we want to keep this last
 			}
 
 			// reset scale mode
