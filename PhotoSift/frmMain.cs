@@ -49,6 +49,8 @@ namespace PhotoSift
 		private Rectangle NormalWindowStateFormRect;
 
 		private bool bMenuInUse = false;
+		private bool bWinKeyLDown = false;
+		private bool bWinKeyRDown = false;
 
 		private bool bCursorVisible = true;
 		private int FullScreenCursorLastMouseX = -1;
@@ -124,9 +126,7 @@ namespace PhotoSift
 			settings.DeleteMode = DeleteOptions.RemoveFromList;
 			settings.TargetFolder = @"t:\PhotoSift Output";
 			// Load test suite
-			AddFiles( new string[] { @"D:\grid.png", @"D:\grid2.png" } );
 			AddFiles( new string[] { @"D:\temp\icons temp\PicSort" } );
-			AddFiles( new string[] { @"D:\Temp\Comics" } );
 #endif
 		}
 

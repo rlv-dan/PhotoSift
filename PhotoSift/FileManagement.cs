@@ -128,10 +128,6 @@ namespace PhotoSift
 		/// <summary>
 		/// Copy or move a file from one directory to another. Runs in a new thread.
 		/// </summary>
-		/// <param name="fileName">The filename (without path)</param>
-		/// <param name="sourceDir">Directory where the file is now</param>
-		/// <param name="destDir">Destination direction path</param>
-		/// <param name="settings">Pass a settings object with FileOperations and ExistingFileOptions set</param>
 		public void CopyMoveFile( string source, string dest, AppSettings settings, int picIndex = -1 , bool bSaveUndo = true )
 		{
 			// launch operation in separate thread (don't want to stop gui thread)

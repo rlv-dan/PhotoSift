@@ -423,6 +423,10 @@ namespace PhotoSift
 		{
 			if( bMenuInUse ) return;
 
+			if( e.KeyCode == Keys.LWin) bWinKeyLDown = false;
+			if( e.KeyCode == Keys.RWin ) bWinKeyRDown = false;
+			if( bWinKeyLDown || bWinKeyRDown ) return;
+
 			// First process arrow keys (next/prev image) & delete since they can use Control/Shift/Alt
 			if( pics.Count > 0 )
 			{
@@ -646,6 +650,10 @@ namespace PhotoSift
 				ToggleMenuVisibility();
 				e.Handled = true;
 			}
+
+
+			if( e.KeyCode == Keys.LWin ) bWinKeyLDown = true;
+			if( e.KeyCode == Keys.RWin ) bWinKeyRDown = true;
 
 			// keyboard zoom (handled in keydown event to allow for key repeats)
 			else if( e.KeyCode == Keys.Add || e.KeyCode == Keys.Subtract || e.KeyCode == Keys.Oemplus || e.KeyCode == Keys.OemMinus )
