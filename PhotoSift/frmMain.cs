@@ -46,6 +46,7 @@ namespace PhotoSift
 		private bool bAutoAdvanceEnabled = false;
 		
 		private bool bFullScreen = false;
+		private FormWindowState NormalWindowState;
 		private Rectangle NormalWindowStateFormRect;
 
 		private bool bMenuInUse = false;
@@ -105,6 +106,8 @@ namespace PhotoSift
 				this.Width = settings.FormRect_Main.Width;
 				this.Height = settings.FormRect_Main.Height;
 			}
+			this.WindowState = settings.WindowState;
+
 			settings.Stats_StartupCount++;
 			
 			ApplySettings();
@@ -187,7 +190,9 @@ namespace PhotoSift
 		private void frmMain_FormClosing( object sender, FormClosingEventArgs e )
 		{
 			// Save settings
-			if( bFullScreen )
+			settings.WindowState = !bFullScreen ? this.WindowState : NormalWindowState;
+
+			if( bFullScreen || this.WindowState == FormWindowState.Maximized)
 				settings.FormRect_Main = new Rectangle( NormalWindowStateFormRect.Left, NormalWindowStateFormRect.Top, NormalWindowStateFormRect.Width, NormalWindowStateFormRect.Height );
 			else
 				settings.FormRect_Main = new Rectangle( this.Left, this.Top, this.Width, this.Height );
@@ -523,11 +528,13 @@ namespace PhotoSift
 				ShowCursor();
 				this.Location = new Point( NormalWindowStateFormRect.Left, NormalWindowStateFormRect.Top );
 				this.ClientSize = new Size( NormalWindowStateFormRect.Width, NormalWindowStateFormRect.Height );
+				this.WindowState = NormalWindowState;
 			}
 			else
 			{
 				// Entering fullscreen mode
 				lblInfoLabel.Visible = true;
+				NormalWindowState = this.WindowState;
 				this.WindowState = FormWindowState.Normal;
 				this.FormBorderStyle = FormBorderStyle.None;
 
