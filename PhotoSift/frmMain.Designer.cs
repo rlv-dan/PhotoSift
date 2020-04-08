@@ -686,6 +686,7 @@
 			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmMain_DragDrop);
 			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.frmMain_DragEnter);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmMain_KeyDown);
+			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.frmMain_KeyPress);
 			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.frmMain_KeyUp);
 			this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.frmMain_MouseUp);
 			this.Resize += new System.EventHandler(this.frmMain_Resize);

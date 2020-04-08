@@ -426,7 +426,7 @@ namespace PhotoSift
 			if( e.KeyCode == Keys.LWin) bWinKeyLDown = false;
 			if( e.KeyCode == Keys.RWin ) bWinKeyRDown = false;
 			if( bWinKeyLDown || bWinKeyRDown ) return;
-
+			
 			// First process arrow keys (next/prev image) & delete since they can use Control/Shift/Alt
 			if( pics.Count > 0 )
 			{
@@ -450,26 +450,29 @@ namespace PhotoSift
 					}
 					else if( e.KeyCode == Keys.Delete )		// Delete
 					{
-						if( !e.Control )	// Cntr+Del --> only remove from list
+						if( picCurrent.Image != null )
 						{
-							if( e.Shift ) fileManagement.DeleteFile( pics[iCurrentPic], false, iCurrentPic );	// Shift+Del --> force delete
-							else if( e.Alt ) fileManagement.DeleteFile( pics[iCurrentPic], true, iCurrentPic );	// Alt+Del --> force recycle
-							else if( settings.DeleteMode == DeleteOptions.RecycleBin ) fileManagement.DeleteFile( pics[iCurrentPic], true, iCurrentPic );
-							else if( settings.DeleteMode == DeleteOptions.Delete ) fileManagement.DeleteFile( pics[iCurrentPic], false, iCurrentPic );
-							else if( settings.DeleteMode == DeleteOptions.RemoveFromList ) { } // do nothing
+							if( !e.Control )	// Cntr+Del --> only remove from list
+							{
+								if( e.Shift ) fileManagement.DeleteFile( pics[iCurrentPic], false, iCurrentPic );	// Shift+Del --> force delete
+								else if( e.Alt ) fileManagement.DeleteFile( pics[iCurrentPic], true, iCurrentPic );	// Alt+Del --> force recycle
+								else if( settings.DeleteMode == DeleteOptions.RecycleBin ) fileManagement.DeleteFile( pics[iCurrentPic], true, iCurrentPic );
+								else if( settings.DeleteMode == DeleteOptions.Delete ) fileManagement.DeleteFile( pics[iCurrentPic], false, iCurrentPic );
+								else if( settings.DeleteMode == DeleteOptions.RemoveFromList ) { } // do nothing
+							}
+
+							Console.WriteLine( ">--> REMOVE FROM LIST" );
+							picCurrent.Image = null;
+							imageCache.DropImage( pics[iCurrentPic] );
+							pics.RemoveAt( iCurrentPic );
+							if( settings.DeleteMode != DeleteOptions.RemoveFromList ) settings.Stats_DeletedPics++;
+
+							if( settings.OnDeleteStepForward )
+								ShowNextPic( 0 );
+							else
+								ShowNextPic( -1 );
+							e.Handled = true;
 						}
-
-						Console.WriteLine( ">--> REMOVE FROM LIST" );
-						picCurrent.Image = null;
-						imageCache.DropImage( pics[iCurrentPic] );
-						pics.RemoveAt( iCurrentPic );
-						if( settings.DeleteMode != DeleteOptions.RemoveFromList ) settings.Stats_DeletedPics++;
-
-						if( settings.OnDeleteStepForward )
-							ShowNextPic( 0 );
-						else
-							ShowNextPic( -1 );
-						e.Handled = true;
 					}
 				}
 			}
@@ -512,20 +515,12 @@ namespace PhotoSift
 
 
 			// Process all other keys
-			if( e.KeyCode == Keys.Escape )		// exit
-			{
-				if( bFullScreen )
-					ToggleFullscreen();
-				else if( settings.CloseOnEscape )
-					this.Close();
-				e.Handled = true;
-			}
-			else if( e.KeyCode == Keys.Pause )		// toggle Auto Advance
+
+			if( e.KeyCode == Keys.Pause )		// toggle Auto Advance
 			{
 				if( bAutoAdvanceEnabled ) StopAutoAdvance(); else StartAutoAdvance();
 				e.Handled = true;
 			}
-
 			else if( e.KeyCode == Keys.Space )	// Show next
 			{
 				ShowNextPic( 1 );
@@ -723,6 +718,21 @@ namespace PhotoSift
 			}
 		}
 
+		private void frmMain_KeyPress( object sender, KeyPressEventArgs e )
+		{
+			if( e.KeyChar == (char)Keys.Escape )
+			{
+				if( bFullScreen )
+				{
+					ToggleFullscreen();
+				}
+				else if( settings.CloseOnEscape )
+				{
+					this.Close();
+				}
+				e.Handled = true;
+			}
+		}
 
 	}
 }

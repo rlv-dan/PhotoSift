@@ -180,7 +180,7 @@ namespace PhotoSift
 			{
 				menuStripMain.Renderer = new CustomMenuRenderer( settings );
 			}
-			/* todo: reset menu renderer
+			/* todo: reset menu renderer (problem: text colors are overwritten in CustomMenuRenderer, making it impossible to simply revert like this)
 			else
 			{
 				menuStripMain.Renderer = new ToolStripProfessionalRenderer();
@@ -1320,8 +1320,6 @@ namespace PhotoSift
 			public override Color MenuItemSelectedGradientBegin { get { return settings.CustomMenuColorHightlight; } }
 			public override Color MenuItemSelectedGradientEnd { get { return settings.CustomMenuColorHightlight; } }
 		}
-
-
 
 		// --------------------------------------------------------------------
 
