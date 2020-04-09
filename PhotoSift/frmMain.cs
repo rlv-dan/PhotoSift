@@ -52,6 +52,7 @@ namespace PhotoSift
 		private bool bMenuInUse = false;
 		private bool bWinKeyLDown = false;
 		private bool bWinKeyRDown = false;
+		private bool bAlreadyLoading = false;
 
 		private bool bCursorVisible = true;
 		private int FullScreenCursorLastMouseX = -1;
@@ -305,6 +306,8 @@ namespace PhotoSift
 
 		private void ShowNextPic( int picsToSkip )
 		{
+			if( this.bAlreadyLoading ) return;
+
 			if( pics.Count == 0 )
 			{
 				this.Text = Util.GetAppName() + " by RL Vision";
@@ -325,7 +328,6 @@ namespace PhotoSift
 				picCurrent.Dock = DockStyle.Fill;
 			}
 
-
 			int newPosition = iCurrentPic + picsToSkip;
 			iCurrentPic = Math.Max( Math.Min( newPosition, pics.Count ), 0 );
 
@@ -344,7 +346,9 @@ namespace PhotoSift
 			this.Text = "Loading...";
 			lblInfoLabel.Text = this.Text;
 			lblHeader.Visible = false;
+			this.bAlreadyLoading = true;	// solves a rare concurrency problem
 			Application.DoEvents();
+			this.bAlreadyLoading = false;
 
 			HaltAutoAdvance();
 
