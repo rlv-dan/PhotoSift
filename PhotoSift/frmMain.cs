@@ -923,10 +923,10 @@ namespace PhotoSift
 		// returns the visible size of the current picture
 		private Rectangle GetPictureDisplaySize()
 		{
-			// While this probably can be calculated, easiest is to get the hidden "ImageRectangle" using reflection
-			PropertyInfo pInfo = picCurrent.GetType().GetProperty( "ImageRectangle", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance );
-			Rectangle rect = (Rectangle)pInfo.GetValue( picCurrent, null );
-			return rect;
+			GraphicsUnit units = GraphicsUnit.Point;
+			RectangleF imgRectangleF = picCurrent.Image.GetBounds( ref units );
+			Rectangle imgRectangle = Rectangle.Round( imgRectangleF );
+			return imgRectangle;
 		}
 
 		private void RotateFlipImage( RotateFlipType mode )

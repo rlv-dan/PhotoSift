@@ -24,6 +24,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Threading;
 using System.IO;
+using System.Linq;
 using Shell32; //Reference Microsoft Shell Controls And Automation on the COM tab.
 
 namespace PhotoSift
@@ -45,7 +46,12 @@ namespace PhotoSift
 				// Create an instance of HookProc.
 				MouseHookProcedure = new HookProc( WinApi.MouseHookProc );
 
-				hHook = SetWindowsHookEx( WH_MOUSE, MouseHookProcedure, (IntPtr)0, AppDomain.GetCurrentThreadId() );
+				var thread = ( System.Diagnostics.Process.GetCurrentProcess().Threads ).OfType<System.Diagnostics.ProcessThread>().SingleOrDefault( x => x.ThreadState == System.Diagnostics.ThreadState.Running );
+				if( thread != null )
+				{
+					hHook = SetWindowsHookEx( WH_MOUSE, MouseHookProcedure, (IntPtr)0, thread.Id );
+				}
+
 				if( hHook == 0 )
 				{
 					MessageBox.Show( "SetWindowsHookEx Failed" );
