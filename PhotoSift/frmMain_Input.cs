@@ -575,7 +575,9 @@ namespace PhotoSift
 
 
 			// If no images stop processing keys here
-			else if( iCurrentPic == -1 || iCurrentPic > pics.Count || picCurrent.Image == null )
+			else if( iCurrentPic == -1 || iCurrentPic > pics.Count || picCurrent.Image == null
+				&& string.IsNullOrEmpty(wmpCurrent.URL)
+				)
 			{
 				return;
 			}
@@ -603,6 +605,7 @@ namespace PhotoSift
 				{
 					picCurrent.Image = null;
 					imageCache.DropImage( pics[iCurrentPic] );
+					wmpCurrent.URL = null;
 
 					string Filename = System.IO.Path.GetFileName( pics[iCurrentPic] );
 
