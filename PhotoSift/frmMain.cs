@@ -199,6 +199,15 @@ namespace PhotoSift
 		{
 			SetScaleMode( CurrentScaleMode, false );
 			Util.CenterControl( lblHeader, picLogo.Image.Height / 2 + 20 );
+
+#if !NOWMP
+			if (wmpCurrent.URL != null)
+			{
+				wmpCurrent.Width = picCurrent.Width;
+				wmpCurrent.Height = picCurrent.Height;
+				wmpCurrent.Dock = DockStyle.Fill;
+			}
+#endif
 		}
 
 		private void frmMain_Shown( object sender, EventArgs e )
@@ -240,7 +249,7 @@ namespace PhotoSift
 			}
 		}
 
-		private readonly List<string> allowsExts = new List<string>()
+		private List<string> allowsPicExts = new List<string>()
 		{
 			".jpg",
 			".jpeg",
@@ -254,6 +263,56 @@ namespace PhotoSift
 			".emf",
 			".webp"
 		};
+		private List<string> allowsVideoExts = new List<string>()
+		{ // https://support.microsoft.com/en-us/help/316992/file-types-supported-by-windows-media-player
+			".asf",
+			".wma",
+			".wmv",
+			".wm",
+			".asx",
+			".wax",
+			".wvx",
+			".wmx",
+			".wpl",
+			".dvr-ms",
+			".wmd",
+			".avi",
+			".mpg",
+			".mpeg",
+			".m1v",
+			".mp2",
+			".mp3",
+			".mpa",
+			".mpe",
+			".m3u",
+			".mid",
+			".midi",
+			".rmi",
+			".aif",
+			".aifc",
+			".aiff",
+			".au",
+			".snd",
+			".wav",
+			".cda",
+			".ivf",
+			".wmz",
+			".wms",
+			".mov",
+			".m4a",
+			".mp4",
+			".m4v",
+			".mp4v",
+			".3g2",
+			".3gp2",
+			".3gp",
+			".3gpp",
+			".aac",
+			".adt",
+			".adts",
+			".m2ts",
+			".flac"
+		};
 		// Add file to the image pool
 		private bool AddFiles( string[] items )
 		{
@@ -266,6 +325,7 @@ namespace PhotoSift
 
 			// validate files to add
 			List<string> newPics = new List<string>();
+			List<string> allowsExts = allowsPicExts.Union(allowsVideoExts).ToList();
 			foreach ( string item in items )
 			{
 				if( System.IO.Directory.Exists( item ) ) // is Directory
@@ -304,6 +364,44 @@ namespace PhotoSift
 			return true;
 		}
 
+		private string getMetaInfo(bool isVideo, bool mediaLoaded)
+		{
+			StringBuilder sb = new StringBuilder(isVideo ? settings.InfoLabelFormatVideo : settings.InfoLabelFormat);
+			if (isVideo && !mediaLoaded) // these info is unavailable
+			{
+				sb.Replace("%w", "");
+				sb.Replace("%h", "");
+				sb.Replace("%time", "");
+			}
+
+			if (isVideo) // note: including audio
+			{
+				sb.Replace("%f", System.IO.Path.GetFileName(pics[iCurrentPic]));
+				sb.Replace("%p", System.IO.Path.GetDirectoryName(pics[iCurrentPic]));
+				sb.Replace("%d", System.IO.Directory.GetParent(pics[iCurrentPic]).Name);
+				sb.Replace("%w", wmpCurrent.currentMedia.imageSourceWidth.ToString());
+				sb.Replace("%h", wmpCurrent.currentMedia.imageSourceHeight.ToString());
+				sb.Replace("%n", "\n");
+				sb.Replace("%c", (iCurrentPic + 1).ToString());
+				sb.Replace("%time", wmpCurrent.currentMedia.durationString);
+				sb.Replace("%t", pics.Count.ToString());
+				sb.Replace("%s", Util.TidyFileSize(new FileInfo(pics[iCurrentPic]).Length));
+				return sb.ToString();
+			}
+			else
+			{
+				sb.Replace("%f", System.IO.Path.GetFileName(pics[iCurrentPic]));
+				sb.Replace("%p", System.IO.Path.GetDirectoryName(pics[iCurrentPic]));
+				sb.Replace("%d", System.IO.Directory.GetParent(pics[iCurrentPic]).Name);
+				sb.Replace("%w", picCurrent.Image.Width.ToString());
+				sb.Replace("%h", picCurrent.Image.Height.ToString());
+				sb.Replace("%n", "\n");
+				sb.Replace("%c", (iCurrentPic + 1).ToString());
+				sb.Replace("%t", pics.Count.ToString());
+				sb.Replace("%s", Util.TidyFileSize(new FileInfo(pics[iCurrentPic]).Length));
+				return sb.ToString();
+			}
+		}
 
 		private void ShowNextPic( int picsToSkip )
 		{
@@ -314,6 +412,8 @@ namespace PhotoSift
 				lblHeader.Visible = true;
 				picCurrent.Image = null;
 				picCurrent.Visible = false;
+				wmpCurrent.URL = null;
+				wmpCurrent.Visible = false;
 				picLogo.Visible = true;
 				lblInfoLabel.Text = this.Text;
 				Util.CenterControl( lblHeader, picLogo.Image.Height / 2 + 20 );
@@ -349,6 +449,41 @@ namespace PhotoSift
 			Application.DoEvents();
 
 			HaltAutoAdvance();
+
+			string URI = pics[iCurrentPic];
+			bool tryVideo = !allowsPicExts.Contains(Path.GetExtension(URI), StringComparer.OrdinalIgnoreCase)
+				&& allowsVideoExts.Contains(Path.GetExtension(URI), StringComparer.OrdinalIgnoreCase);
+
+			if (tryVideo)
+			{
+				picCurrent.Hide();
+				wmpCurrent.Show();
+				if (wmpCurrent.URL == URI)
+				{
+					var pos = wmpCurrent.Ctlcontrols.currentPosition;
+					wmpCurrent.URL = URI; // flash UI effect.
+					wmpCurrent.Ctlcontrols.currentPosition = pos;
+				}
+				else
+				{
+					wmpCurrent.URL = URI;
+				}
+
+				this.Text = "Video playback";
+				this.Text = getMetaInfo(true, false);
+				lblInfoLabel.Text = this.Text;
+				lblInfoLabel.BringToFront();
+
+				UpdateMenuEnabledDisabled();
+				ResumeAutoAdvance();
+				return;
+			}
+			else
+			{
+				picCurrent.Show();
+				wmpCurrent.Hide();
+				wmpCurrent.URL = null;
+			}
 
 			try
 			{
@@ -393,18 +528,8 @@ namespace PhotoSift
 					imageCache.DropImage( pics[n] );
 			}
 			//
-			
-			StringBuilder sb = new StringBuilder (settings.InfoLabelFormat);
-					sb.Replace( "%f", System.IO.Path.GetFileName(pics[iCurrentPic]) );
-					sb.Replace( "%p", System.IO.Path.GetDirectoryName( pics[iCurrentPic] ) );
-					sb.Replace( "%d", System.IO.Directory.GetParent( pics[iCurrentPic] ).Name );
-					sb.Replace( "%w", picCurrent.Image.Width.ToString() );
-					sb.Replace( "%h", picCurrent.Image.Height.ToString() );
-					sb.Replace( "%n", "\n" );
-					sb.Replace( "%c", (iCurrentPic + 1).ToString() );
-					sb.Replace( "%t", pics.Count.ToString() );
-					if( settings.InfoLabelFormat.Contains("%s") ) sb.Replace( "%s", Util.TidyFileSize( new FileInfo( pics[iCurrentPic] ).Length ) );
-			this.Text = sb.ToString();
+
+			this.Text = getMetaInfo(false, true);
 			lblInfoLabel.Text = this.Text;
 
 #if RLVISION
@@ -1321,8 +1446,24 @@ namespace PhotoSift
 			public override Color MenuItemSelectedGradientEnd { get { return settings.CustomMenuColorHightlight; } }
 		}
 
+		private void wmpCurrent_KeyUpEvent(object sender, AxWMPLib._WMPOCXEvents_KeyUpEvent e)
+		{
+			frmMain_KeyUp(sender, new KeyEventArgs((Keys)e.nKeyCode));
+		}
 
+		private void wmpCurrent_KeyDownEvent(object sender, AxWMPLib._WMPOCXEvents_KeyDownEvent e)
+		{
+			frmMain_KeyDown(sender, new KeyEventArgs((Keys)e.nKeyCode));
+		}
 
+		private void wmpCurrent_PlayStateChange(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
+		{
+			if (e.newState == (int)WMPLib.WMPPlayState.wmppsPlaying)
+			{
+				this.Text = getMetaInfo(true, true);
+				lblInfoLabel.Text = this.Text;
+			}
+		}
 		// --------------------------------------------------------------------
 
 

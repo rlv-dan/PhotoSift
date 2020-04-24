@@ -200,6 +200,8 @@ namespace PhotoSift
 
 		[Category( "Display" ), DisplayName( "Info label format" ), DescriptionAttribute( "Here you can decide what to show in the info label. Available format tags: Filename: %f, Parent folder: %d, Full path: %p, Image width: %w, Image height: %h, Filesize: %s, New line: %n, Image pool total count: %t, Image pool current number: %c" )]
 		public string InfoLabelFormat { get; set; }
+		[Category("Display"), DisplayName("Info label format for videos"), DescriptionAttribute("Here you can decide what to show in the info label. Available format tags: Filename: %f, Parent folder: %d, Full path: %p, width: %w, height: %h, Filesize: %s, New line: %n, pool total count: %t, pool current number: %c, %time: media duration")]
+		public string InfoLabelFormatVideo { get; set; }
 
 		[Category( "Display" ), DisplayName( "Hide cursor in fullscreen" ), DescriptionAttribute( "If enabled, the cursor will automatically be hidden on inactivity." )]
 		public bool FullscreenHideCursor { get; set; }
@@ -425,6 +427,7 @@ namespace PhotoSift
 			ShowInfoLabel = ShowModes.FullscreenOnly;
 			ShowModeLabel = ShowModes.AlwaysShow;
 			InfoLabelFormat = "(%c / %t) %f";
+			InfoLabelFormatVideo = "(%c / %t) %f  %time  %w x %h";
 			FullscreenHideCursor = true;
 			EnlargeSmallImages = false;
 #if RLVISION
