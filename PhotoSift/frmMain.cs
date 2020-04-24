@@ -1192,52 +1192,30 @@ namespace PhotoSift
 		{
 			// Enables/Disables menu items
 
-			if( pics.Count == 0 )
-			{
-				mnuRenameFile.Enabled = false;
-				mnuCopyToClipboard.Enabled = false;
-				mnuFlipX.Enabled = false;
-				mnuFlipY.Enabled = false;
-				mnuRotateLeft.Enabled = false;
-				mnuRotateRight.Enabled = false;
-				mnuNavigateBackLarge.Enabled = false;
-				mnuNavigateBackMedium.Enabled = false;
-				mnuNavigateFirst.Enabled = false;
-				mnuNavigateForwardLarge.Enabled = false;
-				mnuNavigateForwardMedium.Enabled = false;
-				mnuNavigateLast.Enabled = false;
-				mnuNavigateNext.Enabled = false;
-				mnuNavigatePrev.Enabled = false;
-				mnuClearImages.Enabled = false;
-				mnuZoomIn.Enabled = false;
-				mnuZoomOut.Enabled = false;
-				mnuZoomToHeight.Enabled = false;
-				mnuZoomToWidth.Enabled = false;
-				mnuResetZoom.Enabled = false;
-			}
-			else
-			{
-				mnuRenameFile.Enabled = true;
-				mnuCopyToClipboard.Enabled = true;
-				mnuFlipX.Enabled = true;
-				mnuFlipY.Enabled = true;
-				mnuRotateLeft.Enabled = true;
-				mnuRotateRight.Enabled = true;
-				mnuNavigateBackLarge.Enabled = true;
-				mnuNavigateBackMedium.Enabled = true;
-				mnuNavigateFirst.Enabled = true;
-				mnuNavigateForwardLarge.Enabled = true;
-				mnuNavigateForwardMedium.Enabled = true;
-				mnuNavigateLast.Enabled = true;
-				mnuNavigateNext.Enabled = true;
-				mnuNavigatePrev.Enabled = true;
-				mnuClearImages.Enabled = true;
-				mnuZoomIn.Enabled = true;
-				mnuZoomOut.Enabled = true;
-				mnuZoomToHeight.Enabled = true;
-				mnuZoomToWidth.Enabled = true;
-				mnuResetZoom.Enabled = true;
-			}
+			List<ToolStripMenuItem> menus = new List<ToolStripMenuItem> { 
+				mnuRenameFile,
+				mnuCopyToClipboard,
+				mnuFlipX,
+				mnuFlipY,
+				mnuRotateLeft,
+				mnuRotateRight,
+				mnuNavigateBackLarge,
+				mnuNavigateBackMedium,
+				mnuNavigateFirst,
+				mnuNavigateForwardLarge,
+				mnuNavigateForwardMedium,
+				mnuNavigateLast,
+				mnuNavigateNext,
+				mnuNavigatePrev,
+				mnuClearImages,
+				mnuZoomIn,
+				mnuZoomOut,
+				mnuZoomToHeight,
+				mnuZoomToWidth,
+				mnuResetZoom
+			};
+			bool hasItem = pics.Count > 0;
+			menus.ForEach((m => m.Enabled = hasItem));
 
 			// undo menu should reflect "next" undo type
 			bool bUndo = true;
