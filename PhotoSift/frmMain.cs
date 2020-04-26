@@ -73,14 +73,28 @@ namespace PhotoSift
 		private bool bMouseHold = false;
 		private Point LastMouseHoldPoint = new Point( -1, -1 );
 		//
+		private AxWMPLib.AxWindowsMediaPlayer wmpCurrent;
 
 
 		// Constructor
 		public frmMain()
 		{
 			InitializeComponent();
+			initWmpPlayer();
 		}
-
+		[STAThread]
+		private void initWmpPlayer()
+		{
+			this.wmpCurrent = new AxWMPLib.AxWindowsMediaPlayer();
+			((System.ComponentModel.ISupportInitialize)(this.wmpCurrent)).BeginInit();
+			this.wmpCurrent.Enabled = true;
+			this.wmpCurrent.Name = "wmpCurrent";
+			this.wmpCurrent.PlayStateChange += new AxWMPLib._WMPOCXEvents_PlayStateChangeEventHandler(this.wmpCurrent_PlayStateChange);
+			this.wmpCurrent.KeyDownEvent += new AxWMPLib._WMPOCXEvents_KeyDownEventHandler(this.wmpCurrent_KeyDownEvent);
+			this.wmpCurrent.KeyUpEvent += new AxWMPLib._WMPOCXEvents_KeyUpEventHandler(this.wmpCurrent_KeyUpEvent);
+			this.Controls.Add(wmpCurrent);
+			((System.ComponentModel.ISupportInitialize)(this.wmpCurrent)).EndInit();
+		}
 
 		private void frmMain_Load( object sender, EventArgs e )
 		{
@@ -200,19 +214,20 @@ namespace PhotoSift
 			SetScaleMode( CurrentScaleMode, false );
 			Util.CenterControl( lblHeader, picLogo.Image.Height / 2 + 20 );
 
-#if !NOWMP
-			if (wmpCurrent.URL != null)
-			{
-				wmpCurrent.Width = picCurrent.Width;
-				wmpCurrent.Height = picCurrent.Height;
-				wmpCurrent.Dock = DockStyle.Fill;
-			}
-#endif
 		}
 
 		private void frmMain_Shown( object sender, EventArgs e )
 		{
-			if( settings.FirstTimeUsing )
+			wmpCurrent.uiMode = "full";
+			wmpCurrent.BringToFront();
+			wmpCurrent.Dock = DockStyle.Fill;
+			wmpCurrent.Show();
+			wmpCurrent.Location = new System.Drawing.Point(352, 36); // refresh the layout
+			wmpCurrent.settings.autoStart = true;
+			//wmpCurrent.URL = @"";
+			//wmpCurrent.Ctlcontrols.play();
+
+			if ( settings.FirstTimeUsing )
 			{
 				settings.FirstTimeUsing = false;
 				if( MessageBox.Show( "New users should read 'Getting Started' in the help file. Open it now?", "Welcome to " + Util.GetAppName(), MessageBoxButtons.YesNo ) == System.Windows.Forms.DialogResult.Yes )
@@ -413,7 +428,7 @@ namespace PhotoSift
 				picCurrent.Image = null;
 				picCurrent.Visible = false;
 				wmpCurrent.URL = null;
-				wmpCurrent.Visible = false;
+				wmpCurrent.Hide();
 				picLogo.Visible = true;
 				lblInfoLabel.Text = this.Text;
 				Util.CenterControl( lblHeader, picLogo.Image.Height / 2 + 20 );
