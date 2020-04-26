@@ -85,15 +85,36 @@ namespace PhotoSift
 		[STAThread]
 		private void initWmpPlayer()
 		{
-			this.wmpCurrent = new AxWMPLib.AxWindowsMediaPlayer();
-			((System.ComponentModel.ISupportInitialize)(this.wmpCurrent)).BeginInit();
-			this.wmpCurrent.Enabled = true;
-			this.wmpCurrent.Name = "wmpCurrent";
-			this.wmpCurrent.PlayStateChange += new AxWMPLib._WMPOCXEvents_PlayStateChangeEventHandler(this.wmpCurrent_PlayStateChange);
-			this.wmpCurrent.KeyDownEvent += new AxWMPLib._WMPOCXEvents_KeyDownEventHandler(this.wmpCurrent_KeyDownEvent);
-			this.wmpCurrent.KeyUpEvent += new AxWMPLib._WMPOCXEvents_KeyUpEventHandler(this.wmpCurrent_KeyUpEvent);
-			this.Controls.Add(wmpCurrent);
-			((System.ComponentModel.ISupportInitialize)(this.wmpCurrent)).EndInit();
+			try
+			{
+				this.wmpCurrent = new AxWMPLib.AxWindowsMediaPlayer();
+				((System.ComponentModel.ISupportInitialize)(this.wmpCurrent)).BeginInit();
+				this.wmpCurrent.Enabled = true;
+				this.wmpCurrent.Name = "wmpCurrent";
+				this.wmpCurrent.PlayStateChange += new AxWMPLib._WMPOCXEvents_PlayStateChangeEventHandler(this.wmpCurrent_PlayStateChange);
+				this.wmpCurrent.KeyDownEvent += new AxWMPLib._WMPOCXEvents_KeyDownEventHandler(this.wmpCurrent_KeyDownEvent);
+				this.wmpCurrent.KeyUpEvent += new AxWMPLib._WMPOCXEvents_KeyUpEventHandler(this.wmpCurrent_KeyUpEvent);
+				this.Controls.Add(wmpCurrent);
+				((System.ComponentModel.ISupportInitialize)(this.wmpCurrent)).EndInit();
+			}
+			catch (Exception)
+			{
+				wmpCurrent = null;
+			}
+		}
+		private void initWmpLayout()
+		{
+			if (wmpCurrent != null)
+			{
+				wmpCurrent.uiMode = "full";
+				wmpCurrent.BringToFront();
+				wmpCurrent.Dock = DockStyle.Fill;
+				wmpCurrent.Location = new System.Drawing.Point(50, 50); // Initialize the fill position
+				wmpCurrent.settings.autoStart = true;
+
+				//wmpCurrent.Show();
+				//wmpCurrent.URL = @"";
+			}
 		}
 
 		private void frmMain_Load( object sender, EventArgs e )
@@ -218,14 +239,7 @@ namespace PhotoSift
 
 		private void frmMain_Shown( object sender, EventArgs e )
 		{
-			wmpCurrent.uiMode = "full";
-			wmpCurrent.BringToFront();
-			wmpCurrent.Dock = DockStyle.Fill;
-			wmpCurrent.Show();
-			wmpCurrent.Location = new System.Drawing.Point(352, 36); // refresh the layout
-			wmpCurrent.settings.autoStart = true;
-			//wmpCurrent.URL = @"";
-			//wmpCurrent.Ctlcontrols.play();
+			initWmpLayout();
 
 			if ( settings.FirstTimeUsing )
 			{
