@@ -23,6 +23,7 @@ using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.VisualBasic.FileIO;
+using System.Threading.Tasks;
 
 namespace PhotoSift
 {
@@ -83,7 +84,7 @@ namespace PhotoSift
 			u.mode = mode;
 			u.picIndex = picIndex;
 			undo.Push( u );
-			mainForm.FileManagementCallback( new UndoCallbackData( UndoCallbackEvent.UndoUpdated, u ) );
+			// mainForm.FileManagementCallback( new UndoCallbackData( UndoCallbackEvent.UndoUpdated, u ) ); // unused.
 		}
 
 		public void UndoLastFileOperation()
@@ -104,8 +105,13 @@ namespace PhotoSift
 				AppSettings s = new AppSettings();
 				s.FileMode = FileOperations.Move;
 				s.ExistingFiles = ExistingFileOptions.Overwrite;
-				CopyMoveFile( u.dest, u.source, s, -1, false ); // move back file
+				string errors = CopyMoveFile( u.dest, u.source, s, -1, false ); // move back file
+				if (errors != "")
+				{
+					MessageBox.Show("Error copying/moving file: \n\n" + errors, "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+			}
 			else if( u.mode == UndoMode.Rename )
 			{
 				RenameFile( u.dest, u.source, -1, false );	// rename back to original filename
@@ -125,17 +131,14 @@ namespace PhotoSift
 		}
 
 		/// <summary>
-		/// Copy or move a file from one directory to another. Runs in a new thread.
+		/// Copy or move a file from one directory to another.
 		/// </summary>
 		/// <param name="fileName">The filename (without path)</param>
 		/// <param name="sourceDir">Directory where the file is now</param>
 		/// <param name="destDir">Destination direction path</param>
 		/// <param name="settings">Pass a settings object with FileOperations and ExistingFileOptions set</param>
-		public void CopyMoveFile( string source, string dest, AppSettings settings, int picIndex = -1 , bool bSaveUndo = true )
+		public string CopyMoveFile( string source, string dest, AppSettings settings, int picIndex = -1, bool bSaveUndo = true)
 		{
-			// launch operation in separate thread (don't want to stop GUI thread)
-			Task.Run(() => 
-			{
 				try
 				{
 					string destDir = Path.GetDirectoryName( dest );
@@ -153,9 +156,9 @@ namespace PhotoSift
 						int i = 1;
 						while( File.Exists( dest ) )
 						{
-							string filename = Path.GetFileNameWithoutExtension(fileName) + " (" + (i++) + ")" + Path.GetExtension(fileName);
-							dest = Path.Combine(destDir, filename);
+							dest = $"{destDir}{Path.DirectorySeparatorChar}{Path.GetFileNameWithoutExtension(fileName)} ({i++}){Path.GetExtension(fileName)}";
 						}
+						// todo: "i" may be conflicted or out of order in async batch runs
 					}
 
 					// what to do with existing files?
@@ -183,12 +186,12 @@ namespace PhotoSift
 							if( bSaveUndo ) AddToUndo( source, dest, UndoMode.Move , picIndex);
 						}
 					}
+					return "";
 				}
 				catch( Exception ex )
 				{
-					MessageBox.Show( "Error copying/moving file: \n\n" + ex.Message, "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
+					return ex.Message;
 				}
-			});
 		}
 
 		/// <summary>

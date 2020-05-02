@@ -37,7 +37,7 @@ namespace PhotoSift
 		private FileManagement fileManagement;
 		private Image TransformedImage = null;	// a copy of the original image when rotating/flipping
 
-		private int iCurrentPic = 0;
+		private int iCurrentPic = 0; // its base is 0
 		private bool bAutoAdvanceEnabled = false;
 		
 		private bool bFullScreen = false;
@@ -667,12 +667,10 @@ namespace PhotoSift
 		}
 		private void ShowMenu()
 		{
-			if( menuStripMain.Visible == true ) return;
 			menuStripMain.Visible = true;
 		}
 		private void HideMenu()
 		{
-			if( menuStripMain.Visible == false ) return;
 			menuStripMain.Visible = false;
 		}
 	
@@ -1241,10 +1239,15 @@ namespace PhotoSift
 				mnuZoomOut,
 				mnuZoomToHeight,
 				mnuZoomToWidth,
-				mnuResetZoom
+				mnuResetZoom,
+				mnuMoves,
+				mnuMovesLeft,
+				mnuMovesRight
 			};
 			bool hasItem = pics.Count > 0;
 			menus.ForEach((m => m.Enabled = hasItem));
+			if (iCurrentPic < 1) mnuMovesLeft.Enabled = false;
+			if (iCurrentPic >= pics.Count - 1) mnuMovesRight.Enabled = false;
 
 			// undo menu should reflect "next" undo type
 			bool bUndo = true;
@@ -1277,12 +1280,7 @@ namespace PhotoSift
 
 		public void FileManagementCallback( FileManagement.UndoCallbackData d )
 		{
-			if( this.InvokeRequired )
-			{
-				// if required for thread safety, call self using invoke instead
-				this.Invoke( new MethodInvoker( delegate() { FileManagementCallback( d ); } ) );
-			}
-			else
+			this.Invoke(new MethodInvoker(delegate ()
 			{
 				if( d.undoEvent == FileManagement.UndoCallbackEvent.UndoPerformed )
 				{
@@ -1307,10 +1305,9 @@ namespace PhotoSift
 					}
 					ShowStatusMessage( "Undo..." );
 
-				}
-
 				UpdateMenuEnabledDisabled();
 			}
+			}));
 		}
 		// --
 

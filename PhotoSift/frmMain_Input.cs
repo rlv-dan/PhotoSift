@@ -23,6 +23,8 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PhotoSift
 {
@@ -406,6 +408,48 @@ namespace PhotoSift
 			panelMain.Cursor = Cursors.Arrow;
 		}
 
+		private void mnuMovesLeft_Click(object sender, EventArgs e)
+		{
+			if (pics.Count < 1) return; // no images loaded
+			if (iCurrentPic < 1) return; // on first image
+
+			int shift = 0; // todo settings
+			//string extraTitle = ""; // (including current (+ x images))
+			//List<string> newPics = pics.GetRange(0, iCurrentPic - shift);
+			string newDir = Microsoft.VisualBasic.Interaction.InputBox(
+				string.Format("Move the {0} images to which folder?\n\nSupports relative path to the target base folder or an absolute path.", iCurrentPic),
+				"Moves the left images in pool");
+			if (newDir.Trim() != "")
+			{
+				var i = Enumerable.Range(0, iCurrentPic - shift);
+				movePicsToCustomFolder(newDir, i.ToArray());
+				Task.Run(() => Task.Delay(500)); // Mitigating cache ops conflicts
+				iCurrentPic = 0;
+				ShowNextPic(shift);
+			}
+		}
+		private void mnuMovesRight_Click(object sender, EventArgs e)
+		{
+			if (pics.Count < 1) return; // no images loaded
+			if (iCurrentPic + 1 >= pics.Count) return; // on end image
+
+			int shift = 0; // todo settings.
+						   //string extraTitle = ""; // (including current (+ x images))
+						   //List<string> newPics = pics.GetRange(0, iCurrentPic - shift);
+			int startIndex = iCurrentPic + 1; // 1 == not including current.
+			int picNum = pics.Count - startIndex;
+			string newDir = Microsoft.VisualBasic.Interaction.InputBox(
+				string.Format("Move the {0} images to which folder?\n\nSupports relative path to the target base folder or an absolute path.", picNum),
+				"Moves the right images in pool");
+			if (newDir.Trim() != "")
+			{
+				var i = Enumerable.Range(startIndex, picNum);
+				movePicsToCustomFolder(newDir, i.ToArray());
+				Task.Run(() => Task.Delay(500)); // Mitigating cache ops conflicts
+				ShowNextPic(shift);
+			}
+
+		}
 
 		// -- Handle mouse events -----------------------------------------------------------------------------------
 
@@ -659,10 +703,7 @@ namespace PhotoSift
 				if( bValidKey )
 				{
 					picCurrent.Image = null;
-					imageCache.DropImage( pics[iCurrentPic] );
 					wmpCurrent.URL = null;
-
-					string Filename = System.IO.Path.GetFileName( pics[iCurrentPic] );
 
 					// get pressed key
 					string KeyName = Convert.ToString( (char)e.KeyValue );
@@ -679,52 +720,83 @@ namespace PhotoSift
 
 					// Get custom target folder from settings
 					PropertyInfo Prop = ( typeof( AppSettings ) ).GetProperty( "KeyFolder_" + KeyName );
-					String tmp = (string)Prop.GetValue( settings, null );
-					string CustomKeyFolder = "";
-					if( tmp.Trim() != "" ) CustomKeyFolder = tmp.Trim();
+					string KeyFolder = settings.TargetFolder + System.IO.Path.DirectorySeparatorChar + KeyName;     // use keyname as default subfolder name
+					string tmp = (string)Prop.GetValue( settings, null );
+					if( tmp.Trim() != "" ) KeyFolder = tmp.Trim();
+					movePicToCustomFolder(KeyFolder, iCurrentPic);
+					ShowNextPic(0);
+					e.Handled = true;
+				}
+			}
 
+		}
+		private void movePicToCustomFolder(string folder, int picIndex)
+		{
+			movePicsToCustomFolder(folder, new[] { picIndex });
+			//pics.RemoveAt(iCurrentPic);
+		}
+		private void movePicsToCustomFolder(string folder, int[] picsIndex)
+		{
+			string targetDir = folder;
 					// figure out how to use the custome folder (complete path or relative to base folder)
-					string targetDir = Path.Combine(settings.TargetFolder, KeyName);		// use keyname as default subfolder name
-					if( CustomKeyFolder != "" )
-					{
 						try
 						{
-							if( Path.IsPathRooted( CustomKeyFolder ) )
-							{
-								targetDir = CustomKeyFolder;	// fully qualified path
-							}
+				if (Path.IsPathRooted(folder))
+					targetDir = folder;    // fully qualified path
 							else
-							{
-								targetDir = Path.Combine(settings.TargetFolder, CustomKeyFolder);	// folder is relative to base folder
-							}
-						}
+					targetDir = settings.TargetFolder + System.IO.Path.DirectorySeparatorChar + folder;    // folder is relative to base folder
+			}
 						catch
 						{
-							MessageBox.Show( "The target folder for this key is not valid:\n\n" + CustomKeyFolder, "Path Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
+				MessageBox.Show("The target folder for this key is not valid:\n\n" + folder, "Path Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						}
-					}
 
-					string sourceDir = System.IO.Path.GetDirectoryName( pics[iCurrentPic] );
-					string sourceFile = Path.Combine(sourceDir, Filename);
-					string targetFil = Path.Combine(targetDir, Filename);
-					try
-					{
+
+			List<int> droppedIndex = new List<int>{ };
+			var taskResults = new Dictionary<int, string>();
+			string errors = "";
+			Task<string> lastTask = Task.Run(()=> "");
+			foreach (int picIndex in picsIndex)
+			{
+				string sourceFile = pics[picIndex];
+				string filename = System.IO.Path.GetFileName(pics[picIndex]);
+				string targetFile = targetDir + System.IO.Path.DirectorySeparatorChar + filename;
+				try
+				{
 						sourceFile = Path.GetFullPath( sourceFile );	// strip double slashes etc
-						targetFil = Path.GetFullPath( targetFil );
+					targetFile = Path.GetFullPath(targetFile);
 					}
 					catch( Exception ex )
 					{
 						Console.WriteLine( "GetFullPath Error" + ex );
 					}
 					Console.WriteLine( sourceFile );
-					fileManagement.CopyMoveFile( sourceFile, targetFil, settings, iCurrentPic );
 
-					pics.RemoveAt( iCurrentPic );
-					ShowNextPic( 0 );
-					e.Handled = true;
+				imageCache.DropImage(sourceFile);
+				// todo: real async and lock
+				var newTask = lastTask.ContinueWith(t => { return fileManagement.CopyMoveFile(sourceFile, targetFile, settings, picIndex); } );
+				newTask.Wait();
+				taskResults.Add(picIndex, newTask.Result);
+				lastTask = newTask;
 				}
+			foreach (KeyValuePair<int, string> item in taskResults)
+			{
+				string errorMsg = item.Value;
+				if (errorMsg == "")
+					droppedIndex.Add(item.Key);
+				else
+					// you can also output the filename or path.
+					errors += errorMsg;
 			}
 
+			droppedIndex.Sort((x, y) => -x.CompareTo(y));
+			droppedIndex.ForEach(i => pics.RemoveAt(i));
+
+			if (errors != "")
+			{
+				// todo, test the ui, check and cut too many lines.
+				MessageBox.Show("Error copying/moving file(s): \n\n" + errors, "File(s) Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+		}
 		}
 
 		private void frmMain_KeyDown( object sender, KeyEventArgs e )
