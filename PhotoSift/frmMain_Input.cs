@@ -43,20 +43,56 @@ namespace PhotoSift
 			HideFullscreenForcedCursor();
 		}
 
-		private void mnuClearImages_Click( object sender, EventArgs e )
+		private void mnuClearImages_Click(object sender, EventArgs e)
 		{
-			if ( settings.WarnThresholdOnClearQueue > 0 && pics.Count > settings.WarnThresholdOnClearQueue)
+			int mode = 0;
+			if (sender.ToString() == Keys.NumPad0.ToString())
+				mode = 0; // all
+			else if (ModifierKeys == (Keys.Shift))
+				mode = 1; // left
+			else if (ModifierKeys == (Keys.Control))
+				mode = 2; // right
+			else
+				mode = 0;
+
+			int count = 0;
+			int keepCur = 1;
+			int removeCur = keepCur == 0 ? 1 : 0;
+			if (mode == 0)
+				count = pics.Count;
+			else if (mode == 1)
+				count = iCurrentPic + removeCur;
+			else if (mode == 2)
+				count = pics.Count - iCurrentPic - keepCur;
+
+			if (settings.WarnThresholdOnClearQueue > 0 && count > settings.WarnThresholdOnClearQueue)
 			{
-				if (MessageBox.Show(string.Format("Confirm to clear the queue with {0} image(s)?", pics.Count),
+				if (MessageBox.Show(string.Format("Confirm to clear the queue with {0} image(s)?", count),
 								"Clear images queue", MessageBoxButtons.YesNo) != DialogResult.Yes)
 					return;
 			}
-			pics.Clear();
-			iCurrentPic = 0;
-			ShowNextPic( 0 );
+			if (mode == 0)
+			{
+				pics.Clear();
+				iCurrentPic = 0;
+				ShowNextPic(0);
+			}
+			else if (mode == 1 && (iCurrentPic > 0 || keepCur == 0))
+			{
+				pics.RemoveRange(0, keepCur > 0 ? iCurrentPic : iCurrentPic + 1);
+				iCurrentPic = 0;
+				ShowNextPic(0);
+			}
+			else if (mode == 2 && (pics.Count - (iCurrentPic + 1)) > 0)
+			{
+				// todo: keepCur support.
+				pics.RemoveRange(iCurrentPic + 1, pics.Count - (iCurrentPic + 1));
+				iCurrentPic = iCurrentPic - 1; // for refresh
+				ShowNextPic(iCurrentPic); // refresh title
+			}
 		}
 
-		private void mnuCopyToClipboard_Click( object sender, EventArgs e )
+			private void mnuCopyToClipboard_Click( object sender, EventArgs e )
 		{
 			if (settings.CopyActionType == CopytoClipboardOptions.Bitmap) {
 				if (picCurrent.Image != null)
@@ -520,7 +556,7 @@ namespace PhotoSift
 			}
 
 			if (e.Control && e.KeyCode == Keys.NumPad0) // allow both
-				mnuClearImages_Click(this, e);
+				mnuClearImages_Click(Keys.NumPad0, e);
 
 #if RLVISION
 			if( e.Control && e.KeyCode == Keys.N )
