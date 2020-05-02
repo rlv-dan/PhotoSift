@@ -767,6 +767,7 @@ namespace PhotoSift
 			var taskResults = new Dictionary<int, string>();
 			string errors = "";
 			Task<string> lastTask = Task.Run(()=> "");
+			string undoGroupID = Guid.NewGuid().ToString();
 			foreach (int picIndex in picsIndex)
 			{
 				string sourceFile = pics[picIndex];
@@ -774,7 +775,7 @@ namespace PhotoSift
 				string targetFile = targetDir + System.IO.Path.DirectorySeparatorChar + filename;
 				try
 				{
-						sourceFile = Path.GetFullPath( sourceFile );	// strip double slashes etc
+					sourceFile = Path.GetFullPath( sourceFile );	// strip double slashes etc
 					targetFile = Path.GetFullPath(targetFile);
 					}
 					catch( Exception ex )
@@ -785,11 +786,13 @@ namespace PhotoSift
 
 				imageCache.DropImage(sourceFile);
 				// todo: real async and lock
-				var newTask = lastTask.ContinueWith(t => { return fileManagement.CopyMoveFile(sourceFile, targetFile, settings, picIndex); } );
+				var newTask = lastTask.ContinueWith(t => { 
+					return fileManagement.CopyMoveFile(sourceFile, targetFile, settings, picIndex, true, undoGroupID); 
+				});
 				newTask.Wait();
 				taskResults.Add(picIndex, newTask.Result);
 				lastTask = newTask;
-				}
+			}
 			foreach (KeyValuePair<int, string> item in taskResults)
 			{
 				string errorMsg = item.Value;

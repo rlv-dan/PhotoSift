@@ -74,54 +74,72 @@ namespace PhotoSift
 			public string dest { get; set; }
 			public UndoMode mode { get; set; }
 			public int picIndex { get; set; }
+			public string actionGroup { get; set; } // Used to undo bulk operations. Use datetime/Guid instead of bool, considering avoiding conflicts and push in asynchronously.
 		}
 
-		private void AddToUndo( string SourceFilename, string DestFilename, UndoMode mode , int picIndex )
+		private void AddToUndo( string SourceFilename, string DestFilename, UndoMode mode , int picIndex, string undoID = "" )
 		{
-			UndoData u = new UndoData();
-			u.source = SourceFilename;
-			u.dest = DestFilename;
-			u.mode = mode;
-			u.picIndex = picIndex;
+			if (undoID == "")
+				undoID = Guid.NewGuid().ToString();
+
+			UndoData u = new UndoData
+			{
+				source = SourceFilename,
+				dest = DestFilename,
+				mode = mode,
+				picIndex = picIndex,
+				actionGroup = undoID // No use timestamp because of concerns about timing conflicts and the related format is not simple.
+			};
 			undo.Push( u );
 			// mainForm.FileManagementCallback( new UndoCallbackData( UndoCallbackEvent.UndoUpdated, u ) ); // unused.
 		}
 
 		public void UndoLastFileOperation()
 		{
-			if( undo.Count == 0 )
+			bool bContinue = true;
+			string errors = "";
+			string lastItemGroup = "unset";
+
+			if (undo.Count == 0)
 			{
-				MessageBox.Show( "Nothing to undo...", "Oops", MessageBoxButtons.OK, MessageBoxIcon.Error );
+				MessageBox.Show("Nothing to undo...", "Oops", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
+			while (bContinue)
+			{
+				if (undo.Count == 0)
+					break;
+				if (lastItemGroup != "unset" && lastItemGroup != undo.Peek().actionGroup) // Assume that batch data is continuous
+					break; // this is new undo group
+				UndoData u = undo.Pop();
+				lastItemGroup = u.actionGroup;
 
-			UndoData u = undo.Pop();
-			if( u.mode == UndoMode.Copy )
-			{
-				DeleteFile( u.dest, false );	// delete copy of original file
-			}
-			else if( u.mode == UndoMode.Move )
-			{
-				AppSettings s = new AppSettings();
-				s.FileMode = FileOperations.Move;
-				s.ExistingFiles = ExistingFileOptions.Overwrite;
-				string errors = CopyMoveFile( u.dest, u.source, s, -1, false ); // move back file
-				if (errors != "")
+				if (u.mode == UndoMode.Copy)
 				{
-					MessageBox.Show("Error copying/moving file: \n\n" + errors, "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+					DeleteFile(u.dest, false);  // delete copy of original file
+				}
+				else if (u.mode == UndoMode.Move)
+				{
+					AppSettings s = new AppSettings();
+					s.FileMode = FileOperations.Move;
+					s.ExistingFiles = ExistingFileOptions.Overwrite;
+					errors += CopyMoveFile(u.dest, u.source, s, -1, false) + "\n"; // move back file
+				}
+				else if (u.mode == UndoMode.Rename)
+				{
+					RenameFile(u.dest, u.source, -1, false);    // rename back to original filename
+				}
+				else if (u.mode == UndoMode.Delete)
+				{
+					Undelete(u.source);
+				}
 
+				mainForm.FileManagementCallback(new UndoCallbackData(UndoCallbackEvent.UndoPerformed, u));
 			}
-			else if( u.mode == UndoMode.Rename )
+			if (!string.IsNullOrWhiteSpace(errors))
 			{
-				RenameFile( u.dest, u.source, -1, false );	// rename back to original filename
+				MessageBox.Show("Error copying/moving file: \n\n" + errors, "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
-			else if( u.mode == UndoMode.Delete )
-			{
-				Undelete( u.source );
-			}
-
-			mainForm.FileManagementCallback( new UndoCallbackData( UndoCallbackEvent.UndoPerformed, u ) );
 		}
 
 		public UndoMode GetNextUndoType()
@@ -137,61 +155,61 @@ namespace PhotoSift
 		/// <param name="sourceDir">Directory where the file is now</param>
 		/// <param name="destDir">Destination direction path</param>
 		/// <param name="settings">Pass a settings object with FileOperations and ExistingFileOptions set</param>
-		public string CopyMoveFile( string source, string dest, AppSettings settings, int picIndex = -1, bool bSaveUndo = true)
+		public string CopyMoveFile( string source, string dest, AppSettings settings, int picIndex = -1, bool bSaveUndo = true, string undoID = "")
 		{
-				try
+			try
+			{
+				string destDir = Path.GetDirectoryName( dest );
+				string fileName = Path.GetFileName( dest );
+
+				// create dir if not already present
+				if( destDir != "" && !Directory.Exists( destDir ) )
 				{
-					string destDir = Path.GetDirectoryName( dest );
-					string fileName = Path.GetFileName( dest );
-
-					// create dir if not already present
-					if( destDir != "" && !Directory.Exists( destDir ) )
-					{
-						Directory.CreateDirectory( Path.GetDirectoryName( dest ) );
-					}
-
-					// option: append number to existing files
-					if( File.Exists( dest ) && settings.ExistingFiles == ExistingFileOptions.AppendNumber )
-					{
-						int i = 1;
-						while( File.Exists( dest ) )
-						{
-							dest = $"{destDir}{Path.DirectorySeparatorChar}{Path.GetFileNameWithoutExtension(fileName)} ({i++}){Path.GetExtension(fileName)}";
-						}
-						// todo: "i" may be conflicted or out of order in async batch runs
-					}
-
-					// what to do with existing files?
-					bool bOverwrite = false;
-					bool bSkip = false;
-					if( File.Exists( dest ) && settings.ExistingFiles == ExistingFileOptions.Overwrite ) bOverwrite = true;
-					if( File.Exists( dest ) && settings.ExistingFiles == ExistingFileOptions.Skip ) bSkip = true;
-
-					// perform copy/move operation
-					if( !bSkip )
-					{
-						if( settings.FileMode == FileOperations.Copy )
-						{
-							File.Copy( source, dest, bOverwrite );
-							settings.Stats_CopiedPics++;
-							Console.WriteLine( "[COPY] " + source + " --> " + dest );
-							if( bSaveUndo ) AddToUndo( source, dest, UndoMode.Copy, picIndex );
-						}
-						else if( settings.FileMode == FileOperations.Move )
-						{
-							if( bOverwrite ) File.Delete( dest );
-							File.Move( source, dest );
-							settings.Stats_MovedPics++;
-							Console.WriteLine( "[MOVE] " + source + " --> " + dest );
-							if( bSaveUndo ) AddToUndo( source, dest, UndoMode.Move , picIndex);
-						}
-					}
-					return "";
+					Directory.CreateDirectory( Path.GetDirectoryName( dest ) );
 				}
-				catch( Exception ex )
+
+				// option: append number to existing files
+				if( File.Exists( dest ) && settings.ExistingFiles == ExistingFileOptions.AppendNumber )
 				{
-					return ex.Message;
+					int i = 1;
+					while( File.Exists( dest ) )
+					{
+						dest = $"{destDir}{Path.DirectorySeparatorChar}{Path.GetFileNameWithoutExtension(fileName)} ({i++}){Path.GetExtension(fileName)}";
+					}
+					// todo: "i" may be conflicted or out of order in async batch runs
 				}
+
+				// what to do with existing files?
+				bool bOverwrite = false;
+				bool bSkip = false;
+				if( File.Exists( dest ) && settings.ExistingFiles == ExistingFileOptions.Overwrite ) bOverwrite = true;
+				if( File.Exists( dest ) && settings.ExistingFiles == ExistingFileOptions.Skip ) bSkip = true;
+
+				// perform copy/move operation
+				if( !bSkip )
+				{
+					if( settings.FileMode == FileOperations.Copy )
+					{
+						File.Copy( source, dest, bOverwrite );
+						settings.Stats_CopiedPics++;
+						Console.WriteLine( "[COPY] " + source + " --> " + dest );
+						if( bSaveUndo ) AddToUndo( source, dest, UndoMode.Copy, picIndex, undoID);
+					}
+					else if( settings.FileMode == FileOperations.Move )
+					{
+						if( bOverwrite ) File.Delete( dest );
+						File.Move( source, dest );
+						settings.Stats_MovedPics++;
+						Console.WriteLine( "[MOVE] " + source + " --> " + dest );
+						if( bSaveUndo ) AddToUndo( source, dest, UndoMode.Move , picIndex, undoID);
+					}
+				}
+				return "";
+			}
+			catch( Exception ex )
+			{
+				return ex.Message;
+			}
 		}
 
 		/// <summary>
