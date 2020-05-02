@@ -1486,6 +1486,11 @@ namespace PhotoSift
 				"Clear Items Hotkeys",
 				MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
+
+		private void mnuOpenTargetFolder_Click(object sender, EventArgs e)
+		{
+			System.Diagnostics.Process.Start("explorer.exe", settings.TargetFolder);
+		}
 		// --------------------------------------------------------------------
 
 

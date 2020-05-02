@@ -39,6 +39,7 @@
             this.menuStripMain = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuSetTargetFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuOpenTargetFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuRenameFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
@@ -87,6 +88,7 @@
             this.mnuAddImages = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuAddFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuClearImages = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuClearImagesShowHotkeys = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuAddInRandomOrder = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuRandimizeOrder = new System.Windows.Forms.ToolStripMenuItem();
@@ -98,7 +100,6 @@
             this.picLogo = new System.Windows.Forms.PictureBox();
             this.panelMain = new System.Windows.Forms.Panel();
             this.timerMouseHider = new System.Windows.Forms.Timer(this.components);
-            this.mnuClearImagesShowHotkeys = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.picCurrent)).BeginInit();
             this.menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
@@ -189,6 +190,7 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuSetTargetFolder,
+            this.mnuOpenTargetFolder,
             this.toolStripMenuItem7,
             this.mnuRenameFile,
             this.toolStripMenuItem4,
@@ -204,6 +206,13 @@
             this.mnuSetTargetFolder.Size = new System.Drawing.Size(239, 22);
             this.mnuSetTargetFolder.Text = "Set Target Base Folder...";
             this.mnuSetTargetFolder.Click += new System.EventHandler(this.mnuSetTargetFolder_Click);
+            // 
+            // mnuOpenTargetFolder
+            // 
+            this.mnuOpenTargetFolder.Name = "mnuOpenTargetFolder";
+            this.mnuOpenTargetFolder.Size = new System.Drawing.Size(239, 22);
+            this.mnuOpenTargetFolder.Text = "Open Target Base Folder";
+            this.mnuOpenTargetFolder.Click += new System.EventHandler(this.mnuOpenTargetFolder_Click);
             // 
             // toolStripMenuItem7
             // 
@@ -602,6 +611,13 @@
             this.mnuClearImages.Text = "Clear";
             this.mnuClearImages.Click += new System.EventHandler(this.mnuClearImages_Click);
             // 
+            // mnuClearImagesShowHotkeys
+            // 
+            this.mnuClearImagesShowHotkeys.Name = "mnuClearImagesShowHotkeys";
+            this.mnuClearImagesShowHotkeys.Size = new System.Drawing.Size(256, 22);
+            this.mnuClearImagesShowHotkeys.Text = "Learn the Clear hotkeys...";
+            this.mnuClearImagesShowHotkeys.Click += new System.EventHandler(this.mnuClearImagesShowHotkeys_Click);
+            // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
@@ -691,13 +707,6 @@
             // 
             this.timerMouseHider.Interval = 1000;
             this.timerMouseHider.Tick += new System.EventHandler(this.timerMouseHider_Tick);
-            // 
-            // mnuClearImagesShowHotkeys
-            // 
-            this.mnuClearImagesShowHotkeys.Name = "mnuClearImagesShowHotkeys";
-            this.mnuClearImagesShowHotkeys.Size = new System.Drawing.Size(256, 22);
-            this.mnuClearImagesShowHotkeys.Text = "Learn the Clear hotkeys...";
-            this.mnuClearImagesShowHotkeys.Click += new System.EventHandler(this.mnuClearImagesShowHotkeys_Click);
             // 
             // frmMain
             // 
@@ -808,6 +817,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuMovesLeft;
 		private System.Windows.Forms.ToolStripMenuItem mnuMovesRight;
         private System.Windows.Forms.ToolStripMenuItem mnuClearImagesShowHotkeys;
+        private System.Windows.Forms.ToolStripMenuItem mnuOpenTargetFolder;
     }
 }
 
