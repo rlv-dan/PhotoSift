@@ -150,7 +150,7 @@ namespace PhotoSift
 
 			// Attempt to load files or folders passed via command line
 			string[] args = Util.ParseArguments( Environment.CommandLine );
-			if( args.Length > 0 ) AddFiles( args ); else ShowNextPic( 0 );
+			if( args.Length > 0 ) AddFiles( args ); else ShowPicByOffset( 0 );
 
 #if DEBUG && RLVISION
 			// Development settings
@@ -376,7 +376,7 @@ namespace PhotoSift
 			}
 			if( newPics.Count == 0 )
 			{
-				ShowNextPic( 0 );
+				ShowPicByOffset( 0 );
 				return false;
 			}
 
@@ -388,7 +388,7 @@ namespace PhotoSift
 			// update gui
 			ShowStatusMessage( "Added " + newPics.Count + " images..." );
 			ResumeAutoAdvance();
-			ShowNextPic( 0 );
+			ShowPicByOffset( 0 );
 			
 			return true;
 		}
@@ -432,7 +432,13 @@ namespace PhotoSift
 			}
 		}
 
-		private void ShowNextPic( int picsToSkip )
+		private void PicGoto(int targetPicIndex) // The function name may not be final. ShowPic, PicGoto, PicJump, or something.
+		{
+			iCurrentPic = targetPicIndex;
+			ShowPicByOffset(0);
+		}
+
+		private void ShowPicByOffset( int picsToSkip )
 		{
 			if( pics.Count == 0 )
 			{
@@ -612,8 +618,7 @@ namespace PhotoSift
 			}
 
 			pics[pictureIndex] = newPicturePath;
-			iCurrentPic = pictureIndex;	// jump to image
-			ShowNextPic( 0 );			// reload image
+			PicGoto(pictureIndex);
 			imageCache.DropImage( currentPicturePath );
 		}
 
@@ -647,7 +652,7 @@ namespace PhotoSift
 		}
 		private void timerAutoAdvance_Tick( object sender, EventArgs e )
 		{
-			ShowNextPic( 1 );
+			ShowPicByOffset( 1 );
 		}
 		// --
 
@@ -1296,8 +1301,7 @@ namespace PhotoSift
 							if( d.undoData.picIndex < 0 ) return;
 							if( d.undoData.picIndex > pics.Count ) d.undoData.picIndex = pics.Count;
 							pics.Insert( d.undoData.picIndex, d.undoData.source );
-							iCurrentPic = d.undoData.picIndex;	// jump to image
-							ShowNextPic( 0 );					// reload image
+							PicGoto(d.undoData.picIndex);
 							if( d.undoData.mode == FileManagement.UndoMode.Copy ) settings.Stats_CopiedPics--;
 							if( d.undoData.mode == FileManagement.UndoMode.Move ) settings.Stats_MovedPics--;
 							if( d.undoData.mode == FileManagement.UndoMode.Delete ) settings.Stats_DeletedPics--;

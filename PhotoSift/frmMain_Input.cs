@@ -75,26 +75,23 @@ namespace PhotoSift
 			if (mode == ClearMode.All)
 			{
 				pics.Clear();
-				iCurrentPic = 0;
-				ShowNextPic(0);
+				PicGoto(0);
 			}
 			else if (mode == ClearMode.Left && (iCurrentPic > 0 || keepCur == 0))
 			{
 				pics.RemoveRange(0, keepCur > 0 ? iCurrentPic : iCurrentPic + 1);
-				iCurrentPic = 0;
-				ShowNextPic(0);
+				PicGoto(0);
 			}
 			else if (mode == ClearMode.Right && (pics.Count - (iCurrentPic + 1)) > 0)
 			{
 				// todo: keepCur support.
 				pics.RemoveRange(iCurrentPic + 1, pics.Count - (iCurrentPic + 1));
-				iCurrentPic = iCurrentPic - 1; // for refresh
-				ShowNextPic(0); // refresh title
+				PicGoto(iCurrentPic - 1); // for refresh the title
 			}
 			else if (mode == ClearMode.Current)
 			{
 				pics.RemoveAt(iCurrentPic);
-				ShowNextPic(0);
+				ShowPicByOffset(0);
 			}
 
 		}
@@ -201,7 +198,7 @@ namespace PhotoSift
 
 			ApplySettings();
 			HideFullscreenForcedCursor();
-			ShowNextPic( 0 );	// reload picture
+			ShowPicByOffset( 0 );	// reload picture
 		}
 
 		private void mnuFullscreen_Click( object sender, EventArgs e )
@@ -288,37 +285,35 @@ namespace PhotoSift
 
 		private void mnuNavigateNext_Click( object sender, EventArgs e )
 		{
-			ShowNextPic( 1 );
+			ShowPicByOffset( 1 );
 		}
 		private void mnuNavigatePrev_Click( object sender, EventArgs e )
 		{
-			ShowNextPic( -1 );
+			ShowPicByOffset( -1 );
 		}
 		private void mnuNavigateFirst_Click( object sender, EventArgs e )
 		{
-			iCurrentPic = 0;
-			ShowNextPic( 0 );
+			PicGoto(0);
 		}
 		private void mnuNavigateLast_Click( object sender, EventArgs e )
 		{
-			iCurrentPic = pics.Count - 1;
-			ShowNextPic( 0 );
+			PicGoto(pics.Count - 1);
 		}
 		private void mnuNavigateForwardMedium_Click( object sender, EventArgs e )
 		{
-			ShowNextPic( settings.MediumJump );
+			ShowPicByOffset( settings.MediumJump );
 		}
 		private void mnuNavigateBackMedium_Click( object sender, EventArgs e )
 		{
-			ShowNextPic( -settings.MediumJump );
+			ShowPicByOffset( -settings.MediumJump );
 		}
 		private void mnuNavigateForwardLarge_Click( object sender, EventArgs e )
 		{
-			ShowNextPic( settings.LargeJump );
+			ShowPicByOffset( settings.LargeJump );
 		}
 		private void mnuNavigateBackLarge_Click( object sender, EventArgs e )
 		{
-			ShowNextPic( -settings.LargeJump );
+			ShowPicByOffset( -settings.LargeJump );
 		}
 
 		private void mnuUndo_Click( object sender, EventArgs e )
@@ -416,7 +411,7 @@ namespace PhotoSift
 		{
 			panelMain.Cursor = Cursors.WaitCursor;
 			Util.Shuffle( pics );
-			ShowNextPic( 0 );
+			ShowPicByOffset( 0 );
 			ShowStatusMessage( "Randomized image order..." );
 			panelMain.Cursor = Cursors.Arrow;
 		}
@@ -437,8 +432,7 @@ namespace PhotoSift
 				var i = Enumerable.Range(0, iCurrentPic - shift);
 				movePicsToCustomFolder(newDir, i.ToArray());
 				Task.Run(() => Task.Delay(500)); // Mitigating cache ops conflicts
-				iCurrentPic = 0;
-				ShowNextPic(shift);
+				PicGoto(0 + shift);
 			}
 		}
 		private void mnuMovesRight_Click(object sender, EventArgs e)
@@ -459,7 +453,7 @@ namespace PhotoSift
 				var i = Enumerable.Range(startIndex, picNum);
 				movePicsToCustomFolder(newDir, i.ToArray());
 				Task.Run(() => Task.Delay(500)); // Mitigating cache ops conflicts
-				ShowNextPic(shift);
+				ShowPicByOffset(shift);
 			}
 
 		}
@@ -541,9 +535,9 @@ namespace PhotoSift
 			{
 				// show next/previous picture
 				if( e.Delta > 0 )
-					ShowNextPic( -1 );
+					ShowPicByOffset( -1 );
 				else
-					ShowNextPic( 1 );
+					ShowPicByOffset( 1 );
 			}
 		}
 
@@ -572,7 +566,7 @@ namespace PhotoSift
 						int n = 1;
 						if( e.Control ) n = settings.MediumJump;
 						else if( e.Shift ) n = settings.LargeJump;
-						ShowNextPic( n );
+						ShowPicByOffset( n );
 						e.Handled = true;
 					}
 					else if( e.KeyCode == Keys.Left || e.KeyCode == Keys.Up || e.KeyCode == Keys.PageUp )	// backwards
@@ -580,14 +574,14 @@ namespace PhotoSift
 						int n = -1;
 						if( e.Control ) n = -settings.MediumJump;
 						else if( e.Shift ) n = -settings.LargeJump;
-						ShowNextPic( n );
+						ShowPicByOffset( n );
 						e.Handled = true;
 					}
 					else if( e.KeyCode == Keys.Delete )		// Delete
 					{
 						string DropPicPath = pics[iCurrentPic];
 						int DropPicIndex = iCurrentPic;
-						ShowNextPic(settings.OnDeleteStepForward ? 1 : -1);
+						ShowPicByOffset(settings.OnDeleteStepForward ? 1 : -1);
 
 						if ( !e.Control )	// Ctrl+Del --> only remove from list
 						{
@@ -669,19 +663,17 @@ namespace PhotoSift
 
 			else if( e.KeyCode == Keys.Space )	// Show next
 			{
-				ShowNextPic( 1 );
+				ShowPicByOffset( 1 );
 				e.Handled = true;
 			}
 			else if( e.KeyCode == Keys.Home )	// Goto first image
 			{
-				iCurrentPic = 0;
-				ShowNextPic( 0 );
+				PicGoto(0);
 				e.Handled = true;
 			}
 			else if( e.KeyCode == Keys.End )	// Goto last image
 			{
-				iCurrentPic = pics.Count - 1;
-				ShowNextPic( 0 );
+				PicGoto(pics.Count - 1);
 				e.Handled = true;
 			}
 
@@ -737,7 +729,7 @@ namespace PhotoSift
 					string tmp = (string)Prop.GetValue( settings, null );
 					if( tmp.Trim() != "" ) KeyFolder = tmp.Trim();
 					movePicToCustomFolder(KeyFolder, iCurrentPic);
-					ShowNextPic(0);
+					ShowPicByOffset(0);
 					e.Handled = true;
 				}
 			}
