@@ -247,10 +247,13 @@ namespace PhotoSift
 		{
 			ForceShowFullscreenCursor();
 			string old_name = Path.GetFileNameWithoutExtension( pics[iCurrentPic] );
-			string new_name = old_name;
 			string ext = Path.GetExtension( pics[iCurrentPic] );
 			string path = Path.GetDirectoryName( pics[iCurrentPic] );
-			if( Util.InputBox( "Rename File", "Enter a new name:", ref new_name ) == System.Windows.Forms.DialogResult.OK )
+
+			string new_name = Microsoft.VisualBasic.Interaction.InputBox("Enter a new name:",
+				"Rename File",
+				old_name);
+			if (new_name != "")
 			{
 				string o = Path.Combine(path, old_name + ext);
 				string n = Path.Combine(path, new_name + ext);
@@ -327,8 +330,13 @@ namespace PhotoSift
 		private void mnuZoomToWidth_Click( object sender, EventArgs e )
 		{
 			string sNewWidth = GetPictureDisplaySize().Width.ToString();
-			if( Util.InputBox( "New width in pixels:", "Zoom to Width", ref sNewWidth ) == System.Windows.Forms.DialogResult.OK )
+
+			string newValue = Microsoft.VisualBasic.Interaction.InputBox("New width in pixels:",
+				"Zoom to Width",
+				sNewWidth);
+			if (newValue != "")
 			{
+				sNewWidth = newValue;
 				try
 				{
 					int iNewWidth = Convert.ToInt32( sNewWidth );
@@ -346,8 +354,13 @@ namespace PhotoSift
 		private void mnuZoomToHeight_Click( object sender, EventArgs e )
 		{
 			string sNewHeight = GetPictureDisplaySize().Height.ToString();
-			if( Util.InputBox( "New height in pixels:", "Zoom to Height", ref sNewHeight ) == System.Windows.Forms.DialogResult.OK )
+			string newValue = Microsoft.VisualBasic.Interaction.InputBox("New height in pixels:",
+				"Zoom to Height",
+				sNewHeight);
+
+			if (newValue != "")
 			{
+				sNewHeight = newValue;
 				try
 				{
 					int iNewHeight = Convert.ToInt32( sNewHeight );
