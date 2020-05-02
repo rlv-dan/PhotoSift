@@ -201,7 +201,7 @@
             this.mnuSetTargetFolder.Name = "mnuSetTargetFolder";
             this.mnuSetTargetFolder.ShortcutKeys = System.Windows.Forms.Keys.F9;
             this.mnuSetTargetFolder.Size = new System.Drawing.Size(230, 22);
-            this.mnuSetTargetFolder.Text = "Set Target Base Folder";
+            this.mnuSetTargetFolder.Text = "Set Target Base Folder...";
             this.mnuSetTargetFolder.Click += new System.EventHandler(this.mnuSetTargetFolder_Click);
             // 
             // toolStripMenuItem7
@@ -214,7 +214,7 @@
             this.mnuRenameFile.Name = "mnuRenameFile";
             this.mnuRenameFile.ShortcutKeys = System.Windows.Forms.Keys.F2;
             this.mnuRenameFile.Size = new System.Drawing.Size(230, 22);
-            this.mnuRenameFile.Text = "Rename File";
+            this.mnuRenameFile.Text = "Rename File...";
             this.mnuRenameFile.Click += new System.EventHandler(this.mnuRenameFile_Click);
             // 
             // toolStripMenuItem4
@@ -274,7 +274,7 @@
             this.mnuOpenSettings.ShortcutKeyDisplayString = "";
             this.mnuOpenSettings.ShortcutKeys = System.Windows.Forms.Keys.F12;
             this.mnuOpenSettings.Size = new System.Drawing.Size(229, 22);
-            this.mnuOpenSettings.Text = "Settings";
+            this.mnuOpenSettings.Text = "Settings...";
             this.mnuOpenSettings.Click += new System.EventHandler(this.mnuOpenSettings_Click);
             // 
             // viewToolStripMenuItem
@@ -395,7 +395,7 @@
             this.mnuZoomToWidth.Name = "mnuZoomToWidth";
             this.mnuZoomToWidth.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
             this.mnuZoomToWidth.Size = new System.Drawing.Size(214, 22);
-            this.mnuZoomToWidth.Text = "Zoom to Width";
+            this.mnuZoomToWidth.Text = "Zoom to Width...";
             this.mnuZoomToWidth.Click += new System.EventHandler(this.mnuZoomToWidth_Click);
             // 
             // mnuZoomToHeight
@@ -403,7 +403,7 @@
             this.mnuZoomToHeight.Name = "mnuZoomToHeight";
             this.mnuZoomToHeight.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
             this.mnuZoomToHeight.Size = new System.Drawing.Size(214, 22);
-            this.mnuZoomToHeight.Text = "Zoom to Height";
+            this.mnuZoomToHeight.Text = "Zoom to Height...";
             this.mnuZoomToHeight.Click += new System.EventHandler(this.mnuZoomToHeight_Click);
             // 
             // toolStripMenuItem13
@@ -581,7 +581,7 @@
             this.mnuAddImages.Name = "mnuAddImages";
             this.mnuAddImages.ShortcutKeys = System.Windows.Forms.Keys.Insert;
             this.mnuAddImages.Size = new System.Drawing.Size(256, 22);
-            this.mnuAddImages.Text = "Add Images";
+            this.mnuAddImages.Text = "Add Images...";
             this.mnuAddImages.Click += new System.EventHandler(this.mnuAddImages_Click);
             // 
             // mnuAddFolder
@@ -589,7 +589,7 @@
             this.mnuAddFolder.Name = "mnuAddFolder";
             this.mnuAddFolder.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Insert)));
             this.mnuAddFolder.Size = new System.Drawing.Size(256, 22);
-            this.mnuAddFolder.Text = "Add from Folder";
+            this.mnuAddFolder.Text = "Add from Folder...";
             this.mnuAddFolder.Click += new System.EventHandler(this.mnuAddFolder_Click);
             // 
             // mnuClearImages
@@ -643,7 +643,7 @@
             // 
             this.mnuHomepage.Name = "mnuHomepage";
             this.mnuHomepage.Size = new System.Drawing.Size(197, 22);
-            this.mnuHomepage.Text = "PhotoSift Homepage";
+            this.mnuHomepage.Text = "PhotoSift Homepage...";
             this.mnuHomepage.Click += new System.EventHandler(this.mnuHomepage_Click);
             // 
             // toolStripMenuItem2
