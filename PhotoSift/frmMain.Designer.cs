@@ -84,6 +84,8 @@
             this.mnuMoves = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMovesLeft = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMovesRight = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuMovesCurChecked = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuAddImages = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuAddFolder = new System.Windows.Forms.ToolStripMenuItem();
@@ -563,7 +565,9 @@
             // 
             this.mnuMoves.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuMovesLeft,
-            this.mnuMovesRight});
+            this.mnuMovesRight,
+            this.toolStripSeparator1,
+            this.mnuMovesCurChecked});
             this.mnuMoves.Name = "mnuMoves";
             this.mnuMoves.Size = new System.Drawing.Size(256, 22);
             this.mnuMoves.Text = "Moves";
@@ -571,16 +575,29 @@
             // mnuMovesLeft
             // 
             this.mnuMovesLeft.Name = "mnuMovesLeft";
-            this.mnuMovesLeft.Size = new System.Drawing.Size(150, 22);
+            this.mnuMovesLeft.Size = new System.Drawing.Size(203, 22);
             this.mnuMovesLeft.Text = "Left items...";
             this.mnuMovesLeft.Click += new System.EventHandler(this.mnuMovesLeft_Click);
             // 
             // mnuMovesRight
             // 
             this.mnuMovesRight.Name = "mnuMovesRight";
-            this.mnuMovesRight.Size = new System.Drawing.Size(150, 22);
+            this.mnuMovesRight.Size = new System.Drawing.Size(203, 22);
             this.mnuMovesRight.Text = "Right items...";
             this.mnuMovesRight.Click += new System.EventHandler(this.mnuMovesRight_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(200, 6);
+            // 
+            // mnuMovesCurChecked
+            // 
+            this.mnuMovesCurChecked.CheckOnClick = true;
+            this.mnuMovesCurChecked.Name = "mnuMovesCurChecked";
+            this.mnuMovesCurChecked.Size = new System.Drawing.Size(203, 22);
+            this.mnuMovesCurChecked.Text = "Including current item";
+            this.mnuMovesCurChecked.Click += new System.EventHandler(this.mnuMovesCurChecked_Click);
             // 
             // toolStripMenuItem8
             // 
@@ -818,6 +835,8 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuMovesRight;
         private System.Windows.Forms.ToolStripMenuItem mnuClearImagesShowHotkeys;
         private System.Windows.Forms.ToolStripMenuItem mnuOpenTargetFolder;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem mnuMovesCurChecked;
     }
 }
 

@@ -344,8 +344,10 @@ namespace PhotoSift
 		// Settings located on the GUI menus (not visible in the property grid)
 		[Browsable( false )]
 		public bool AddInRandomOrder { get; set; }
-		[Browsable( false )]
+		[Browsable(false)]
 		public bool ResetViewModeOnPictureChange { get; set; }
+		[Browsable(false)]
+		public bool MoveIncludingCurrent { get; set; }
 
 
 		// Hidden / Non-user Settings
@@ -443,6 +445,7 @@ namespace PhotoSift
 			// GUI settings
 			TargetFolder = System.Windows.Forms.Application.StartupPath;
 			AddInRandomOrder = false;
+			MoveIncludingCurrent = false;
 
 			// Hidden settings
 			FormRect_Main = new Rectangle();

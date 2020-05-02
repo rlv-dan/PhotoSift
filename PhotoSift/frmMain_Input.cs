@@ -418,9 +418,11 @@ namespace PhotoSift
 			if (pics.Count < 1) return; // no images loaded
 			if (iCurrentPic < 1) return; // on first image
 
-			int shift = 0; // todo settings
+			//int shift = 0; // todo: allow moving more images on the right?
 			//string extraTitle = ""; // (including current (+ x images))
+
 			//List<string> newPics = pics.GetRange(0, iCurrentPic - shift);
+			int shift = mnuMovesCurChecked.Checked ? 1 : 0;
 			string newDir = Microsoft.VisualBasic.Interaction.InputBox(
 				string.Format("Move the {0} images to which folder?\n\nSupports relative path to the target base folder or an absolute path.", iCurrentPic),
 				"Moves the left images in pool");
@@ -437,10 +439,12 @@ namespace PhotoSift
 			if (pics.Count < 1) return; // no images loaded
 			if (iCurrentPic + 1 >= pics.Count) return; // on end image
 
-			int shift = 0; // todo settings.
-						   //string extraTitle = ""; // (including current (+ x images))
-						   //List<string> newPics = pics.GetRange(0, iCurrentPic - shift);
-			int startIndex = iCurrentPic + 1; // 1 == not including current.
+			//int shift = 0; // todo settings.
+			//string extraTitle = ""; // (including current (+ x images))
+			//List<string> newPics = pics.GetRange(0, iCurrentPic - shift);
+
+			int shift = mnuMovesCurChecked.Checked ? 1 : 0;
+			int startIndex = iCurrentPic + 1 + -shift; // + 1 == not including current.
 			int picNum = pics.Count - startIndex;
 			string newDir = Microsoft.VisualBasic.Interaction.InputBox(
 				string.Format("Move the {0} images to which folder?\n\nSupports relative path to the target base folder or an absolute path.", picNum),
@@ -450,9 +454,13 @@ namespace PhotoSift
 				var i = Enumerable.Range(startIndex, picNum);
 				movePicsToCustomFolder(newDir, i.ToArray());
 				Task.Run(() => Task.Delay(500)); // Mitigating cache ops conflicts
-				ShowPicByOffset(shift);
+				ShowPicByOffset(-shift);
 			}
 
+		}
+		private void mnuMovesCurChecked_Click(object sender, EventArgs e)
+		{
+			settings.MoveIncludingCurrent = mnuMovesCurChecked.Checked;
 		}
 
 		// -- Handle mouse events -----------------------------------------------------------------------------------
@@ -885,6 +893,22 @@ namespace PhotoSift
 			}
 		}
 
+		private void mnuClearImagesShowHotkeys_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show("The current hotkeys (quirks):\n\nClick on the menu: Clear all items in the pool.\n" +
+				"Shift + Click on the menu: Clear the left items in the pool.\n" +
+				"Ctrl + Click on the menu: Clear the right items in the pool.\n" +
+				//"Alt + Click on the menu: not support.\n" +
+				"\nCtrl + 0 hotkey: Clear all items in the pool." +
+				"\nAlt + 0 hotkey: Remove the current item in the pool." +
+				"\n\nNo files will be moved, deleted, renamed or changed.",
+				"Clear Items Hotkeys",
+				MessageBoxButtons.OK, MessageBoxIcon.Information);
+		}
 
+		private void mnuOpenTargetFolder_Click(object sender, EventArgs e)
+		{
+			System.Diagnostics.Process.Start("explorer.exe", settings.TargetFolder);
+		}
 	}
 }
