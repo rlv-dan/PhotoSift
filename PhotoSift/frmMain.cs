@@ -1472,6 +1472,19 @@ namespace PhotoSift
 				lblInfoLabel.Text = this.Text;
 			}
 		}
+
+		private void mnuClearImagesShowHotkeys_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show("The current hotkeys (quirks):\n\nClick on the menu: Clear all items in the pool.\n" +
+				"Shift + Click on the menu: Clear the left items in the pool.\n" +
+				"Ctrl + Click on the menu: Clear the right items in the pool.\n" +
+				//"Alt + Click on the menu: not support.\n" +
+				"\nCtrl + 0 hotkey: Clear all items in the pool." +
+				"\nAlt + 0 hotkey: Remove the current item in the pool." +
+				"\n\nNo files will be moved, deleted, renamed or changed.",
+				"Clear Items Hotkeys",
+				MessageBoxButtons.OK, MessageBoxIcon.Information);
+		}
 		// --------------------------------------------------------------------
 
 

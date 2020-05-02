@@ -97,18 +97,15 @@ namespace PhotoSift
 		}
 		private void mnuClearImages_Click(object sender, EventArgs e)
 		{
-			if (sender.ToString() == Keys.NumPad0.ToString())
-				clearItems(ClearMode.All);
-			else if (ModifierKeys == (Keys.Shift))
+			if (ModifierKeys == (Keys.Shift))
 				clearItems(ClearMode.Left);
 			else if (ModifierKeys == (Keys.Control))
 				clearItems(ClearMode.Right);
 			else
 				clearItems(ClearMode.All);
-
 		}
 
-			private void mnuCopyToClipboard_Click( object sender, EventArgs e )
+		private void mnuCopyToClipboard_Click( object sender, EventArgs e )
 		{
 			if (settings.CopyActionType == CopytoClipboardOptions.Bitmap) {
 				if (picCurrent.Image != null)
@@ -554,10 +551,16 @@ namespace PhotoSift
 
 		private void frmMain_KeyUp( object sender, KeyEventArgs e )
 		{
-			if( bMenuInUse ) return;
+			if (e.Modifiers == (Keys.Alt) && (e.KeyCode == Keys.NumPad0 || e.KeyCode == Keys.D0)) // Temporary quirk for design
+				clearItems(ClearMode.Current);
+
+			if ( bMenuInUse ) return;
+
+			if (e.Modifiers == (Keys.Control) && e.KeyCode == Keys.NumPad0) // allow both, see also mnuClearImages's ShortcutKeys propertie
+				clearItems(ClearMode.All);
 
 			// First process arrow keys (next/prev image) & delete since they can use Control/Shift/Alt
-			if( pics.Count > 0 )
+			if ( pics.Count > 0 )
 			{
 				if ( !( e.Control && e.Shift ) && !IsWindowsKeyPressed())
 				{
@@ -622,11 +625,6 @@ namespace PhotoSift
 					e.Handled = true;
 				}
 			}
-
-			if (e.Modifiers == (Keys.Control) && e.KeyCode == Keys.NumPad0) // allow both, see also propertie
-				clearItems(ClearMode.All);
-			if (e.Modifiers == (Keys.Alt) && e.KeyCode == Keys.NumPad0) // Temporary quirk for design
-				clearItems(ClearMode.Current);
 
 #if RLVISION
 			if( e.Control && e.KeyCode == Keys.N )

@@ -98,6 +98,7 @@
             this.picLogo = new System.Windows.Forms.PictureBox();
             this.panelMain = new System.Windows.Forms.Panel();
             this.timerMouseHider = new System.Windows.Forms.Timer(this.components);
+            this.mnuClearImagesShowHotkeys = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.picCurrent)).BeginInit();
             this.menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
@@ -450,6 +451,7 @@
             this.mnuAddImages,
             this.mnuAddFolder,
             this.mnuClearImages,
+            this.mnuClearImagesShowHotkeys,
             this.toolStripMenuItem1,
             this.mnuAddInRandomOrder,
             this.mnuRandimizeOrder});
@@ -471,7 +473,7 @@
             this.mnuNavigateForwardLarge,
             this.mnuNavigateBackLarge});
             this.mnuNavigate.Name = "mnuNavigate";
-            this.mnuNavigate.Size = new System.Drawing.Size(315, 22);
+            this.mnuNavigate.Size = new System.Drawing.Size(256, 22);
             this.mnuNavigate.Text = "Navigate";
             // 
             // mnuNavigateNext
@@ -554,33 +556,33 @@
             this.mnuMovesLeft,
             this.mnuMovesRight});
             this.mnuMoves.Name = "mnuMoves";
-            this.mnuMoves.Size = new System.Drawing.Size(315, 22);
+            this.mnuMoves.Size = new System.Drawing.Size(256, 22);
             this.mnuMoves.Text = "Moves";
             // 
             // mnuMovesLeft
             // 
             this.mnuMovesLeft.Name = "mnuMovesLeft";
-            this.mnuMovesLeft.Size = new System.Drawing.Size(180, 22);
+            this.mnuMovesLeft.Size = new System.Drawing.Size(150, 22);
             this.mnuMovesLeft.Text = "Left items...";
             this.mnuMovesLeft.Click += new System.EventHandler(this.mnuMovesLeft_Click);
             // 
             // mnuMovesRight
             // 
             this.mnuMovesRight.Name = "mnuMovesRight";
-            this.mnuMovesRight.Size = new System.Drawing.Size(180, 22);
+            this.mnuMovesRight.Size = new System.Drawing.Size(150, 22);
             this.mnuMovesRight.Text = "Right items...";
             this.mnuMovesRight.Click += new System.EventHandler(this.mnuMovesRight_Click);
             // 
             // toolStripMenuItem8
             // 
             this.toolStripMenuItem8.Name = "toolStripMenuItem8";
-            this.toolStripMenuItem8.Size = new System.Drawing.Size(312, 6);
+            this.toolStripMenuItem8.Size = new System.Drawing.Size(253, 6);
             // 
             // mnuAddImages
             // 
             this.mnuAddImages.Name = "mnuAddImages";
             this.mnuAddImages.ShortcutKeys = System.Windows.Forms.Keys.Insert;
-            this.mnuAddImages.Size = new System.Drawing.Size(315, 22);
+            this.mnuAddImages.Size = new System.Drawing.Size(256, 22);
             this.mnuAddImages.Text = "Add Images...";
             this.mnuAddImages.Click += new System.EventHandler(this.mnuAddImages_Click);
             // 
@@ -588,7 +590,7 @@
             // 
             this.mnuAddFolder.Name = "mnuAddFolder";
             this.mnuAddFolder.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Insert)));
-            this.mnuAddFolder.Size = new System.Drawing.Size(315, 22);
+            this.mnuAddFolder.Size = new System.Drawing.Size(256, 22);
             this.mnuAddFolder.Text = "Add from Folder...";
             this.mnuAddFolder.Click += new System.EventHandler(this.mnuAddFolder_Click);
             // 
@@ -596,19 +598,19 @@
             // 
             this.mnuClearImages.Name = "mnuClearImages";
             this.mnuClearImages.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D0)));
-            this.mnuClearImages.Size = new System.Drawing.Size(315, 22);
+            this.mnuClearImages.Size = new System.Drawing.Size(256, 22);
             this.mnuClearImages.Text = "Clear";
             this.mnuClearImages.Click += new System.EventHandler(this.mnuClearImages_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(312, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(253, 6);
             // 
             // mnuAddInRandomOrder
             // 
             this.mnuAddInRandomOrder.Name = "mnuAddInRandomOrder";
-            this.mnuAddInRandomOrder.Size = new System.Drawing.Size(315, 22);
+            this.mnuAddInRandomOrder.Size = new System.Drawing.Size(256, 22);
             this.mnuAddInRandomOrder.Text = "Add in Random Order";
             this.mnuAddInRandomOrder.Click += new System.EventHandler(this.mnuAddInRandomOrder_Click);
             // 
@@ -616,7 +618,7 @@
             // 
             this.mnuRandimizeOrder.Name = "mnuRandimizeOrder";
             this.mnuRandimizeOrder.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.mnuRandimizeOrder.Size = new System.Drawing.Size(315, 22);
+            this.mnuRandimizeOrder.Size = new System.Drawing.Size(256, 22);
             this.mnuRandimizeOrder.Text = "Randomize Order Now";
             this.mnuRandimizeOrder.Click += new System.EventHandler(this.mnuRandimizeOrder_Click);
             // 
@@ -689,6 +691,13 @@
             // 
             this.timerMouseHider.Interval = 1000;
             this.timerMouseHider.Tick += new System.EventHandler(this.timerMouseHider_Tick);
+            // 
+            // mnuClearImagesShowHotkeys
+            // 
+            this.mnuClearImagesShowHotkeys.Name = "mnuClearImagesShowHotkeys";
+            this.mnuClearImagesShowHotkeys.Size = new System.Drawing.Size(256, 22);
+            this.mnuClearImagesShowHotkeys.Text = "Learn the Clear hotkeys...";
+            this.mnuClearImagesShowHotkeys.Click += new System.EventHandler(this.mnuClearImagesShowHotkeys_Click);
             // 
             // frmMain
             // 
@@ -798,6 +807,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuMoves;
 		private System.Windows.Forms.ToolStripMenuItem mnuMovesLeft;
 		private System.Windows.Forms.ToolStripMenuItem mnuMovesRight;
+        private System.Windows.Forms.ToolStripMenuItem mnuClearImagesShowHotkeys;
     }
 }
 
