@@ -43,27 +43,26 @@ namespace PhotoSift
 			HideFullscreenForcedCursor();
 		}
 
-		private void mnuClearImages_Click(object sender, EventArgs e)
+		private enum ClearMode
 		{
-			int mode = 0;
-			if (sender.ToString() == Keys.NumPad0.ToString())
-				mode = 0; // all
-			else if (ModifierKeys == (Keys.Shift))
-				mode = 1; // left
-			else if (ModifierKeys == (Keys.Control))
-				mode = 2; // right
-			else
-				mode = 0;
-
+			All,
+			Left,
+			Right,
+			Current
+		}
+		private void clearItems(ClearMode mode)
+		{
 			int count = 0;
 			int keepCur = 1;
 			int removeCur = keepCur == 0 ? 1 : 0;
-			if (mode == 0)
+			if (mode == ClearMode.All)
 				count = pics.Count;
-			else if (mode == 1)
+			else if (mode == ClearMode.Left)
 				count = iCurrentPic + removeCur;
-			else if (mode == 2)
+			else if (mode == ClearMode.Right)
 				count = pics.Count - iCurrentPic - keepCur;
+			else if (mode == ClearMode.Current)
+				count = 1;
 
 			if (settings.WarnThresholdOnClearQueue > 0 && count > settings.WarnThresholdOnClearQueue)
 			{
@@ -71,25 +70,43 @@ namespace PhotoSift
 								"Clear images queue", MessageBoxButtons.YesNo) != DialogResult.Yes)
 					return;
 			}
-			if (mode == 0)
+			if (mode == ClearMode.All)
 			{
 				pics.Clear();
 				iCurrentPic = 0;
 				ShowNextPic(0);
 			}
-			else if (mode == 1 && (iCurrentPic > 0 || keepCur == 0))
+			else if (mode == ClearMode.Left && (iCurrentPic > 0 || keepCur == 0))
 			{
 				pics.RemoveRange(0, keepCur > 0 ? iCurrentPic : iCurrentPic + 1);
 				iCurrentPic = 0;
 				ShowNextPic(0);
 			}
-			else if (mode == 2 && (pics.Count - (iCurrentPic + 1)) > 0)
+			else if (mode == ClearMode.Right && (pics.Count - (iCurrentPic + 1)) > 0)
 			{
 				// todo: keepCur support.
 				pics.RemoveRange(iCurrentPic + 1, pics.Count - (iCurrentPic + 1));
 				iCurrentPic = iCurrentPic - 1; // for refresh
-				ShowNextPic(iCurrentPic); // refresh title
+				ShowNextPic(0); // refresh title
 			}
+			else if (mode == ClearMode.Current)
+			{
+				pics.RemoveAt(iCurrentPic);
+				ShowNextPic(0);
+			}
+
+		}
+		private void mnuClearImages_Click(object sender, EventArgs e)
+		{
+			if (sender.ToString() == Keys.NumPad0.ToString())
+				clearItems(ClearMode.All);
+			else if (ModifierKeys == (Keys.Shift))
+				clearItems(ClearMode.Left);
+			else if (ModifierKeys == (Keys.Control))
+				clearItems(ClearMode.Right);
+			else
+				clearItems(ClearMode.All);
+
 		}
 
 			private void mnuCopyToClipboard_Click( object sender, EventArgs e )
@@ -555,8 +572,10 @@ namespace PhotoSift
 				}
 			}
 
-			if (e.Control && e.KeyCode == Keys.NumPad0) // allow both
-				mnuClearImages_Click(Keys.NumPad0, e);
+			if (e.Modifiers == (Keys.Control) && e.KeyCode == Keys.NumPad0) // allow both, see also propertie
+				clearItems(ClearMode.All);
+			if (e.Modifiers == (Keys.Alt) && e.KeyCode == Keys.NumPad0) // Temporary quirk for design
+				clearItems(ClearMode.Current);
 
 #if RLVISION
 			if( e.Control && e.KeyCode == Keys.N )
@@ -572,7 +591,7 @@ namespace PhotoSift
 
 
 			// Control/Shift/Alt are not used below so skip the rest
-			if( e.Alt || e.Control || e.Shift ) return;
+			if ( e.Alt || e.Control || e.Shift ) return;
 
 
 			// Process all other keys
