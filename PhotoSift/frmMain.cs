@@ -628,19 +628,20 @@ namespace PhotoSift
 		}
 
 		// -- Auto Advance control --
-		private void StopAutoAdvance()
+		private void SwitchAutoAdvance(bool newStatus)
 		{
-			bAutoAdvanceEnabled = false;
-			mnuAutoAdvanceEnabled.Checked = false;
-			timerAutoAdvance.Stop();
-			ShowStatusMessage( "Auto Advance: Off" );
-		}
-		private void StartAutoAdvance()
-		{
-			bAutoAdvanceEnabled = true;
-			mnuAutoAdvanceEnabled.Checked = true;
-			timerAutoAdvance.Start();
-			ShowStatusMessage( "Auto Advance: On" );
+			bAutoAdvanceEnabled = newStatus;
+			mnuAutoAdvanceEnabled.Checked = newStatus;
+			if (newStatus)
+			{
+				timerAutoAdvance.Start();
+				ShowStatusMessage("Auto Advance: On");
+			}
+			else
+			{
+				timerAutoAdvance.Stop();
+				ShowStatusMessage("Auto Advance: Off");
+			}
 		}
 		private void HaltAutoAdvance()
 		{

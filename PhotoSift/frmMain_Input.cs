@@ -655,7 +655,7 @@ namespace PhotoSift
 			}
 			else if( e.KeyCode == Keys.Pause )		// toggle Auto Advance
 			{
-				if( bAutoAdvanceEnabled ) StopAutoAdvance(); else StartAutoAdvance();
+				SwitchAutoAdvance(!bAutoAdvanceEnabled);
 				e.Handled = true;
 			}
 
