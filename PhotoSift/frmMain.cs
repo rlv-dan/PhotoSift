@@ -60,7 +60,7 @@ namespace PhotoSift
 			ManualZoomPercentage,
 			ManualZoomWidth,
 			ManualZoomHeight
-		}
+		};
 		private ScaleMode CurrentScaleMode = ScaleMode.NormalFitWindow;
 		private Point ScaleModeOriginalPoint = new Point( -1, -1 );
 		private float ScaleModeOriginalScale;
@@ -444,7 +444,13 @@ namespace PhotoSift
 			ShowPicByOffset(0);
 		}
 
-		private void ShowPicByOffset( int picsToSkip )
+		private enum ShowPicMode
+		{
+			None,
+			UserPaging, // loop allowed
+			MakeAction  // rewind allowed
+		}
+		private void ShowPicByOffset( int picsToSkip, ShowPicMode specialMode = ShowPicMode.None)
 		{
 			if( pics.Count == 0 )
 			{
@@ -468,18 +474,33 @@ namespace PhotoSift
 				picCurrent.Dock = DockStyle.Fill;
 			}
 
-
 			int newPosition = iCurrentPic + picsToSkip;
 			iCurrentPic = Math.Max( Math.Min( newPosition, pics.Count ), 0 );
 
 			if( newPosition >= pics.Count )	// past last item
 			{
-				this.Text = "End of Image Pool";
-				lblHeader.Visible = true;
-				lblHeader.Text = "End of Image Pool\nGo back or add more images";
-				picCurrent.Image = null;
-				Util.CenterControl( lblHeader );
-				return;
+				if (specialMode == ShowPicMode.MakeAction && 
+					settings.RewindOnEnd && pics.Count >= 1)
+				{
+					iCurrentPic--;
+				}
+				else if (specialMode == ShowPicMode.UserPaging && settings.LoopInPool)
+				{
+					iCurrentPic = 0;
+				}
+				else
+				{
+					this.Text = "End of Image Pool";
+					lblHeader.Visible = true;
+					lblHeader.Text = "End of Image Pool\nGo back or add more images";
+					picCurrent.Image = null;
+					Util.CenterControl(lblHeader);
+					return;
+				}
+			}
+			else if (newPosition < 0 && specialMode == ShowPicMode.UserPaging && settings.LoopInPool) // PageUp on pic 1 will be -1.
+			{
+				iCurrentPic = pics.Count + newPosition;
 			}
 
 

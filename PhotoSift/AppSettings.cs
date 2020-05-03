@@ -153,6 +153,10 @@ namespace PhotoSift
 		// Controls Group
 		[Category("Controls"), DisplayName("Hold key repeat interval"), DescriptionAttribute("Interval (ms) for press and hold a key to repeat actions. The value < 100 ms will disalbe this feature.")]
 		public int HoldKeyInterval { get; set; }
+		[Category("Controls"), DisplayName("Rewind on pool end"), DescriptionAttribute("Try to rewind when the pool end is reached while handle.")]
+		public bool RewindOnEnd { get; set; }
+		[Category("Controls"), DisplayName("Loop in pool"), DescriptionAttribute("Cycle your pool when you switch images, there is no pool end screen.")]
+		public bool LoopInPool { get; set; }
 		[Category( "Controls" ), DisplayName( "Medium jump" ), DescriptionAttribute( "Number of images to skip when doing a medium jump. Medium jump is invoked by holding Ctrl and pressing Left/Right." )]
 		public int MediumJump { get; set; }
 
@@ -413,6 +417,8 @@ namespace PhotoSift
 
 			// Controls Group
 			HoldKeyInterval = 1000;
+			RewindOnEnd = false;
+			LoopInPool = false;
 			MediumJump = 10;
 			LargeJump = 25;
 			WarnThresholdOnClearQueue = 0;

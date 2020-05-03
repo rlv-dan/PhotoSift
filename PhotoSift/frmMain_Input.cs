@@ -282,11 +282,11 @@ namespace PhotoSift
 
 		private void mnuNavigateNext_Click( object sender, EventArgs e )
 		{
-			ShowPicByOffset( 1 );
+			ShowPicByOffset( 1, ShowPicMode.UserPaging );
 		}
 		private void mnuNavigatePrev_Click( object sender, EventArgs e )
 		{
-			ShowPicByOffset( -1 );
+			ShowPicByOffset( -1, ShowPicMode.UserPaging );
 		}
 		private void mnuNavigateFirst_Click( object sender, EventArgs e )
 		{
@@ -298,19 +298,19 @@ namespace PhotoSift
 		}
 		private void mnuNavigateForwardMedium_Click( object sender, EventArgs e )
 		{
-			ShowPicByOffset( settings.MediumJump );
+			ShowPicByOffset( settings.MediumJump, ShowPicMode.UserPaging);
 		}
 		private void mnuNavigateBackMedium_Click( object sender, EventArgs e )
 		{
-			ShowPicByOffset( -settings.MediumJump );
+			ShowPicByOffset( -settings.MediumJump, ShowPicMode.UserPaging);
 		}
 		private void mnuNavigateForwardLarge_Click( object sender, EventArgs e )
 		{
-			ShowPicByOffset( settings.LargeJump );
+			ShowPicByOffset( settings.LargeJump, ShowPicMode.UserPaging);
 		}
 		private void mnuNavigateBackLarge_Click( object sender, EventArgs e )
 		{
-			ShowPicByOffset( -settings.LargeJump );
+			ShowPicByOffset( -settings.LargeJump, ShowPicMode.UserPaging);
 		}
 
 		private void mnuUndo_Click( object sender, EventArgs e )
@@ -540,9 +540,9 @@ namespace PhotoSift
 			{
 				// show next/previous picture
 				if( e.Delta > 0 )
-					ShowPicByOffset( -1 );
+					ShowPicByOffset( -1, ShowPicMode.UserPaging );
 				else
-					ShowPicByOffset( 1 );
+					ShowPicByOffset( 1, ShowPicMode.UserPaging );
 			}
 		}
 
@@ -592,7 +592,7 @@ namespace PhotoSift
 						int n = 1;
 						if( e.Control ) n = settings.MediumJump;
 						else if( e.Shift ) n = settings.LargeJump;
-						ShowPicByOffset( n );
+						ShowPicByOffset( n, ShowPicMode.UserPaging );
 						e.Handled = true;
 					}
 					else if( e.KeyCode == Keys.Left || e.KeyCode == Keys.Up || e.KeyCode == Keys.PageUp )	// backwards
@@ -600,14 +600,14 @@ namespace PhotoSift
 						int n = -1;
 						if( e.Control ) n = -settings.MediumJump;
 						else if( e.Shift ) n = -settings.LargeJump;
-						ShowPicByOffset( n );
+						ShowPicByOffset( n, ShowPicMode.UserPaging );
 						e.Handled = true;
 					}
 					else if( e.KeyCode == Keys.Delete )		// Delete
 					{
 						string DropPicPath = pics[iCurrentPic];
 						int DropPicIndex = iCurrentPic;
-						ShowPicByOffset(settings.OnDeleteStepForward ? 1 : -1);
+						ShowPicByOffset(settings.OnDeleteStepForward ? 1 : -1, ShowPicMode.MakeAction);
 
 						if ( !e.Control )	// Ctrl+Del --> only remove from list
 						{
@@ -684,7 +684,7 @@ namespace PhotoSift
 
 			else if( e.KeyCode == Keys.Space )	// Show next
 			{
-				ShowPicByOffset( 1 );
+				ShowPicByOffset( 1, ShowPicMode.UserPaging);
 				e.Handled = true;
 			}
 			else if( e.KeyCode == Keys.Home )	// Goto first image
@@ -750,7 +750,7 @@ namespace PhotoSift
 					string tmp = (string)Prop.GetValue( settings, null );
 					if( tmp.Trim() != "" ) KeyFolder = tmp.Trim();
 					movePicToCustomFolder(KeyFolder, iCurrentPic);
-					ShowPicByOffset(0);
+					ShowPicByOffset(0, ShowPicMode.MakeAction);
 					e.Handled = true;
 				}
 			}
