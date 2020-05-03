@@ -284,70 +284,7 @@ namespace PhotoSift
 			}
 		}
 
-		private List<string> allowsPicExts = new List<string>()
-		{
-			".jpg",
-			".jpeg",
-			".tif",
-			".tiff",
-			".png",
-			".gif",
-			".bmp",
-			".ico",
-			".wmf",
-			".emf",
-			".webp"
-		};
-		private List<string> allowsVideoExts = new List<string>()
-		{ // https://support.microsoft.com/en-us/help/316992/file-types-supported-by-windows-media-player
-			".asf",
-			".wma",
-			".wmv",
-			".wm",
-			".asx",
-			".wax",
-			".wvx",
-			".wmx",
-			".wpl",
-			".dvr-ms",
-			".wmd",
-			".avi",
-			".mpg",
-			".mpeg",
-			".m1v",
-			".mp2",
-			".mp3",
-			".mpa",
-			".mpe",
-			".m3u",
-			".mid",
-			".midi",
-			".rmi",
-			".aif",
-			".aifc",
-			".aiff",
-			".au",
-			".snd",
-			".wav",
-			".cda",
-			".ivf",
-			".wmz",
-			".wms",
-			".mov",
-			".m4a",
-			".mp4",
-			".m4v",
-			".mp4v",
-			".3g2",
-			".3gp2",
-			".3gp",
-			".3gpp",
-			".aac",
-			".adt",
-			".adts",
-			".m2ts",
-			".flac"
-		};
+
 		// Add file to the image pool
 		private bool AddFiles( string[] items )
 		{
@@ -360,7 +297,7 @@ namespace PhotoSift
 
 			// validate files to add
 			List<string> newPics = new List<string>();
-			List<string> allowsExts = allowsPicExts.Union(allowsVideoExts).ToList();
+			List<string> allowsExts = settings.allowsPicExts.Union(settings.allowsVidExts).ToList();
 			foreach ( string item in items )
 			{
 				if( System.IO.Directory.Exists( item ) ) // is Directory
@@ -513,8 +450,8 @@ namespace PhotoSift
 			HaltAutoAdvance();
 
 			string URI = pics[iCurrentPic];
-			bool tryVideo = !allowsPicExts.Contains(Path.GetExtension(URI), StringComparer.OrdinalIgnoreCase)
-				&& allowsVideoExts.Contains(Path.GetExtension(URI), StringComparer.OrdinalIgnoreCase);
+			bool tryVideo = !settings.allowsPicExts.Contains(Path.GetExtension(URI), StringComparer.OrdinalIgnoreCase)
+				&& settings.allowsVidExts.Contains(Path.GetExtension(URI), StringComparer.OrdinalIgnoreCase);
 
 			if (tryVideo)
 			{

@@ -23,6 +23,7 @@ using System.Drawing.Design;
 using System.Windows.Forms.Design;
 using System.Drawing;
 using System.Xml.Serialization;
+using System.Collections.Generic;
 
 namespace PhotoSift
 {
@@ -341,6 +342,12 @@ namespace PhotoSift
 		[Category("Cache"), DisplayName("Cache Behind (later)"), DescriptionAttribute("Pre-reading x pictures later than the current image in image pool.")]
 		public int CacheBehind { get; set; }
 
+		// FileType settings
+		[Category("File Type"), DisplayName("Image exts"), DescriptionAttribute("File extensions allowed to be added to the pool.")]
+		public List<string> allowsPicExts { get; set; }
+		[Category("File Type"), DisplayName("Video exts"), DescriptionAttribute("File extensions allowed to be added to the pool.")]
+		public List<string> allowsVidExts { get; set; }
+
 		// Misc settings
 		[Category("Misc"), DisplayName("Copy action"), DescriptionAttribute("Sets the action type when you press Ctrl+C or click the \"Copy to clipboard\" menu in this software.")]
 		public CopytoClipboardOptions CopyActionType { get; set; }
@@ -446,6 +453,10 @@ namespace PhotoSift
 #endif
 			// System Group
 			PreventSleep = false;
+
+			// File Type
+			allowsPicExts = Util.Def_allowsPicExts;
+			allowsVidExts = Util.Def_allowsVideoExts;
 
 			// Misc
 			SaveRelativePaths = true;
