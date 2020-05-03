@@ -1224,8 +1224,7 @@ namespace PhotoSift
 
 		private void UpdateMenuEnabledDisabled()
 		{
-			// Enables/Disables menu items
-
+			// Enables/Disables menu items rely on current images
 			List<ToolStripMenuItem> menus = new List<ToolStripMenuItem> { 
 				mnuRenameFile,
 				mnuCopyToClipboard,
@@ -1242,6 +1241,7 @@ namespace PhotoSift
 				mnuNavigateNext,
 				mnuNavigatePrev,
 				mnuClearImages,
+				mnuRandimizeOrder,
 				mnuZoomIn,
 				mnuZoomOut,
 				mnuZoomToHeight,
