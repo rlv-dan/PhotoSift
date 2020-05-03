@@ -172,6 +172,11 @@ namespace PhotoSift
 			timerAutoAdvance.Interval = (int)( settings.AutoAdvanceInterval * 1000 );
 			timerMouseHider.Interval = settings.FullscreenCursorAutoHideTime;
 
+			if (settings.HoldKeyInterval > 1)
+				timerHoldKey.Interval = settings.HoldKeyInterval;
+			else
+				timerHoldKey.Interval = 1; // will not work. avoid make an exception.
+
 			mnuAddInRandomOrder.Checked = settings.AddInRandomOrder;
 			mnuResetViewMode.Checked = settings.ResetViewModeOnPictureChange;
 			mnuMovesCurChecked.Checked = settings.MoveIncludingCurrent;
@@ -1367,6 +1372,7 @@ namespace PhotoSift
 		private void frmMain_Deactivate( object sender, EventArgs e )
 		{
 			ShowCursor();
+			timerHoldKey.Enabled = false;
 		}		
 		
 		// --

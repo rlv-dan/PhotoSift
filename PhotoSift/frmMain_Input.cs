@@ -557,8 +557,23 @@ namespace PhotoSift
 			return IsKeyDown(System.Windows.Input.Key.LWin) || IsKeyDown(System.Windows.Input.Key.RWin);
 		}
 
+		private KeyEventArgs curHoldKey = null;
+		private bool timerHoldKeyTriggered = false;
 		private void frmMain_KeyUp( object sender, KeyEventArgs e )
 		{
+			if (sender.ToString() != "timerHoldKey_Tick") // if user action
+			{
+				curHoldKey = null;
+				timerHoldKey.Enabled = false;
+
+				if (timerHoldKeyTriggered)
+				{
+					timerHoldKeyTriggered = false;
+					return; // avoid double event while keyup
+				}
+				
+			}
+
 			if (e.Modifiers == (Keys.Alt) && (e.KeyCode == Keys.NumPad0 || e.KeyCode == Keys.D0)) // Temporary quirk for design
 				clearItems(ClearMode.Current);
 
@@ -749,19 +764,18 @@ namespace PhotoSift
 		private void movePicsToCustomFolder(string folder, int[] picsIndex)
 		{
 			string targetDir = folder;
-					// figure out how to use the custome folder (complete path or relative to base folder)
-						try
-						{
+		// figure out how to use the custome folder (complete path or relative to base folder)
+			try
+			{
 				if (Path.IsPathRooted(folder))
 					targetDir = folder;    // fully qualified path
-							else
+				else
 					targetDir = settings.TargetFolder + System.IO.Path.DirectorySeparatorChar + folder;    // folder is relative to base folder
 			}
-						catch
-						{
+			catch
+			{
 				MessageBox.Show("The target folder for this key is not valid:\n\n" + folder, "Path Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						}
-
+			}
 
 			List<int> droppedIndex = new List<int>{ };
 			var taskResults = new Dictionary<int, string>();
@@ -810,7 +824,7 @@ namespace PhotoSift
 			{
 				// todo, test the ui, check and cut too many lines.
 				MessageBox.Show("Error copying/moving file(s): \n\n" + errors, "File(s) Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-		}
+			}
 		}
 
 		private void frmMain_KeyDown( object sender, KeyEventArgs e )
@@ -894,6 +908,19 @@ namespace PhotoSift
 			{
 				bEscIsPassed = true;
 			}
+			else
+			{
+				if (timerHoldKey.Interval < 100) return; // Instead of a separate switch
+				curHoldKey = e;
+				timerHoldKey.Enabled = true;
+				e.Handled = true; // need?
+			}
+		}
+		private void timerHoldKey_Tick(object sender, EventArgs e)
+		{
+			if (curHoldKey == null) return;
+			timerHoldKeyTriggered = true;
+			frmMain_KeyUp("timerHoldKey_Tick", curHoldKey);
 		}
 
 		private void mnuClearImagesShowHotkeys_Click(object sender, EventArgs e)

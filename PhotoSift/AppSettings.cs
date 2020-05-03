@@ -151,6 +151,8 @@ namespace PhotoSift
 
 
 		// Controls Group
+		[Category("Controls"), DisplayName("Hold key repeat interval"), DescriptionAttribute("Interval (ms) for press and hold a key to repeat actions. The value < 100 ms will disalbe this feature.")]
+		public int HoldKeyInterval { get; set; }
 		[Category( "Controls" ), DisplayName( "Medium jump" ), DescriptionAttribute( "Number of images to skip when doing a medium jump. Medium jump is invoked by holding Ctrl and pressing Left/Right." )]
 		public int MediumJump { get; set; }
 
@@ -410,6 +412,7 @@ namespace PhotoSift
 			CustomMenuColorHightlight = Color.FromArgb( 255, 65, 65, 65 );
 
 			// Controls Group
+			HoldKeyInterval = 1000;
 			MediumJump = 10;
 			LargeJump = 25;
 			WarnThresholdOnClearQueue = 0;

@@ -102,6 +102,7 @@
             this.picLogo = new System.Windows.Forms.PictureBox();
             this.panelMain = new System.Windows.Forms.Panel();
             this.timerMouseHider = new System.Windows.Forms.Timer(this.components);
+            this.timerHoldKey = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picCurrent)).BeginInit();
             this.menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
@@ -725,6 +726,11 @@
             this.timerMouseHider.Interval = 1000;
             this.timerMouseHider.Tick += new System.EventHandler(this.timerMouseHider_Tick);
             // 
+            // timerHoldKey
+            // 
+            this.timerHoldKey.Interval = 1000;
+            this.timerHoldKey.Tick += new System.EventHandler(this.timerHoldKey_Tick);
+            // 
             // frmMain
             // 
             this.AllowDrop = true;
@@ -837,6 +843,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuOpenTargetFolder;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem mnuMovesCurChecked;
+        private System.Windows.Forms.Timer timerHoldKey;
     }
 }
 
