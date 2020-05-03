@@ -135,12 +135,14 @@ namespace PhotoSift
 		private void mnuAddImages_Click( object sender, EventArgs e )
 		{
 			ForceShowFullscreenCursor();
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Multiselect = true;
-			ofd.Title = "Select images to add...";
-			ofd.Filter = "Images|*.jpg;*.jpeg;*.tif;*.tiff;*.png;*.bmp;*.gif;*.ico;*.wmf;*.emf;*.webp|All files (*.*)|*.*";
-			ofd.InitialDirectory = settings.LastFolder_AddFiles;
-			if( ofd.ShowDialog() == DialogResult.OK )
+			OpenFileDialog ofd = new OpenFileDialog
+			{
+				Multiselect = true,
+				Title = "Select images to add...",
+				Filter = "Images|*.jpg;*.jpeg;*.tif;*.tiff;*.png;*.bmp;*.gif;*.ico;*.wmf;*.emf;*.webp|All files (*.*)|*.*",
+				InitialDirectory = settings.LastFolder_AddFiles
+			};
+			if ( ofd.ShowDialog() == DialogResult.OK )
 			{
 				if( ofd.FileNames.Length > 0 )
 				{

@@ -750,10 +750,11 @@ namespace PhotoSift
 		{
 			if( bFullScreen )
 			{
-				Point p = new Point();
-				p.X = Screen.AllScreens[scr].WorkingArea.Left;
-				p.Y = Screen.AllScreens[scr].WorkingArea.Top;
-				this.Location = p;
+				this.Location = new Point
+				{
+					X = Screen.AllScreens[scr].WorkingArea.Left,
+					Y = Screen.AllScreens[scr].WorkingArea.Top
+				};
 
 				Screen currentScreen = Screen.FromControl( this );
 				this.ClientSize = new Size( currentScreen.Bounds.Width, currentScreen.Bounds.Height );
@@ -936,8 +937,8 @@ namespace PhotoSift
 					int top = relativeMouseXY.Y - (int)ScaleModeOriginalRelativePoint.Y;
 
 					// move around mouse
-					left = left - (int)( percentMovedX * picCurrent.Width );
-					top = top - (int)( percentMovedY * picCurrent.Height );
+					left -= (int)( percentMovedX * picCurrent.Width );
+					top -= (int)( percentMovedY * picCurrent.Height );
 
 					if( settings.ActualSizeAutoScrollNoLimitInsideForm )
 					{

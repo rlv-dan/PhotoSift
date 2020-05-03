@@ -23,14 +23,13 @@ using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.VisualBasic.FileIO;
-using System.Threading.Tasks;
 
 namespace PhotoSift
 {
-    /// <summary>
-    /// Contains methods to copy/move/delete files as well as undo previous operations
-    /// </summary>
-    public class FileManagement
+	/// <summary>
+	/// Contains methods to copy/move/delete files as well as undo previous operations
+	/// </summary>
+	public class FileManagement
 	{
 		private WinApi winApi;
 		private frmMain mainForm;
