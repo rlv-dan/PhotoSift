@@ -343,10 +343,14 @@ namespace PhotoSift
 		public int CacheBehind { get; set; }
 
 		// FileType settings
-		[Category("File Type"), DisplayName("Image exts"), DescriptionAttribute("File extensions allowed to be added to the pool.")]
-		public List<string> allowsPicExts { get; set; }
-		[Category("File Type"), DisplayName("Video exts"), DescriptionAttribute("File extensions allowed to be added to the pool.")]
-		public List<string> allowsVidExts { get; set; }
+		[Category("File Type"), DisplayName("Image exts"), DescriptionAttribute("File extensions allowed to be added to the pool. Will be ignored if the Check MIME is on.")]
+		public string[] allowsPicExts { get; set; }
+		[Category("File Type"), DisplayName("Video exts"), DescriptionAttribute("File extensions allowed to be added to the pool. Will be ignored if the Check MIME is on.")]
+		public string[] allowsVidExts { get; set; }
+		[Category("File Type"), DisplayName("Check MIME"), DescriptionAttribute("Check the actual MIME type of the file instead of checking the extensions. May be slower. Unavailable means that the related function failed to load.")]
+		public FeatureSwitch FileMIMEChecker { get; set; }
+		[Category("File Type"), DisplayName("Allowed MIME"), DescriptionAttribute("File MIME types allowed to be added to the pool. Work only while the Check MIME option be turn on. Semicolon separated. Spaces on edge are ignored. Default: 'image/;video/;audio/'.")]
+		public string allowsMIME { get; set; }
 
 		// Misc settings
 		[Category("Misc"), DisplayName("Copy action"), DescriptionAttribute("Sets the action type when you press Ctrl+C or click the \"Copy to clipboard\" menu in this software.")]
@@ -457,6 +461,8 @@ namespace PhotoSift
 			// File Type
 			allowsPicExts = Util.Def_allowsPicExts;
 			allowsVidExts = Util.Def_allowsVideoExts;
+			FileMIMEChecker = FeatureSwitch.Disabled;
+			allowsMIME = "image/;video/;audio/";
 
 			// Misc
 			SaveRelativePaths = true;
@@ -549,6 +555,15 @@ namespace PhotoSift
 		File,
 		[Description("File Path")]
 		FilePath,
+	}
+	public enum FeatureSwitch
+	{
+		[Description("Disabled")]
+		Disabled = 0,
+		[Description("Enabled")]
+		Enabled = 1,
+		[Description("Unavailable")]
+		Unavailable = -1,
 	}
 
 #if RLVISION

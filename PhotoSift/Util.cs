@@ -176,7 +176,7 @@ namespace PhotoSift
 			return args;
 		}
 
-		public static List<string> Def_allowsPicExts = new List<string>()
+		public static readonly string[] Def_allowsPicExts = new string[]
 		{
 			".jpg",
 			".jpeg",
@@ -190,7 +190,7 @@ namespace PhotoSift
 			".emf",
 			".webp"
 		};
-		public static List<string> Def_allowsVideoExts = new List<string>()
+		public static readonly string[] Def_allowsVideoExts = new string[]
 		{ // https://support.microsoft.com/en-us/help/316992/file-types-supported-by-windows-media-player
 			".asf",
 			".wma",

@@ -24,6 +24,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Linq;
+using System.Configuration;
 
 namespace PhotoSift
 {
@@ -50,6 +51,8 @@ namespace PhotoSift
 		private bool bCursorVisible = true;
 		private int FullScreenCursorLastMouseX = -1;
 		private bool bPreventAutoHideCursor = false;
+
+		private string[] allowsMIME;
 
 		// Variables managing the scale modes
 		private enum ScaleMode
@@ -177,6 +180,21 @@ namespace PhotoSift
 			else
 				timerHoldKey.Interval = 1; // will not work. avoid make an exception.
 
+			allowsMIME = settings.allowsMIME.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+			// Util.GetFileMIME(?); // TODO: sanity test, lacks reliable target file.
+
+			try
+			{
+				WindowsAPICodePack.GetFileMIME(""); // Usability test
+				if (settings.FileMIMEChecker == FeatureSwitch.Unavailable)
+					settings.FileMIMEChecker = FeatureSwitch.Disabled;
+			}
+			catch
+			{
+				allowsMIME = new string[0];
+				settings.FileMIMEChecker = FeatureSwitch.Unavailable;
+			}
+
 			mnuAddInRandomOrder.Checked = settings.AddInRandomOrder;
 			mnuResetViewMode.Checked = settings.ResetViewModeOnPictureChange;
 			mnuMovesCurChecked.Checked = settings.MoveIncludingCurrent;
@@ -284,8 +302,22 @@ namespace PhotoSift
 			}
 		}
 
-
 		// Add file to the image pool
+		private void _addFile(string file, ref List<string> newPics, List<string> allowsExts)
+		{
+			if (pics.Exists(i => i == file)) return;
+
+			if (settings.FileMIMEChecker == FeatureSwitch.Enabled && allowsMIME.Length > 0)
+			{
+				string mime = WindowsAPICodePack.GetFileMIME(file);
+
+				int match = allowsMIME.Where(rule => mime.Contains(rule)).ToArray().Length;
+				if (match > 0)
+					newPics.Add(file);
+			}
+			else if (allowsExts.Contains(Path.GetExtension(file), StringComparer.OrdinalIgnoreCase))
+				newPics.Add(file);
+		}
 		private bool AddFiles( string[] items )
 		{
 			if( items.Length == 0 ) return false;
@@ -302,18 +334,14 @@ namespace PhotoSift
 			{
 				if( System.IO.Directory.Exists( item ) ) // is Directory
 				{
-					foreach( string file in System.IO.Directory.GetFiles( item, "*.*", System.IO.SearchOption.AllDirectories ) )
+					foreach( string file in System.IO.Directory.GetFiles( item, "*", System.IO.SearchOption.AllDirectories ) )
 					{
-						if(allowsExts.Contains(Path.GetExtension(file), StringComparer.OrdinalIgnoreCase)
-							&& !pics.Exists(i => i == item))
-							newPics.Add( file );
+						_addFile(file, ref newPics, allowsExts);
 					}
 				}
 				else if( System.IO.File.Exists( item ) ) // is File
 				{
-					if (allowsExts.Contains(Path.GetExtension(item), StringComparer.OrdinalIgnoreCase)
-						&& !pics.Exists((i => i == item)))
-						newPics.Add( item );
+					_addFile(item, ref newPics, allowsExts);
 				}
 
 			}

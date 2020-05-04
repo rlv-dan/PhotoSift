@@ -135,11 +135,21 @@ namespace PhotoSift
 		private void mnuAddImages_Click( object sender, EventArgs e )
 		{
 			ForceShowFullscreenCursor();
+
+			var FilterStr = "Images|";
+			Util.Def_allowsPicExts.ToList().ForEach(i => FilterStr += "*" + i + ";");
+			FilterStr = FilterStr.Substring(0, FilterStr.Length - 1); // strip ";"
+			FilterStr += "|Videos|";
+			Util.Def_allowsVideoExts.ToList().ForEach(i => FilterStr += "*" + i + ";");
+			FilterStr = FilterStr.Substring(0, FilterStr.Length - 1);
+			FilterStr += "|All files (*.*)|*.*";
+
 			OpenFileDialog ofd = new OpenFileDialog
 			{
 				Multiselect = true,
 				Title = "Select images to add...",
-				Filter = "Images|*.jpg;*.jpeg;*.tif;*.tiff;*.png;*.bmp;*.gif;*.ico;*.wmf;*.emf;*.webp|All files (*.*)|*.*",
+				//Filter = "Images|*.jpg;*.jpeg;*.tif;*.tiff;*.png;*.bmp;*.gif;*.ico;*.wmf;*.emf;*.webp|All files (*.*)|*.*",
+				Filter = FilterStr,
 				InitialDirectory = settings.LastFolder_AddFiles
 			};
 			if ( ofd.ShowDialog() == DialogResult.OK )
