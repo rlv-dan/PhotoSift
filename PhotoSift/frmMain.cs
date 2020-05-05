@@ -24,7 +24,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Linq;
-using System.Configuration;
 
 namespace PhotoSift
 {
@@ -424,8 +423,11 @@ namespace PhotoSift
 				lblHeader.Visible = true;
 				picCurrent.Image = null;
 				picCurrent.Visible = false;
-				wmpCurrent.URL = null;
-				wmpCurrent.Hide();
+				if (wmpCurrent != null)
+				{
+					wmpCurrent.URL = null;
+					wmpCurrent.Hide();
+				}
 				picLogo.Visible = true;
 				lblInfoLabel.Text = this.Text;
 				Util.CenterControl( lblHeader, picLogo.Image.Height / 2 + 20 );
@@ -479,7 +481,8 @@ namespace PhotoSift
 
 			string URI = pics[iCurrentPic];
 			bool tryVideo = !settings.allowsPicExts.Contains(Path.GetExtension(URI), StringComparer.OrdinalIgnoreCase)
-				&& settings.allowsVidExts.Contains(Path.GetExtension(URI), StringComparer.OrdinalIgnoreCase);
+				&& settings.allowsVidExts.Contains(Path.GetExtension(URI), StringComparer.OrdinalIgnoreCase)
+				&& wmpCurrent != null;
 
 			if (tryVideo)
 			{
@@ -508,8 +511,11 @@ namespace PhotoSift
 			else
 			{
 				picCurrent.Show();
-				wmpCurrent.Hide();
-				wmpCurrent.URL = null;
+				if (wmpCurrent != null)
+				{
+					wmpCurrent.Hide();
+					wmpCurrent.URL = null;
+				}
 			}
 
 			try
