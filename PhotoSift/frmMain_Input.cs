@@ -103,7 +103,10 @@ namespace PhotoSift
 			{
 				string path = dialog.FileName;
 				string[] paths = dialog.FileNames;
-
+				if( paths == null )
+				{
+					paths = new string[] { path };
+				}
 				panelMain.Cursor = Cursors.WaitCursor;
 				AddFiles(paths);
 				settings.LastFolder_AddFolder = paths.Length > 0 ? System.IO.Directory.GetParent(paths[0]).FullName : path;
