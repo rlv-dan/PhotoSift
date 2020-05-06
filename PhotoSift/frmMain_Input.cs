@@ -183,7 +183,17 @@ namespace PhotoSift
 				}
 				panelMain.Cursor = Cursors.WaitCursor;
 				AddFiles(paths);
-				settings.LastFolder_AddFolder = paths.Length > 0 ? System.IO.Directory.GetParent(paths[0]).FullName : path;
+
+				settings.LastFolder_AddFolder = path;
+				if( paths.Length > 0 )
+				{
+					var parentDir = System.IO.Directory.GetParent( paths[0] );
+					if( parentDir != null )
+					{
+						settings.LastFolder_AddFolder = parentDir.FullName;
+					}
+				}
+
 				panelMain.Cursor = Cursors.Arrow;
 			}
 			HideFullscreenForcedCursor();
