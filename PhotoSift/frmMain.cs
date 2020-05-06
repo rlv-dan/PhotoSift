@@ -293,7 +293,7 @@ namespace PhotoSift
 				string[] files = (string[])e.Data.GetData( DataFormats.FileDrop );
 				if( files.Length > 0 )
 				{
-					if( AddFiles( files ) )
+					if( AddFiles( files ) >= 0 )
 					{
 						this.Activate();
 					}
@@ -317,9 +317,9 @@ namespace PhotoSift
 			else if (allowsExts.Contains(Path.GetExtension(file), StringComparer.OrdinalIgnoreCase))
 				newPics.Add(file);
 		}
-		private bool AddFiles( string[] items )
+		private int AddFiles( string[] items )
 		{
-			if( items.Length == 0 ) return false;
+			if( items.Length == 0 ) return 0;
 
 			HaltAutoAdvance();
 			this.Text = lblHeader.Text = "Loading...";
@@ -333,9 +333,17 @@ namespace PhotoSift
 			{
 				if( System.IO.Directory.Exists( item ) ) // is Directory
 				{
-					foreach( string file in System.IO.Directory.GetFiles( item, "*", System.IO.SearchOption.AllDirectories ) )
+					try
 					{
-						_addFile(file, ref newPics, allowsExts);
+						foreach (string file in System.IO.Directory.GetFiles(item, "*", System.IO.SearchOption.AllDirectories))
+						{
+							_addFile(file, ref newPics, allowsExts);
+						}
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); // lising dir error, e.g. "C:\".
+						return -1;
 					}
 				}
 				else if( System.IO.File.Exists( item ) ) // is File
@@ -347,7 +355,7 @@ namespace PhotoSift
 			if( newPics.Count == 0 )
 			{
 				ShowPicByOffset( 0 );
-				return false;
+				return 0;
 			}
 
 			// add images
@@ -360,7 +368,7 @@ namespace PhotoSift
 			ResumeAutoAdvance();
 			ShowPicByOffset( 0 );
 			
-			return true;
+			return newPics.Count;
 		}
 
 		private string getMetaInfo(bool isVideo, bool mediaLoaded)
