@@ -85,7 +85,7 @@ namespace PhotoSift
 		{
 			if( cache.ContainsKey( sFilename ) )
 			{
-				cache[sFilename].img.Dispose();
+				cache[sFilename].img?.Dispose();
 				cache.Remove( sFilename );
 			}
 		}
