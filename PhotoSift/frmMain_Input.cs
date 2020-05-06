@@ -619,7 +619,6 @@ namespace PhotoSift
 					{
 						string DropPicPath = pics[iCurrentPic];
 						int DropPicIndex = iCurrentPic;
-						ShowPicByOffset(settings.OnDeleteStepForward ? 1 : -1, ShowPicMode.MakeAction);
 
 						if ( !e.Control )	// Ctrl+Del --> only remove from list
 						{
@@ -635,6 +634,7 @@ namespace PhotoSift
 						pics.RemoveAt( DropPicIndex );
 						iCurrentPic--;
 						if ( settings.DeleteMode != DeleteOptions.RemoveFromList ) settings.Stats_DeletedPics++;
+						ShowPicByOffset(settings.OnDeleteStepForward ? 1 : -1, ShowPicMode.MakeAction);
 
 						e.Handled = true;
 					}
