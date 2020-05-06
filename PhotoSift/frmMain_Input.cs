@@ -175,25 +175,24 @@ namespace PhotoSift
 			};
 			if (dialog.Show(Handle))
 			{
-				string path = dialog.FileName;
-				string[] paths = dialog.FileNames;
-				if( paths == null )
-				{
+				string path = dialog.FileName; // First or selected item
+				string[] paths = dialog.FileNames; // may be multiple choice
+				if (paths == null) // old style dialog
 					paths = new string[] { path };
-				}
-				panelMain.Cursor = Cursors.WaitCursor;
-				AddFiles(paths);
 
-				settings.LastFolder_AddFolder = path;
-				if( paths.Length > 0 )
+				panelMain.Cursor = Cursors.WaitCursor;
+				if (AddFiles(paths) >= 0) // if no error
 				{
-					var parentDir = System.IO.Directory.GetParent( paths[0] );
-					if( parentDir != null )
+					settings.LastFolder_AddFolder = path;
+					if (paths.Length > 1) // multiple choice
 					{
-						settings.LastFolder_AddFolder = parentDir.FullName;
+						var parentDir = System.IO.Directory.GetParent(paths[0]);
+						if (parentDir != null) // has a parent directory
+						{
+							settings.LastFolder_AddFolder = parentDir.FullName;
+						}
 					}
 				}
-
 				panelMain.Cursor = Cursors.Arrow;
 			}
 			HideFullscreenForcedCursor();
