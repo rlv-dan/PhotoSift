@@ -24,6 +24,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PhotoSift
@@ -454,7 +455,7 @@ namespace PhotoSift
 			{
 				var i = Enumerable.Range(0, iCurrentPic - shift);
 				movePicsToCustomFolder(newDir, i.ToArray());
-				Task.Run(() => Task.Delay(500)); // Mitigating cache ops conflicts
+				Thread.Sleep(500); // Mitigating cache ops conflicts
 				PicGoto(0 + shift);
 			}
 		}
@@ -477,7 +478,7 @@ namespace PhotoSift
 			{
 				var i = Enumerable.Range(startIndex, picNum);
 				movePicsToCustomFolder(newDir, i.ToArray());
-				Task.Run(() => Task.Delay(500)); // Mitigating cache ops conflicts
+				Thread.Sleep(500); // Mitigating cache ops conflicts
 				ShowPicByOffset(-shift);
 			}
 
@@ -632,6 +633,7 @@ namespace PhotoSift
 						string DropPicPath = pics[iCurrentPic];
 						int DropPicIndex = iCurrentPic;
 
+						imageCache.DropImage(DropPicPath);
 						if ( !e.Control )	// Ctrl+Del --> only remove from list
 						{
 							if( e.Shift ) fileManagement.DeleteFile(DropPicPath, false, DropPicIndex);	// Shift+Del --> force delete
@@ -642,10 +644,10 @@ namespace PhotoSift
 						}
 
 						Console.WriteLine( ">--> REMOVE FROM LIST" );
-						imageCache.DropImage( DropPicPath );
 						pics.RemoveAt( DropPicIndex );
 						iCurrentPic--;
 						if ( settings.DeleteMode != DeleteOptions.RemoveFromList ) settings.Stats_DeletedPics++;
+						Thread.Sleep(50); // Make sure that the delete task first completes adding the "undo" records, to enable the undo menu.
 						ShowPicByOffset(settings.OnDeleteStepForward ? 1 : -1, ShowPicMode.MakeAction);
 
 						e.Handled = true;
