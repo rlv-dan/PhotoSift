@@ -438,6 +438,27 @@ namespace PhotoSift
 			panelMain.Cursor = Cursors.Arrow;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="input"></param>
+		/// <param name="items"></param>
+		/// <returns>isStop</returns>
+		private bool MovesMagicWordsConfirm(string input, IEnumerable<int> items)
+		{
+			string t = input.Trim().ToUpper();
+			if (t == "<REC>") // Recycle bin
+			{
+				// No special treatment here, see also movePicsToCustomFolder.
+			}
+			else if (t == "<DEL>")
+			{
+				var c = MessageBox.Show(string.Format("Are you sure you want to delete {0} files permanently? This operation cannot be undone.", items.Count()),
+										"Delete files", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+				if (c != DialogResult.OK) return true;
+			}
+			return false;
+		}
 		private void mnuMovesLeft_Click(object sender, EventArgs e)
 		{
 			if (pics.Count < 1) return; // no images loaded
@@ -451,13 +472,13 @@ namespace PhotoSift
 			string newDir = Microsoft.VisualBasic.Interaction.InputBox(
 				string.Format("Move the {0} images to which folder?\n\nSupports relative path to the target base folder or an absolute path.", iCurrentPic),
 				"Moves the left images in pool");
-			if (newDir.Trim() != "")
-			{
-				var i = Enumerable.Range(0, iCurrentPic - shift);
-				movePicsToCustomFolder(newDir, i.ToArray());
-				Thread.Sleep(500); // Mitigating cache ops conflicts
-				PicGoto(0 + shift);
-			}
+			if (newDir.Trim().Length == 0) return;
+			var items = Enumerable.Range(0, iCurrentPic - shift);
+			if (MovesMagicWordsConfirm(newDir, items)) return;
+
+			movePicsToCustomFolder(newDir, items.ToArray());
+			Thread.Sleep(500); // Mitigating cache ops conflicts
+			PicGoto(0 + shift);
 		}
 		private void mnuMovesRight_Click(object sender, EventArgs e)
 		{
@@ -474,14 +495,13 @@ namespace PhotoSift
 			string newDir = Microsoft.VisualBasic.Interaction.InputBox(
 				string.Format("Move the {0} images to which folder?\n\nSupports relative path to the target base folder or an absolute path.", picNum),
 				"Moves the right images in pool");
-			if (newDir.Trim() != "")
-			{
-				var i = Enumerable.Range(startIndex, picNum);
-				movePicsToCustomFolder(newDir, i.ToArray());
-				Thread.Sleep(500); // Mitigating cache ops conflicts
-				ShowPicByOffset(-shift);
-			}
+			if (newDir.Trim().Length == 0) return;
+			var items = Enumerable.Range(startIndex, picNum);
+			if (MovesMagicWordsConfirm(newDir, items)) return;
 
+			movePicsToCustomFolder(newDir, items.ToArray());
+			Task.Run(() => Task.Delay(500)); // Mitigating cache ops conflicts
+			ShowPicByOffset(-shift);
 		}
 		private void mnuMovesCurChecked_Click(object sender, EventArgs e)
 		{
@@ -787,13 +807,15 @@ namespace PhotoSift
 			movePicsToCustomFolder(folder, new[] { picIndex });
 			//pics.RemoveAt(iCurrentPic);
 		}
-		private void movePicsToCustomFolder(string folder, int[] picsIndex)
+		private void movePicsToCustomFolder(string folder, int[] picsIndexs)
 		{
 			string targetDir = folder;
-		// figure out how to use the custome folder (complete path or relative to base folder)
+			// figure out how to use the custome folder (complete path or relative to base folder)
 			try
 			{
-				if (Path.IsPathRooted(folder))
+				if (targetDir.Trim().ToUpper() == "<REC>" || targetDir.Trim().ToUpper() == "<DEL>")
+					targetDir = folder; // void(0);
+				else if (Path.IsPathRooted(folder))
 					targetDir = folder;    // fully qualified path
 				else
 					targetDir = settings.TargetFolder + System.IO.Path.DirectorySeparatorChar + folder;    // folder is relative to base folder
@@ -808,8 +830,24 @@ namespace PhotoSift
 			string errors = "";
 			Task<string> lastTask = Task.Run(()=> "");
 			string undoGroupID = Guid.NewGuid().ToString();
-			foreach (int picIndex in picsIndex)
+
+			// Handle magic words for deleting files.
+			if (targetDir.Trim().ToUpper() == "<REC>")
 			{
+				picsIndexs.ToList().ForEach(i => imageCache.DropImage(pics[i]));
+				taskResults = fileManagement.DeleteFilesByIndexs(pics, picsIndexs, true, undoGroupID);
+			}
+			else if (targetDir.Trim().ToUpper() == "<DEL>")
+			{
+				picsIndexs.ToList().ForEach(i => imageCache.DropImage(pics[i]));
+				taskResults = fileManagement.DeleteFilesByIndexs(pics, picsIndexs, false); // Undo is impossible. Warning has occurred.
+			}
+
+			foreach (int picIndex in picsIndexs)
+			{
+				if (targetDir.Trim().ToUpper() == "<REC>" || targetDir.Trim().ToUpper() == "<DEL>") break;
+
+				// copy/move
 				string sourceFile = pics[picIndex];
 				string filename = System.IO.Path.GetFileName(pics[picIndex]);
 				string targetFile = targetDir + System.IO.Path.DirectorySeparatorChar + filename;
@@ -817,12 +855,12 @@ namespace PhotoSift
 				{
 					sourceFile = Path.GetFullPath( sourceFile );	// strip double slashes etc
 					targetFile = Path.GetFullPath(targetFile);
-					}
-					catch( Exception ex )
-					{
-						Console.WriteLine( "GetFullPath Error" + ex );
-					}
-					Console.WriteLine( sourceFile );
+				}
+				catch( Exception ex )
+				{
+					Console.WriteLine( "GetFullPath Error" + ex );
+				}
+				Console.WriteLine( sourceFile );
 
 				imageCache.DropImage(sourceFile);
 				// todo: real async and lock
@@ -840,13 +878,17 @@ namespace PhotoSift
 					droppedIndex.Add(item.Key);
 				else
 					// you can also output the filename or path.
-					errors += errorMsg;
+					errors += errorMsg + "\n";
 			}
 
 			droppedIndex.Sort((x, y) => -x.CompareTo(y));
 			droppedIndex.ForEach(i => pics.RemoveAt(i));
 
-			if (errors != "")
+			if (errors != "" && (targetDir.Trim().ToUpper() == "<REC>" || targetDir.Trim().ToUpper() == "<DEL>"))
+			{
+				MessageBox.Show("Error deleting file: \n\n" + errors, "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+			else if (errors != "")
 			{
 				// todo, test the ui, check and cut too many lines.
 				MessageBox.Show("Error copying/moving file(s): \n\n" + errors, "File(s) Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

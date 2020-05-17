@@ -104,12 +104,20 @@ namespace PhotoSift
 				MessageBox.Show("Nothing to undo...", "Oops", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
+			bool stopGoto = false;
+			int num = 0;
 			while (bContinue)
 			{
-				if (undo.Count == 0)
-					break;
-				if (lastItemGroup != "unset" && lastItemGroup != undo.Peek().actionGroup) // Assume that batch data is continuous
-					break; // this is new undo group
+				if (undo.Count == 0 ||
+					lastItemGroup != "unset" && lastItemGroup != undo.Peek().actionGroup) // Assume that batch data is continuous
+				{
+					if (stopGoto && num > 0) // Refresh when undoing a batch of deletions, keep in current picture.
+					{
+						mainForm.PicGotoCallback();
+					}
+
+					break; // emptied or this is new undo group
+				}
 				UndoData u = undo.Pop();
 				lastItemGroup = u.actionGroup;
 
@@ -131,9 +139,10 @@ namespace PhotoSift
 				else if (u.mode == UndoMode.Delete)
 				{
 					Undelete(u.source);
+					stopGoto = true; // better performance for a batch
 				}
-
-				mainForm.FileManagementCallback(new UndoCallbackData(UndoCallbackEvent.UndoPerformed, u));
+				num++;
+				mainForm.FileManagementCallback(new UndoCallbackData(UndoCallbackEvent.UndoPerformed, u), stopGoto);
 			}
 			if (!string.IsNullOrWhiteSpace(errors))
 			{
@@ -260,6 +269,39 @@ namespace PhotoSift
 					MessageBox.Show( "Error deleting file: \n\n" + ex.Message, "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
 				}
 			});
+		}
+		public Dictionary<int, string> DeleteFilesByIndexs(List<string> pics, int[] picIndexs, bool sendToRecycleBin, string undoID = "")
+		{
+			var taskResults = new Dictionary<int, string>();
+			var tasks = new List<Task>();
+			foreach (int picIndex in picIndexs)
+			{
+				tasks.Add(Task.Run(() =>
+				{
+					try
+					{
+						string filePath = pics[picIndex];
+						if (sendToRecycleBin)
+						{
+							Console.WriteLine("[RECYCLE] " + filePath);
+							MoveToRecycle(filePath);
+							AddToUndo(filePath, "", UndoMode.Delete, picIndex, undoID);
+						}
+						else
+						{
+							File.Delete(filePath);
+							Console.WriteLine("[DELETE] " + filePath);
+						}
+						taskResults.Add(picIndex, "");
+					}
+					catch (Exception ex)
+					{
+						taskResults.Add(picIndex, ex.Message);
+					}
+				}));
+			}
+			Task.WaitAll(tasks.ToArray());
+			return taskResults;
 		}
 		private void Undelete(string filePath)
 		{

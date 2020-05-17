@@ -1292,7 +1292,7 @@ namespace PhotoSift
 
 		public delegate void FileManagementCallback_Delegate( FileManagement.UndoCallbackData d );
 
-		public void FileManagementCallback( FileManagement.UndoCallbackData d )
+		public void FileManagementCallback( FileManagement.UndoCallbackData d, bool noGoto = false )
 		{
 			this.Invoke(new MethodInvoker(delegate ()
 			{
@@ -1310,8 +1310,11 @@ namespace PhotoSift
 							if( d.undoData.picIndex < 0 ) return;
 							if( d.undoData.picIndex > pics.Count ) d.undoData.picIndex = pics.Count;
 							pics.Insert( d.undoData.picIndex, d.undoData.source );
-							PicGoto(d.undoData.picIndex);
-							if( d.undoData.mode == FileManagement.UndoMode.Copy ) settings.Stats_CopiedPics--;
+							if (noGoto)
+								iCurrentPic++; // TODO: Keep current instead of last when undoing moves right
+							else
+								PicGoto(d.undoData.picIndex);
+							if ( d.undoData.mode == FileManagement.UndoMode.Copy ) settings.Stats_CopiedPics--;
 							if( d.undoData.mode == FileManagement.UndoMode.Move ) settings.Stats_MovedPics--;
 							if( d.undoData.mode == FileManagement.UndoMode.Delete ) settings.Stats_DeletedPics--;
 							break;
@@ -1321,6 +1324,11 @@ namespace PhotoSift
 				UpdateMenuEnabledDisabled();
 			}
 			}));
+		}
+		public void PicGotoCallback(int index = -1)
+		{
+			if (index == -1) index = iCurrentPic;
+			PicGoto(index);
 		}
 		// --
 
