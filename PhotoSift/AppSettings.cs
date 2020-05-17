@@ -24,6 +24,7 @@ using System.Windows.Forms.Design;
 using System.Drawing;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 
 namespace PhotoSift
 {
@@ -78,6 +79,32 @@ namespace PhotoSift
 		[Browsable( false )]
 		public SerializableColor ColorBackground_Serializable { get; set; }
 #endif
+
+		[Category("Appearance"), DisplayName("Gradient background mode"), DescriptionAttribute("Set the mode of gradient background colors.")]
+		public LineGradientMode ColorGradientBackgroundMode { get; set; }
+	
+		[XmlIgnore]
+		[Category("Appearance"), DisplayName("Gradient background color 1"), DescriptionAttribute("Set the gradient background colors of the window. The main background color is ignored.")]
+		public Color ColorGradientBackgroundOne
+		{
+			get { return ColorGradientBackgroundOne_Serializable.ToColor(); }
+			set { ColorGradientBackgroundOne_Serializable = new SerializableColor(value); }
+		}
+		[Browsable(false)]
+		public SerializableColor ColorGradientBackgroundOne_Serializable { get; set; }
+		[XmlIgnore]
+		[Category("Appearance"), DisplayName("Gradient background color 2"), DescriptionAttribute("Set the gradient background colors of the window. The main background color is ignored.")]
+		public Color ColorGradientBackgroundTwo
+		{
+			get { return ColorGradientBackgroundTwo_Serializable.ToColor(); }
+			set { ColorGradientBackgroundTwo_Serializable = new SerializableColor(value); }
+		}
+		[Browsable(false)]
+		public SerializableColor ColorGradientBackgroundTwo_Serializable { get; set; }
+		[Category("Appearance"), DisplayName("Gradient background gamma correction"), DescriptionAttribute("Gamma correction is disabled by default. Enabling it may get better or worse result.")]
+		public bool ColorGradientBackgroundGammaCorrection { get; set; }
+
+
 		[XmlIgnore]
 		[Category( "Appearance" ), DisplayName( "Text label color" ), DescriptionAttribute( "Sets the font color of text labels." )]
 		public Color ColorLabelFront
@@ -416,6 +443,10 @@ namespace PhotoSift
 #else
 			ColorBackground = Color.Black;
 #endif
+			ColorGradientBackgroundMode = LineGradientMode.Off;
+			ColorGradientBackgroundOne = Color.Gray;
+			ColorGradientBackgroundTwo = Color.Black;
+			ColorGradientBackgroundGammaCorrection = false;
 			ColorLabelFront = Color.Gray;
 			ColorLabelBack = Color.Black;
 			ColorTransparentLabels = true;
@@ -564,6 +595,14 @@ namespace PhotoSift
 		Enabled = 1,
 		[Description("Unavailable")]
 		Unavailable = -1,
+	}
+	public enum LineGradientMode
+	{
+		Off = -1,
+		Horizontal = 0,
+		Vertical = 1,
+		ForwardDiagonal = 2,
+		BackwardDiagonal = 3
 	}
 
 #if RLVISION

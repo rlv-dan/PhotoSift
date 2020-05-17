@@ -24,6 +24,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Linq;
+using System.Drawing.Drawing2D;
 
 namespace PhotoSift
 {
@@ -240,6 +241,7 @@ namespace PhotoSift
 			{
 				menuStripMain.Renderer = new ToolStripProfessionalRenderer();
 			}*/
+			panelMain.Refresh();
 		}
 
 		private void frmMain_FormClosing( object sender, FormClosingEventArgs e )
@@ -1505,6 +1507,15 @@ namespace PhotoSift
 				this.Text = getMetaInfo(true, true);
 				lblInfoLabel.Text = this.Text;
 			}
+		}
+
+		private void panelMain_Paint(object sender, PaintEventArgs e)
+		{
+			if (settings.ColorGradientBackgroundMode == LineGradientMode.Off) return;
+			LinearGradientBrush linearGradientBrush = new LinearGradientBrush(this.ClientRectangle, 
+				settings.ColorGradientBackgroundOne, settings.ColorGradientBackgroundTwo, (LinearGradientMode)settings.ColorGradientBackgroundMode);
+			linearGradientBrush.GammaCorrection = settings.ColorGradientBackgroundGammaCorrection;
+			e.Graphics.FillRectangle(linearGradientBrush, this.ClientRectangle);
 		}
 		// --------------------------------------------------------------------
 

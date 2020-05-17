@@ -94,6 +94,7 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuAddInRandomOrder = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuRandimizeOrder = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuReverseOrder = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuShowHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuHomepage = new System.Windows.Forms.ToolStripMenuItem();
@@ -103,7 +104,6 @@
             this.panelMain = new System.Windows.Forms.Panel();
             this.timerMouseHider = new System.Windows.Forms.Timer(this.components);
             this.timerHoldKey = new System.Windows.Forms.Timer(this.components);
-            this.mnuReverseOrder = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.picCurrent)).BeginInit();
             this.menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
@@ -658,6 +658,13 @@
             this.mnuRandimizeOrder.Text = "Randomize Order Now";
             this.mnuRandimizeOrder.Click += new System.EventHandler(this.mnuRandimizeOrder_Click);
             // 
+            // mnuReverseOrder
+            // 
+            this.mnuReverseOrder.Name = "mnuReverseOrder";
+            this.mnuReverseOrder.Size = new System.Drawing.Size(256, 22);
+            this.mnuReverseOrder.Text = "Reverse Order Now";
+            this.mnuReverseOrder.Click += new System.EventHandler(this.mnuReverseOrder_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -721,6 +728,7 @@
             this.panelMain.Name = "panelMain";
             this.panelMain.Size = new System.Drawing.Size(472, 267);
             this.panelMain.TabIndex = 11;
+            this.panelMain.Paint += new System.Windows.Forms.PaintEventHandler(this.panelMain_Paint);
             this.panelMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelMain_MouseUp);
             // 
             // timerMouseHider
@@ -732,13 +740,6 @@
             // 
             this.timerHoldKey.Interval = 1000;
             this.timerHoldKey.Tick += new System.EventHandler(this.timerHoldKey_Tick);
-            // 
-            // mnuReverseOrder
-            // 
-            this.mnuReverseOrder.Name = "mnuReverseOrder";
-            this.mnuReverseOrder.Size = new System.Drawing.Size(256, 22);
-            this.mnuReverseOrder.Text = "Reverse Order Now";
-            this.mnuReverseOrder.Click += new System.EventHandler(this.mnuReverseOrder_Click);
             // 
             // frmMain
             // 
