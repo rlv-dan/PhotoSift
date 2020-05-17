@@ -149,33 +149,6 @@ namespace PhotoSift
 			return newPosition;
 		}
 
-		/// <summary>
-		/// Parse command line: Split into string array, and strips " chars
-		/// </summary>
-		/// <param name="commandLine">Command line to parse</param>
-		/// <returns>String array with each command line item</returns>
-		public static string[] ParseArguments(string commandLine)
-		{
-			char[] parmChars = commandLine.ToCharArray();
-			bool inQuote = false;
-			for (int index = 0; index < parmChars.Length; index++)
-			{
-				if (parmChars[index] == '"')
-					inQuote = !inQuote;
-				if (!inQuote && parmChars[index] == ' ')
-					parmChars[index] = '\n';
-			}
-
-			string[] args = ( new string( parmChars ) ).Split( new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries );
-
-			for( int i=0; i<args.Length; i++ )
-			{
-				args[i] = args[i].Replace( "\"", "" );
-			}
-
-			return args;
-		}
-
 		public static readonly string[] Def_allowsPicExts = new string[]
 		{
 			".jpg",

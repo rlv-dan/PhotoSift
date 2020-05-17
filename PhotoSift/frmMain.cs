@@ -151,7 +151,7 @@ namespace PhotoSift
 			UpdateMenuEnabledDisabled();
 
 			// Attempt to load files or folders passed via command line
-			string[] args = Util.ParseArguments( Environment.CommandLine );
+			string[] args = Environment.GetCommandLineArgs();
 			if( args.Length > 0 ) AddFiles( args ); else ShowPicByOffset( 0 );
 
 #if DEBUG && RLVISION
