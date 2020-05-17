@@ -1326,10 +1326,25 @@ namespace PhotoSift
 			}
 			}));
 		}
-		public void PicGotoCallback(int index = -1)
+		public void PicGotoCallback(int index = -1, string oldPath = "")
 		{
+			if (!string.IsNullOrEmpty(oldPath))
+			{
+				index = pics.FindIndex((path) => path == oldPath); // Assuming no duplication here
+			}
 			if (index == -1) index = iCurrentPic;
 			PicGoto(index);
+		}
+		public string GetCurPicPath()
+		{
+			try
+			{
+				return pics[iCurrentPic];
+			}
+			catch
+			{
+				return "";
+			}
 		}
 		// --
 

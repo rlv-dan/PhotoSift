@@ -106,6 +106,8 @@ namespace PhotoSift
 			}
 			bool stopGoto = false;
 			int num = 0;
+			string oldCurPath = mainForm.GetCurPicPath();
+			// CurPath must be no duplicates
 			while (bContinue)
 			{
 				if (undo.Count == 0 ||
@@ -113,7 +115,7 @@ namespace PhotoSift
 				{
 					if (stopGoto && num > 0) // Refresh when undoing a batch of deletions, keep in current picture.
 					{
-						mainForm.PicGotoCallback();
+						mainForm.PicGotoCallback(-1, oldCurPath);
 					}
 
 					break; // emptied or this is new undo group
