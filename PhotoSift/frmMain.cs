@@ -152,6 +152,7 @@ namespace PhotoSift
 
 			// Attempt to load files or folders passed via command line
 			string[] args = Environment.GetCommandLineArgs();
+			args = args.Skip(1).ToArray(); // slice
 			if( args.Length > 0 ) AddFiles( args ); else ShowPicByOffset( 0 );
 
 #if DEBUG && RLVISION
