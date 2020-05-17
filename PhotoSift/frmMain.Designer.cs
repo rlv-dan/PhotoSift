@@ -103,6 +103,7 @@
             this.panelMain = new System.Windows.Forms.Panel();
             this.timerMouseHider = new System.Windows.Forms.Timer(this.components);
             this.timerHoldKey = new System.Windows.Forms.Timer(this.components);
+            this.mnuReverseOrder = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.picCurrent)).BeginInit();
             this.menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
@@ -466,7 +467,8 @@
             this.mnuClearImagesShowHotkeys,
             this.toolStripMenuItem1,
             this.mnuAddInRandomOrder,
-            this.mnuRandimizeOrder});
+            this.mnuRandimizeOrder,
+            this.mnuReverseOrder});
             this.imagePoolToolStripMenuItem.Name = "imagePoolToolStripMenuItem";
             this.imagePoolToolStripMenuItem.Size = new System.Drawing.Size(87, 21);
             this.imagePoolToolStripMenuItem.Text = "&Image Pool";
@@ -731,6 +733,13 @@
             this.timerHoldKey.Interval = 1000;
             this.timerHoldKey.Tick += new System.EventHandler(this.timerHoldKey_Tick);
             // 
+            // mnuReverseOrder
+            // 
+            this.mnuReverseOrder.Name = "mnuReverseOrder";
+            this.mnuReverseOrder.Size = new System.Drawing.Size(256, 22);
+            this.mnuReverseOrder.Text = "Reverse Order Now";
+            this.mnuReverseOrder.Click += new System.EventHandler(this.mnuReverseOrder_Click);
+            // 
             // frmMain
             // 
             this.AllowDrop = true;
@@ -844,6 +853,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem mnuMovesCurChecked;
         private System.Windows.Forms.Timer timerHoldKey;
+        private System.Windows.Forms.ToolStripMenuItem mnuReverseOrder;
     }
 }
 

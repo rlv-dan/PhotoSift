@@ -437,6 +437,14 @@ namespace PhotoSift
 			ShowStatusMessage( "Randomized image order..." );
 			panelMain.Cursor = Cursors.Arrow;
 		}
+		private void mnuReverseOrder_Click(object sender, EventArgs e)
+		{
+			// note: undo's index is not changed;
+			pics.Reverse();
+			int newPos = pics.Count() - iCurrentPic - 1;
+			PicGoto(newPos);
+			ShowStatusMessage("Reversed image order...");
+		}
 
 		/// <summary>
 		/// 

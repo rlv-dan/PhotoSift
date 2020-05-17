@@ -1249,6 +1249,7 @@ namespace PhotoSift
 				mnuNavigatePrev,
 				mnuClearImages,
 				mnuRandimizeOrder,
+				mnuReverseOrder,
 				mnuZoomIn,
 				mnuZoomOut,
 				mnuZoomToHeight,
