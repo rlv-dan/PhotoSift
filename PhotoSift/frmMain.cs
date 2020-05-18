@@ -205,7 +205,10 @@ namespace PhotoSift
 			mnuMovesCurChecked.Checked = settings.MoveIncludingCurrent;
 
 			ShowHideLabels();
-
+			ApplyColorSettings();
+		}
+		public void ApplyColorSettings()
+		{
 			// Apply colors
 #if RLVISION
 			panelMain.BackColor = Color.FromArgb( 255, (int)settings.ColorBackground, (int)settings.ColorBackground, (int)settings.ColorBackground );

@@ -215,7 +215,8 @@ namespace PhotoSift
 			HaltAutoAdvance();
 			ForceShowFullscreenCursor();
 
-			Form frm = new frmSettings( settings );
+			frmSettings frm = new frmSettings( settings );
+			frm.applyColorSettings = ApplyColorSettings;
 			frm.ShowDialog();
 
 			ApplySettings();

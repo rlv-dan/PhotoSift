@@ -30,6 +30,9 @@ namespace PhotoSift
 	{
 		AppSettings settings;
 
+		public delegate void ApplyColorSettings();
+		public ApplyColorSettings applyColorSettings;
+
 		public frmSettings( AppSettings settings )
 		{
 			this.settings = settings;
@@ -47,7 +50,7 @@ namespace PhotoSift
 				this.Top = settings.FormRect_Settings.Y;
 				this.Width = settings.FormRect_Settings.Width;
 				this.Height = settings.FormRect_Settings.Height;
-			}			
+			}
 		}
 
 		private void frmSettings_FormClosing( object sender, FormClosingEventArgs e )
@@ -56,12 +59,16 @@ namespace PhotoSift
 			{
 				settings.FormRect_Settings = new Rectangle( this.Left, this.Top, this.Width, this.Height );
 			}
-
 		}
 
 		private void frmSettings_KeyDown( object sender, KeyEventArgs e )
 		{
 			if( e.KeyCode == Keys.F12 || e.KeyCode == Keys.Escape ) this.Close();
+		}
+
+		private void propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+		{
+			applyColorSettings();
 		}
 	}
 
