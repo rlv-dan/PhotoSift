@@ -560,6 +560,7 @@ namespace PhotoSift
 				lblHeader.Text = "Error loading image:\n" + ex.Message;
 				picCurrent.Image = null;
 				Util.CenterControl( lblHeader );
+				UpdateMenuEnabledDisabled();
 				return;
 			}
 
