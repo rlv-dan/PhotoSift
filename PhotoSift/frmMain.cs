@@ -82,6 +82,10 @@ namespace PhotoSift
 		// Constructor
 		public frmMain()
 		{
+			string folderPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+			string assemblyPath = Path.Combine(folderPath, "Lib");
+			Environment.SetEnvironmentVariable("PATH", Environment.GetEnvironmentVariable("PATH") + ";" + assemblyPath);
+
 			InitializeComponent();
 			initWmpPlayer();
 		}
