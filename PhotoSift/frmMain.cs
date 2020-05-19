@@ -432,7 +432,7 @@ namespace PhotoSift
 		{
 			if( pics.Count == 0 )
 			{
-				this.Text = Util.GetAppName() + " by RL Vision";
+				this.Text = Util.GetAppName();
 				lblHeader.Text = "Add or Drop Images to Start";
 				lblHeader.Visible = true;
 				picCurrent.Image = null;
@@ -1521,6 +1521,7 @@ namespace PhotoSift
 			linearGradientBrush.GammaCorrection = settings.ColorGradientBackgroundGammaCorrection;
 			e.Graphics.FillRectangle(linearGradientBrush, this.ClientRectangle);
 		}
+
 		// --------------------------------------------------------------------
 
 

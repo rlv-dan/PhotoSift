@@ -130,7 +130,7 @@ namespace PhotoSift
 
 		private void mnuHomepage_Click( object sender, EventArgs e )
 		{
-			System.Diagnostics.Process.Start( "https://www.rlvision.com" );
+			System.Diagnostics.Process.Start("https://github.com/yfdyh000/PhotoSift");
 		}
 
 		private void mnuAddImages_Click( object sender, EventArgs e )

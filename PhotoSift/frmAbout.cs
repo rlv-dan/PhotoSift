@@ -31,7 +31,7 @@ namespace PhotoSift
 			this.Text = String.Format( "About {0}", Assembly.GetExecutingAssembly().GetName().Name );
 			this.labelProductName.Text = Assembly.GetExecutingAssembly().GetName().Name + " " + Assembly.GetExecutingAssembly().GetName().Version.Major + "." + Assembly.GetExecutingAssembly().GetName().Version.Minor;
 			this.labelCopyright.Text = AssemblyCopyright;
-			this.labelLicense.Text = "Free, open source software (GPL)";
+			this.labelLicense.Text = "Free, open source software (GPLv3)";
 			this.labelStats.Text = "Loaded: " + settings.Stats_LoadedPics + "\nCopied/Moved: " + ( settings.Stats_CopiedPics + settings.Stats_MovedPics ) + "\nRenamed: " + settings.Stats_RenamedPics + "\nDeleted: " + settings.Stats_DeletedPics;
 		}
 
@@ -122,12 +122,7 @@ namespace PhotoSift
 
 		private void linkLabel1_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
 		{
-			System.Diagnostics.Process.Start( "http://www.rlvision.com" );
-		}
-
-		private void frmAbout_Load( object sender, EventArgs e )
-		{
-
+			System.Diagnostics.Process.Start("https://github.com/yfdyh000/PhotoSift");
 		}
 	}
 }

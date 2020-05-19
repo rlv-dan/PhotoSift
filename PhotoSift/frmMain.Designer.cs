@@ -98,7 +98,6 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuShowHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuHomepage = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.picLogo = new System.Windows.Forms.PictureBox();
             this.panelMain = new System.Windows.Forms.Panel();
@@ -670,7 +669,6 @@
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuShowHelp,
             this.mnuHomepage,
-            this.toolStripMenuItem2,
             this.mnuAbout});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(47, 21);
@@ -680,7 +678,7 @@
             // 
             this.mnuShowHelp.Name = "mnuShowHelp";
             this.mnuShowHelp.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.mnuShowHelp.Size = new System.Drawing.Size(206, 22);
+            this.mnuShowHelp.Size = new System.Drawing.Size(180, 22);
             this.mnuShowHelp.Text = "View Help";
             this.mnuShowHelp.Visible = false;
             this.mnuShowHelp.Click += new System.EventHandler(this.mnuShowHelp_Click);
@@ -688,20 +686,15 @@
             // mnuHomepage
             // 
             this.mnuHomepage.Name = "mnuHomepage";
-            this.mnuHomepage.Size = new System.Drawing.Size(206, 22);
-            this.mnuHomepage.Text = "PhotoSift Homepage...";
+            this.mnuHomepage.Size = new System.Drawing.Size(180, 22);
+            this.mnuHomepage.Text = "View project...";
             this.mnuHomepage.Click += new System.EventHandler(this.mnuHomepage_Click);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(203, 6);
             // 
             // mnuAbout
             // 
             this.mnuAbout.Name = "mnuAbout";
-            this.mnuAbout.Size = new System.Drawing.Size(206, 22);
-            this.mnuAbout.Text = "About PhotoSift";
+            this.mnuAbout.Size = new System.Drawing.Size(184, 22);
+            this.mnuAbout.Text = "About PhotoSift Ex";
             this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
             // 
             // picLogo
@@ -758,7 +751,7 @@
             this.MinimumSize = new System.Drawing.Size(160, 188);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "PhotoSift";
+            this.Text = "PhotoSift Ex";
             this.Deactivate += new System.EventHandler(this.frmMain_Deactivate);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);
@@ -797,7 +790,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuHomepage;
 		private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem mnuOpenSettings;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 		private System.Windows.Forms.ToolStripMenuItem imagePoolToolStripMenuItem;
