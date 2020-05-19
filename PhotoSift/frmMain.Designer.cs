@@ -42,6 +42,7 @@
             this.mnuOpenTargetFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuRenameFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuOpenContainingFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -196,6 +197,7 @@
             this.mnuOpenTargetFolder,
             this.toolStripMenuItem7,
             this.mnuRenameFile,
+            this.mnuOpenContainingFolder,
             this.toolStripMenuItem4,
             this.mnuExit});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -229,6 +231,13 @@
             this.mnuRenameFile.Size = new System.Drawing.Size(239, 22);
             this.mnuRenameFile.Text = "Rename File...";
             this.mnuRenameFile.Click += new System.EventHandler(this.mnuRenameFile_Click);
+            // 
+            // mnuOpenContainingFolder
+            // 
+            this.mnuOpenContainingFolder.Name = "mnuOpenContainingFolder";
+            this.mnuOpenContainingFolder.Size = new System.Drawing.Size(239, 22);
+            this.mnuOpenContainingFolder.Text = "Open Containing Folder";
+            this.mnuOpenContainingFolder.Click += new System.EventHandler(this.mnuOpenContainingFolder_Click);
             // 
             // toolStripMenuItem4
             // 
@@ -678,7 +687,7 @@
             // 
             this.mnuShowHelp.Name = "mnuShowHelp";
             this.mnuShowHelp.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.mnuShowHelp.Size = new System.Drawing.Size(180, 22);
+            this.mnuShowHelp.Size = new System.Drawing.Size(184, 22);
             this.mnuShowHelp.Text = "View Help";
             this.mnuShowHelp.Visible = false;
             this.mnuShowHelp.Click += new System.EventHandler(this.mnuShowHelp_Click);
@@ -686,7 +695,7 @@
             // mnuHomepage
             // 
             this.mnuHomepage.Name = "mnuHomepage";
-            this.mnuHomepage.Size = new System.Drawing.Size(180, 22);
+            this.mnuHomepage.Size = new System.Drawing.Size(184, 22);
             this.mnuHomepage.Text = "View project...";
             this.mnuHomepage.Click += new System.EventHandler(this.mnuHomepage_Click);
             // 
@@ -848,6 +857,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuMovesCurChecked;
         private System.Windows.Forms.Timer timerHoldKey;
         private System.Windows.Forms.ToolStripMenuItem mnuReverseOrder;
+        private System.Windows.Forms.ToolStripMenuItem mnuOpenContainingFolder;
     }
 }
 

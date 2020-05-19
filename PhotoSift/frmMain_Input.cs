@@ -1019,5 +1019,23 @@ namespace PhotoSift
 		{
 			System.Diagnostics.Process.Start("explorer.exe", settings.TargetFolder);
 		}
+
+		private void mnuOpenContainingFolder_Click(object sender, EventArgs e)
+		{
+			string path = pics[iCurrentPic];
+			if (File.Exists(path))
+				System.Diagnostics.Process.Start("explorer.exe", $"/e,/select,{path}");
+			else
+			{
+				//MessageBox.Show("The file does not exist!", "Open Containing Folder", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+				path = Path.GetDirectoryName(path);
+				while (!Directory.Exists(path))
+				{
+					path = Path.GetDirectoryName(path); // Use available upper directory, including drive root.
+				}
+				System.Diagnostics.Process.Start("explorer.exe", path);
+			}
+		}
 	}
 }

@@ -1241,6 +1241,7 @@ namespace PhotoSift
 			// Enables/Disables menu items rely on current images
 			List<ToolStripMenuItem> menus = new List<ToolStripMenuItem> { 
 				mnuRenameFile,
+				mnuOpenContainingFolder,
 				mnuCopyToClipboard,
 				mnuFlipX,
 				mnuFlipY,
