@@ -47,6 +47,7 @@
             this.propertyGrid.Size = new System.Drawing.Size(530, 539);
             this.propertyGrid.TabIndex = 0;
             this.propertyGrid.ToolbarVisible = false;
+            this.propertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid_PropertyValueChanged);
             // 
             // contextMenuStrip1
             // 
