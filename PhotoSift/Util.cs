@@ -127,7 +127,7 @@ namespace PhotoSift
 
 		public static string GetAppName()
 		{
-			return Assembly.GetExecutingAssembly().GetName().Name;
+			return Assembly.GetExecutingAssembly().GetName().Name + " Ex"; // Append to avoid space in the generated file's name
 		}
 
 		/// <summary>

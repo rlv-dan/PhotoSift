@@ -29,8 +29,8 @@ namespace PhotoSift
 		public frmAbout( AppSettings settings )
 		{
 			InitializeComponent();
-			this.Text = String.Format( "About {0}", Assembly.GetExecutingAssembly().GetName().Name );
-			this.labelProductName.Text = Assembly.GetExecutingAssembly().GetName().Name + " " + Assembly.GetExecutingAssembly().GetName().Version.Major + "." + Assembly.GetExecutingAssembly().GetName().Version.Minor;
+			this.Text = String.Format( "About {0}", Util.GetAppName() );
+			this.labelProductName.Text = Util.GetAppName() + " " + Assembly.GetExecutingAssembly().GetName().Version.Major + "." + Assembly.GetExecutingAssembly().GetName().Version.Minor;
 			this.labelCopyright.Text = AssemblyCopyright;
 			this.labelLicense.Text = "Free, open source software (GPLv3)";
 			this.labelStats.Text = "Loaded: " + settings.Stats_LoadedPics + "\nCopied/Moved: " + ( settings.Stats_CopiedPics + settings.Stats_MovedPics ) + "\nRenamed: " + settings.Stats_RenamedPics + "\nDeleted: " + settings.Stats_DeletedPics;
