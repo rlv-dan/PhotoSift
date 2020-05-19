@@ -8,9 +8,9 @@ PhotoSift Ex
 
 This a fork with video playback, batch operations, and other optimizations.
 
-View the release notes and downloads at https://github.com/yfdyh000/PhotoSift/releases
+View the release notes and downloads at https://github.com/yfdyh000/PhotoSift/releases.
 
-This program requires .NET Framework 4.5.2 or higher, Windows Media Player librarys, etc. Available on Microsoft Windows.
+This program requires .NET Framework 4.5.2 or higher, Windows Media Player Library, etc. Available on Microsoft Windows.
 
 PhotoSift
 =========
