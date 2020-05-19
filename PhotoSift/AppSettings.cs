@@ -25,6 +25,7 @@ using System.Windows.Forms.Design;
 using System.Drawing;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.IO;
 
 namespace PhotoSift
 {
@@ -39,28 +40,37 @@ namespace PhotoSift
 
 		// File Operations Group
 		// (space in front of category name is intended; makes it sort first)
-		[Category( " File Operations" ), DisplayName( "File mode" ), DescriptionAttribute( "When pressing an action key, should the file be copied or moved?" )]
+		[Category("\u200B" + "File Operations" ), DisplayName( "File mode" ), DescriptionAttribute( "When pressing an action key, should the file be copied or moved?" )]
 		[TypeConverter( typeof( EnumTypeConverter ) )]
 		public FileOperations FileMode { get; set; }
 
-		[Category( " File Operations" ), DisplayName( "Existing files" ), DescriptionAttribute( "When pressing an action key, and the target folder already contains a file with the same name, what action do you want to take? Append number means a (1) will be added to the end of the filename." )]
+		[Category("\u200B" + "File Operations" ), DisplayName( "Existing files" ), DescriptionAttribute( "When pressing an action key, and the target folder already contains a file with the same name, what action do you want to take? Append number means a (1) will be added to the end of the filename." )]
 		[TypeConverter( typeof( EnumTypeConverter ) )]
 		public ExistingFileOptions ExistingFiles { get; set; }
 
-		[Category( " File Operations" ), DisplayName( "Delete mode" ), DescriptionAttribute( "Determines the action to take when pressing the delete key. You can force different modes with Shift+Del (Delete), Alt+Del (Recycle) and Ctrl+Del (Remove from List)" )]
+		[Category("\u200B" + "File Operations" ), DisplayName( "Delete mode" ), DescriptionAttribute( "Determines the action to take when pressing the delete key. You can force different modes with Shift+Del (Delete), Alt+Del (Recycle) and Ctrl+Del (Remove from List)" )]
 		[TypeConverter( typeof( EnumTypeConverter ) )]
 		public DeleteOptions DeleteMode { get; set; }
-		[Category(" File Operations"), DisplayName("Target base folder"), DescriptionAttribute("Target base folder. %PhotoSift% will be replaced with the location of the software")]
+		[Category("\u200B" + "File Operations" ), DisplayName("Target base folder"), DescriptionAttribute("Target base folder. %PhotoSift% or relative path (not \\ starting) will be replaced with the location of the software.")]
 		[EditorAttribute(typeof(FolderNameEditor), typeof(UITypeEditor))]
 		public string TargetFolderPath { get; set; } // TargetFolder_Serializable
 		[System.Xml.Serialization.XmlIgnore]
 		[Browsable(false)]
 		public string TargetFolder
 		{
-			get => this.TargetFolderPath.Replace("%PhotoSift%",
-					System.Windows.Forms.Application.StartupPath);
-			set => this.TargetFolderPath = SaveRelativePaths ? value.Replace(System.Windows.Forms.Application.StartupPath,
-						   "%PhotoSift%") : value;
+			get
+			{
+				string nPath = this.TargetFolderPath.Replace("%PhotoSift%", System.Windows.Forms.Application.StartupPath);
+				if (!Path.IsPathRooted(nPath)) nPath = Path.Combine(System.Windows.Forms.Application.StartupPath, nPath); // For filled in the properties panel
+				return nPath;
+			}
+			set
+			{
+				if (SaveRelativePaths)
+					this.TargetFolderPath = value.Replace(System.Windows.Forms.Application.StartupPath, "%PhotoSift%");
+				else
+					this.TargetFolderPath = value;
+			}
 		}
 
 		// Appearance Group

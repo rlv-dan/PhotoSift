@@ -70,6 +70,9 @@ namespace PhotoSift
 		private void propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
 		{
 			applyColorSettings();
+
+			if (e.ChangedItem.PropertyDescriptor.Name == "TargetFolderPath") // workaround, the displayed item is storage.
+				this.settings.TargetFolder = (string)e.ChangedItem.Value;
 		}
 
 		private void resetToolStripMenuItem_Click(object sender, EventArgs e)
