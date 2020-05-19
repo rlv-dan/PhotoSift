@@ -1,12 +1,12 @@
 ﻿
---- PhotoSift Source Code Comments --------------------------------------------
+--- PhotoSift Ex Source Code Comments --------------------------------------------
 
   Language: C#
-  IDE: Visual Studio 2010 Professional
-  Target: DotNet Framework 2.0 on Windows
-  License: GPL
+  IDE: Visual Studio 2019 (Community)
+  Target: DotNet Framework 4.5.2 on Windows
+  License: GPLv3
 
-  Notes:
+--- PhotoSift (original) Author Notes ---
 
     I need to maintain a custom version of PhotoSift with some special 
 	requirements that are not suitable for the public version. This is 
