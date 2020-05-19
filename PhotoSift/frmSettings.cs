@@ -70,6 +70,56 @@ namespace PhotoSift
 		{
 			applyColorSettings();
 		}
+
+		private void resetToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			// System.ComponentModel.DefaultValueAttribute not automatically filled and only static, so give up.
+			//propertyGrid.ResetSelectedProperty();
+
+			void _PropItemResetToDefault(GridItem gridItem)
+			{
+				string keyName = gridItem.PropertyDescriptor.Name;
+				if (settings.defaultSettings.TryGetValue(keyName, out object keyValue))
+				{
+					object convertedValue = Convert.ChangeType(keyValue, gridItem.PropertyDescriptor.PropertyType);
+					PropertyInfo prop = (typeof(AppSettings)).GetProperty(keyName);
+					prop.SetValue(this.settings, convertedValue);
+				}
+				else
+				{
+					Console.WriteLine("Error getting default value: " + keyName);
+				}
+			}
+
+			string SelectedGridItem = propertyGrid.SelectedGridItem.GridItemType.ToString();
+			if (SelectedGridItem == "Property")
+			{
+				_PropItemResetToDefault(propertyGrid.SelectedGridItem);
+			}
+			else if (SelectedGridItem == "Category")
+			{
+				DialogResult confirm = MessageBox.Show(
+					string.Format("Are you sure you want to reset {0} preferences of this group to defaults?", propertyGrid.SelectedGridItem.GridItems.Count),
+					"Reset to defaults", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+				if (confirm == DialogResult.No) return;
+
+				foreach (GridItem item in propertyGrid.SelectedGridItem.GridItems)
+				{
+					_PropItemResetToDefault(item);
+					item.PropertyDescriptor.ResetValue(this.settings); // Necessary for Refresh();
+				}
+			}
+			propertyGrid.Refresh();
+			//this.Focus(); // Refresh, not work for groups reset
+		}
+
+		private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+		{
+			if (propertyGrid.SelectedGridItem != null)
+				contextMenuStrip1.Items[0].Enabled = true;
+			else
+				contextMenuStrip1.Items[0].Enabled = false;
+		}
 	}
 
 	public class EnumTypeConverter : EnumConverter

@@ -24,7 +24,6 @@ using System.Windows.Forms.Design;
 using System.Drawing;
 using System.Xml.Serialization;
 using System.Collections.Generic;
-using System.Drawing.Drawing2D;
 
 namespace PhotoSift
 {
@@ -52,7 +51,7 @@ namespace PhotoSift
 		public DeleteOptions DeleteMode { get; set; }
 		[Category(" File Operations"), DisplayName("Target base folder"), DescriptionAttribute("Target base folder. %PhotoSift% will be replaced with the location of the software")]
 		[EditorAttribute(typeof(FolderNameEditor), typeof(UITypeEditor))]
-		public string TargetFolderPath { get; set; }
+		public string TargetFolderPath { get; set; } // TargetFolder_Serializable
 		[System.Xml.Serialization.XmlIgnore]
 		[Browsable(false)]
 		public string TargetFolder
@@ -428,101 +427,106 @@ namespace PhotoSift
 		[Browsable( false )]
 		public int Stats_DeletedPics { get; set; }
 
-
-		// Constructor - apply default settings
+		[XmlIgnore]
+		public Dictionary<string, object> defaultSettings = new Dictionary<string, object>();
 		public AppSettings()
 		{
 			// File Operations Group
-			FileMode = FileOperations.Move;
-			ExistingFiles = ExistingFileOptions.AppendNumber;
-			DeleteMode = DeleteOptions.RecycleBin;
+			defaultSettings.Add("FileMode", FileOperations.Move);
+			defaultSettings.Add("ExistingFiles", ExistingFileOptions.AppendNumber);
+			defaultSettings.Add("DeleteMode", DeleteOptions.RecycleBin);
+			defaultSettings.Add("TargetFolderPath", System.Windows.Forms.Application.StartupPath);
 
 			// Appearance Group
 #if RLVISION
-			ColorBackground = GrayColors.Col7;
+			defaultSettings.Add("ColorBackground", GrayColors.Col7);
 #else
-			ColorBackground = Color.Black;
+			defaultSettings.Add("ColorBackground", Color.Black);
 #endif
-			ColorGradientBackgroundMode = LineGradientMode.Off;
-			ColorGradientBackgroundOne = Color.Gray;
-			ColorGradientBackgroundTwo = Color.Black;
-			ColorGradientBackgroundGammaCorrection = false;
-			ColorLabelFront = Color.Gray;
-			ColorLabelBack = Color.Black;
-			ColorTransparentLabels = true;
-			LabelFont = new Font( "Arial", 10, FontStyle.Regular );
-			CustomMenuColors = true;
-			CustomMenuColorBackground = Color.FromArgb( 255, 45, 45, 45 );
-			CustomMenuColorText = Color.FromArgb( 255, 255, 255, 255 );
-			CustomMenuColorBorder = Color.FromArgb( 255, 128, 128, 128 );
-			CustomMenuColorHightlight = Color.FromArgb( 255, 65, 65, 65 );
+			defaultSettings.Add("ColorGradientBackgroundMode", LineGradientMode.Off);
+			defaultSettings.Add("ColorGradientBackgroundOne", Color.Gray);
+			defaultSettings.Add("ColorGradientBackgroundTwo", Color.Black);
+			defaultSettings.Add("ColorGradientBackgroundGammaCorrection", false);
+			defaultSettings.Add("ColorLabelFront", Color.Gray);
+			defaultSettings.Add("ColorLabelBack", Color.Black);
+			defaultSettings.Add("ColorTransparentLabels", true);
+			defaultSettings.Add("LabelFont", new Font("Arial", 10, FontStyle.Regular));
+			defaultSettings.Add("CustomMenuColors", true);
+			defaultSettings.Add("CustomMenuColorBackground", Color.FromArgb(255, 45, 45, 45));
+			defaultSettings.Add("CustomMenuColorText", Color.FromArgb(255, 255, 255, 255));
+			defaultSettings.Add("CustomMenuColorBorder", Color.FromArgb(255, 128, 128, 128));
+			defaultSettings.Add("CustomMenuColorHightlight", Color.FromArgb(255, 65, 65, 65));
 
 			// Controls Group
-			HoldKeyInterval = 1000;
-			RewindOnEnd = false;
-			LoopInPool = false;
-			MediumJump = 10;
-			LargeJump = 25;
-			WarnThresholdOnClearQueue = 0;
-			CloseOnEscape = false;
-			OnDeleteStepForward = true;
-			AutoAdvanceInterval = 4.5;
-			ActualSizeAutoScroll = true;
-			ActualSizeAutoScrollNoLimitInsideForm = false;
-			ActualSizeAutoScrollDistance = 100;
-			LinearScale = false;
-			FreeZoomSnap = 0;
-			ZoomSteps = "5,10,25,50,75,100,125,150,175,200";
-			ZoomLimitMaxToWindowSize = false;
-			ResetViewModeOnPictureChange = true;
+			defaultSettings.Add("HoldKeyInterval", 1000);
+			defaultSettings.Add("RewindOnEnd", false);
+			defaultSettings.Add("LoopInPool", false);
+			defaultSettings.Add("MediumJump", 10);
+			defaultSettings.Add("LargeJump", 25);
+			defaultSettings.Add("WarnThresholdOnClearQueue", 0);
+			defaultSettings.Add("CloseOnEscape", false);
+			defaultSettings.Add("OnDeleteStepForward", true);
+			defaultSettings.Add("AutoAdvanceInterval", 4.5);
+			defaultSettings.Add("ActualSizeAutoScroll", true);
+			defaultSettings.Add("ActualSizeAutoScrollDistance", 100);
+			defaultSettings.Add("ActualSizeAutoScrollNoLimitInsideForm", false);
+			defaultSettings.Add("LinearScale", false);
+			defaultSettings.Add("FreeZoomSnap", 0);
+			defaultSettings.Add("ZoomSteps", "5,10,25,50,75,100,125,150,175,200");
+			defaultSettings.Add("ZoomLimitMaxToWindowSize", false);
 
 			// Display Group
-			ShowInfoLabel = ShowModes.FullscreenOnly;
-			ShowModeLabel = ShowModes.AlwaysShow;
-			InfoLabelFormat = "(%c / %t) %f";
-			InfoLabelFormatVideo = "(%c / %t) %f  %time  %w x %h";
-			FullscreenHideCursor = true;
-			EnlargeSmallImages = false;
+			defaultSettings.Add("ShowInfoLabel", ShowModes.FullscreenOnly);
+			defaultSettings.Add("ShowModeLabel", ShowModes.AlwaysShow);
+			defaultSettings.Add("InfoLabelFormat", "(%c / %t) %f");
+			defaultSettings.Add("InfoLabelFormatVideo", "(%c / %t) %f  %time  %w x %h");
+			defaultSettings.Add("FullscreenHideCursor", true);
+			defaultSettings.Add("EnlargeSmallImages", false);
 #if RLVISION
-			AutoMoveToScreen = false;
+			defaultSettings.Add("AutoMoveToScreen", false);
 #endif
 			// System Group
-			PreventSleep = false;
+			defaultSettings.Add("PreventSleep", false);
+
+			// Cache settings
+			defaultSettings.Add("CacheAhead", 2);
+			defaultSettings.Add("CacheBehind", 1);
 
 			// File Type
-			allowsPicExts = Util.Def_allowsPicExts;
-			allowsVidExts = Util.Def_allowsVideoExts;
-			FileMIMEChecker = FeatureSwitch.Disabled;
-			allowsMIME = "image/;video/;audio/";
+			defaultSettings.Add("allowsPicExts", Util.Def_allowsPicExts);
+			defaultSettings.Add("allowsVidExts", Util.Def_allowsVideoExts);
+			defaultSettings.Add("FileMIMEChecker", FeatureSwitch.Disabled);
+			defaultSettings.Add("allowsMIME", "image/);video/);audio/");
 
 			// Misc
-			SaveRelativePaths = true;
-			CopyActionType = CopytoClipboardOptions.Bitmap;
+			defaultSettings.Add("SaveRelativePaths", true);
+			defaultSettings.Add("CopyActionType", CopytoClipboardOptions.Bitmap);
 
 			// GUI settings
-			TargetFolder = System.Windows.Forms.Application.StartupPath;
-			AddInRandomOrder = false;
-			MoveIncludingCurrent = false;
+			defaultSettings.Add("AddInRandomOrder", false);
+			defaultSettings.Add("ResetViewModeOnPictureChange", true);
+			defaultSettings.Add("MoveIncludingCurrent", false);
 
 			// Hidden settings
-			FormRect_Main = new Rectangle();
-			FormRect_Settings = new Rectangle();
-			FirstTimeUsing = true;
-			FullscreenCursorAutoHideTime = 3000;
-			CacheAhead = 2;
-			CacheBehind = 1;
-			Stats_FirstLaunchDate = DateTime.Now;
-			Stats_StartupCount = 0;
-			Stats_LoadedPics = 0;
-			Stats_RenamedPics = 0;
-			Stats_MovedPics = 0;
-			Stats_CopiedPics = 0;
-			Stats_DeletedPics = 0;
+			defaultSettings.Add("FormRect_Main", new Rectangle());
+			defaultSettings.Add("FormRect_Settings", new Rectangle());
+			defaultSettings.Add("FirstTimeUsing", true);
+			defaultSettings.Add("FullscreenCursorAutoHideTime", 3000);
+			defaultSettings.Add("Stats_FirstLaunchDate", DateTime.Now);
+			defaultSettings.Add("Stats_StartupCount", 0);
+			defaultSettings.Add("Stats_LoadedPics", 0);
+			defaultSettings.Add("Stats_RenamedPics", 0);
+			defaultSettings.Add("Stats_MovedPics", 0);
+			defaultSettings.Add("Stats_CopiedPics", 0);
+			defaultSettings.Add("Stats_DeletedPics", 0);
 
-			// Set all KeyFolder properties to ""
 			foreach( System.Reflection.PropertyInfo Prop in typeof( AppSettings ).GetProperties() )
 			{
-				if( Prop.Name.StartsWith( "KeyFolder_" ) ) Prop.SetValue( this, "" , null );
+				if (Prop.Name.StartsWith("KeyFolder_"))
+					defaultSettings.Add(Prop.Name, "");
+
+				if (defaultSettings.TryGetValue(Prop.Name, out object value))
+					Prop.SetValue(this, value); // apply default settings
 			}
 		}
 
