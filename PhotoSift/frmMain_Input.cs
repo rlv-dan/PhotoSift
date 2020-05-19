@@ -231,6 +231,7 @@ namespace PhotoSift
 
 		private void mnuShowHelp_Click( object sender, EventArgs e )
 		{
+			return;
 			string ReadmeFile = Path.Combine(System.Windows.Forms.Application.StartupPath, "ReadMe.txt");
 			if( System.IO.File.Exists( ReadmeFile ) )
 			{

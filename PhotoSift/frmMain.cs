@@ -277,10 +277,6 @@ namespace PhotoSift
 			if ( settings.FirstTimeUsing )
 			{
 				settings.FirstTimeUsing = false;
-				if( MessageBox.Show( "New users should read 'Getting Started' in the help file. Open it now?", "Welcome to " + Util.GetAppName(), MessageBoxButtons.YesNo ) == System.Windows.Forms.DialogResult.Yes )
-				{
-					mnuShowHelp_Click( this, new EventArgs() );
-				}
 			}
 		}
 

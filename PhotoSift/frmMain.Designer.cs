@@ -682,6 +682,7 @@
             this.mnuShowHelp.ShortcutKeys = System.Windows.Forms.Keys.F1;
             this.mnuShowHelp.Size = new System.Drawing.Size(206, 22);
             this.mnuShowHelp.Text = "View Help";
+            this.mnuShowHelp.Visible = false;
             this.mnuShowHelp.Click += new System.EventHandler(this.mnuShowHelp_Click);
             // 
             // mnuHomepage
