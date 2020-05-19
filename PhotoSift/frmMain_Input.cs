@@ -998,7 +998,11 @@ namespace PhotoSift
 		private void timerHoldKey_Tick(object sender, EventArgs e)
 		{
 			if (curHoldKey == null) return;
-			timerHoldKeyTriggered = true;
+			if (!timerHoldKeyTriggered)
+			{
+				timerHoldKeyTriggered = true;
+				return; // double time for the first time
+			}
 			frmMain_KeyUp("timerHoldKey_Tick", curHoldKey);
 		}
 

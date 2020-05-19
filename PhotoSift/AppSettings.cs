@@ -189,7 +189,7 @@ namespace PhotoSift
 
 
 		// Controls Group
-		[Category("Controls"), DisplayName("Hold key repeat interval"), DescriptionAttribute("Interval (ms) for press and hold a key to repeat actions. The value < 100 ms will disalbe this feature.")]
+		[Category("Controls"), DisplayName("Repeat interval (ms)"), DescriptionAttribute("Interval (ms) for press and hold a key to repeat actions. The value < 100 ms will disalbe this feature. The first trigger will double the time.")]
 		public int HoldKeyInterval { get; set; }
 		[Category("Controls"), DisplayName("Rewind on pool end"), DescriptionAttribute("Try to rewind when the pool end is reached while handle.")]
 		public bool RewindOnEnd { get; set; }
@@ -469,7 +469,7 @@ namespace PhotoSift
 			defaultSettings.Add("CustomMenuColorHightlight", Color.FromArgb(255, 65, 65, 65));
 
 			// Controls Group
-			defaultSettings.Add("HoldKeyInterval", 1000);
+			defaultSettings.Add("HoldKeyInterval", 300);
 			defaultSettings.Add("RewindOnEnd", false);
 			defaultSettings.Add("LoopInPool", false);
 			defaultSettings.Add("MediumJump", 10);
