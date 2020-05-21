@@ -26,6 +26,7 @@ using System.Drawing;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.IO;
+using static PhotoSift.WinApi;
 
 namespace PhotoSift
 {
@@ -52,7 +53,7 @@ namespace PhotoSift
 		[TypeConverter( typeof( EnumTypeConverter ) )]
 		public DeleteOptions DeleteMode { get; set; }
 		[Category("\u200B" + "File Operations" ), DisplayName("Target base folder"), DescriptionAttribute("Target base folder. %PhotoSift% or relative path (not \\ starting) will be replaced with the location of the software.")]
-		[EditorAttribute(typeof(FolderNameEditor), typeof(UITypeEditor))]
+		[EditorAttribute(typeof(FolderNameEditor2), typeof(UITypeEditor))]
 		public string TargetFolderPath { get; set; } // TargetFolder_Serializable
 		[System.Xml.Serialization.XmlIgnore]
 		[Browsable(false)]
@@ -265,112 +266,112 @@ namespace PhotoSift
 
 		// Key Folder group
 		[Category( "Key Folders" ), DisplayName( "A" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_A { get; set; }
 		[Category( "Key Folders" ), DisplayName( "B" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_B { get; set; }
 		[Category( "Key Folders" ), DisplayName( "C" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_C { get; set; }
 		[Category( "Key Folders" ), DisplayName( "D" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_D { get; set; }
 		[Category( "Key Folders" ), DisplayName( "E" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_E { get; set; }
 		[Category( "Key Folders" ), DisplayName( "F" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_F { get; set; }
 		[Category( "Key Folders" ), DisplayName( "G" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_G { get; set; }
 		[Category( "Key Folders" ), DisplayName( "H" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_H { get; set; }
 		[Category( "Key Folders" ), DisplayName( "I" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_I { get; set; }
 		[Category( "Key Folders" ), DisplayName( "J" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_J { get; set; }
 		[Category( "Key Folders" ), DisplayName( "K" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_K { get; set; }
 		[Category( "Key Folders" ), DisplayName( "L" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_L { get; set; }
 		[Category( "Key Folders" ), DisplayName( "M" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_M { get; set; }
 		[Category( "Key Folders" ), DisplayName( "N" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_N { get; set; }
 		[Category( "Key Folders" ), DisplayName( "O" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_O { get; set; }
 		[Category( "Key Folders" ), DisplayName( "P" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_P { get; set; }
 		[Category( "Key Folders" ), DisplayName( "Q" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_Q { get; set; }
 		[Category( "Key Folders" ), DisplayName( "R" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_R { get; set; }
 		[Category( "Key Folders" ), DisplayName( "S" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_S { get; set; }
 		[Category( "Key Folders" ), DisplayName( "T" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_T { get; set; }
 		[Category( "Key Folders" ), DisplayName( "U" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_U { get; set; }
 		[Category( "Key Folders" ), DisplayName( "V" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_V { get; set; }
 		[Category( "Key Folders" ), DisplayName( "W" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_W { get; set; }
 		[Category( "Key Folders" ), DisplayName( "X" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_X { get; set; }
 		[Category( "Key Folders" ), DisplayName( "Y" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_Y { get; set; }
 		[Category( "Key Folders" ), DisplayName( "Z" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_Z { get; set; }
 		[Category( "Key Folders" ), DisplayName( "0" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_0 { get; set; }
 		[Category( "Key Folders" ), DisplayName( "1" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_1 { get; set; }
 		[Category( "Key Folders" ), DisplayName( "2" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_2 { get; set; }
 		[Category( "Key Folders" ), DisplayName( "3" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_3 { get; set; }
 		[Category( "Key Folders" ), DisplayName( "4" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_4 { get; set; }
 		[Category( "Key Folders" ), DisplayName( "5" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_5 { get; set; }
 		[Category( "Key Folders" ), DisplayName( "6" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_6 { get; set; }
 		[Category( "Key Folders" ), DisplayName( "7" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_7 { get; set; }
 		[Category( "Key Folders" ), DisplayName( "8" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_8 { get; set; }
 		[Category( "Key Folders" ), DisplayName( "9" ), DescriptionAttribute( "Sets the destination folder where images go when this key is pressing. This can be a subfolder relative to the current base target folder, or a complete path. Clear to use default. See readme file for a more detailed explanation of the various options." )]
-		[EditorAttribute( typeof( FolderNameEditor ), typeof( UITypeEditor ) )]
+		[EditorAttribute( typeof( FolderNameEditor2 ), typeof( UITypeEditor ) )]
 		public string KeyFolder_9 { get; set; }
 
 		// Cache settings
