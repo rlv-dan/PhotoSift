@@ -555,6 +555,7 @@ namespace PhotoSift
 				lblInfoLabel.Text = "(" + ( iCurrentPic + 1 ) + "/" + pics.Count + ") " + pics[iCurrentPic];
 				lblHeader.Visible = true;
 				lblHeader.Text = "Error loading image:\n" + ex.Message;
+				this.Text = "Error loading image: " + pics[iCurrentPic];
 				picCurrent.Image = null;
 				Util.CenterControl( lblHeader );
 				UpdateMenuEnabledDisabled();
