@@ -342,7 +342,7 @@ namespace PhotoSift
 				{
 					try
 					{
-						foreach (string file in System.IO.Directory.GetFiles(item, "*", System.IO.SearchOption.AllDirectories))
+						foreach (string file in System.IO.Directory.EnumerateFiles(item, "*", System.IO.SearchOption.AllDirectories))
 						{
 							_addFile(file, ref newPics, allowsExts);
 						}
