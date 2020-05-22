@@ -1041,5 +1041,21 @@ namespace PhotoSift
 				System.Diagnostics.Process.Start("explorer.exe", path);
 			}
 		}
+		private void mnuGoToIndex_Click(object sender, EventArgs e)
+		{
+			string newNumStr = Microsoft.VisualBasic.Interaction.InputBox(string.Format("Enter the target page: ?/{0}\n\nNote: Numbers beyond the range will be leveled automatically.", pics.Count()),
+				"Go to...",	(iCurrentPic + 1).ToString());
+
+            if (!int.TryParse(newNumStr, out int newNum))
+				newNum = iCurrentPic + 1; // can also be return, warn.
+
+			int newIndex = newNum - 1;
+			if (newIndex >= pics.Count)
+				newIndex = pics.Count - 1;
+			if (newIndex < 0)
+				newIndex = 0;
+			PicGoto(newIndex);
+		}
+
 	}
 }

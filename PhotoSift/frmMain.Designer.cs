@@ -96,6 +96,7 @@
             this.mnuAddInRandomOrder = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuRandimizeOrder = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuReverseOrder = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuGoToIndex = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuShowHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuHomepage = new System.Windows.Forms.ToolStripMenuItem();
@@ -476,7 +477,8 @@
             this.toolStripMenuItem1,
             this.mnuAddInRandomOrder,
             this.mnuRandimizeOrder,
-            this.mnuReverseOrder});
+            this.mnuReverseOrder,
+            this.mnuGoToIndex});
             this.imagePoolToolStripMenuItem.Name = "imagePoolToolStripMenuItem";
             this.imagePoolToolStripMenuItem.Size = new System.Drawing.Size(87, 21);
             this.imagePoolToolStripMenuItem.Text = "&Image Pool";
@@ -673,6 +675,14 @@
             this.mnuReverseOrder.Text = "Reverse Order Now";
             this.mnuReverseOrder.Click += new System.EventHandler(this.mnuReverseOrder_Click);
             // 
+            // mnuGoToIndex
+            // 
+            this.mnuGoToIndex.Name = "mnuGoToIndex";
+            this.mnuGoToIndex.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+            this.mnuGoToIndex.Size = new System.Drawing.Size(256, 22);
+            this.mnuGoToIndex.Text = "Go to...";
+            this.mnuGoToIndex.Click += new System.EventHandler(this.mnuGoToIndex_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -858,6 +868,7 @@
         private System.Windows.Forms.Timer timerHoldKey;
         private System.Windows.Forms.ToolStripMenuItem mnuReverseOrder;
         private System.Windows.Forms.ToolStripMenuItem mnuOpenContainingFolder;
+        private System.Windows.Forms.ToolStripMenuItem mnuGoToIndex;
     }
 }
 
