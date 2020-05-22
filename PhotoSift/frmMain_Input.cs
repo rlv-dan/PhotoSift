@@ -76,19 +76,24 @@ namespace PhotoSift
 			}
 			if (mode == ClearMode.All)
 			{
+				ShowStatusMessage(string.Format("Cleared {0} items", pics.Count));
 				pics.Clear();
 				PicGoto(0);
 			}
 			else if (mode == ClearMode.Left && (iCurrentPic > 0 || keepCur == 0))
 			{
+				int oldCount = pics.Count;
 				pics.RemoveRange(0, keepCur > 0 ? iCurrentPic : iCurrentPic + 1);
 				PicGoto(0);
+				ShowStatusMessage(string.Format("Cleared {0} item(s)", oldCount - pics.Count));
 			}
 			else if (mode == ClearMode.Right && (pics.Count - (iCurrentPic + 1)) > 0)
 			{
+				int oldCount = pics.Count;
 				// todo: keepCur support.
 				pics.RemoveRange(iCurrentPic + 1, pics.Count - (iCurrentPic + 1));
 				PicGoto(iCurrentPic - 1); // for refresh the title
+				ShowStatusMessage(string.Format("Cleared {0} item(s)", oldCount - pics.Count));
 			}
 			else if (mode == ClearMode.Current)
 			{
@@ -904,6 +909,8 @@ namespace PhotoSift
 				// todo, test the ui, check and cut too many lines.
 				MessageBox.Show("Error copying/moving file(s): \n\n" + errors, "File(s) Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
+			if (droppedIndex.Count > 1)
+				ShowStatusMessage(string.Format("Processed {0} files", droppedIndex.Count));
 		}
 
 		private void frmMain_KeyDown( object sender, KeyEventArgs e )
