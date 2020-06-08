@@ -689,6 +689,7 @@
 			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.frmMain_KeyPress);
 			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.frmMain_KeyUp);
 			this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.frmMain_MouseUp);
+			this.Move += new System.EventHandler(this.frmMain_Move);
 			this.Resize += new System.EventHandler(this.frmMain_Resize);
 			((System.ComponentModel.ISupportInitialize)(this.picCurrent)).EndInit();
 			this.menuStripMain.ResumeLayout(false);

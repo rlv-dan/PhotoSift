@@ -46,8 +46,9 @@ namespace PhotoSift
 		private bool bAutoAdvanceEnabled = false;
 		
 		private bool bFullScreen = false;
-		private FormWindowState NormalWindowState;
-		private Rectangle NormalWindowStateFormRect;
+		private FormWindowState WindowStateToReturnToAfterFullscreen;
+		private FormWindowState WindowStateToSave;
+		private Rectangle FormPositionToSave;
 
 		private bool bMenuInUse = false;
 		private bool bWinKeyLDown = false;
@@ -191,30 +192,45 @@ namespace PhotoSift
 		private void frmMain_FormClosing( object sender, FormClosingEventArgs e )
 		{
 			// Save settings
-			settings.WindowState = !bFullScreen ? this.WindowState : NormalWindowState;
-
-			if( bFullScreen || this.WindowState == FormWindowState.Maximized)
-				settings.FormRect_Main = new Rectangle( NormalWindowStateFormRect.Left, NormalWindowStateFormRect.Top, NormalWindowStateFormRect.Width, NormalWindowStateFormRect.Height );
-			else
-				settings.FormRect_Main = new Rectangle( this.Left, this.Top, this.Width, this.Height );
+			settings.WindowState = this.WindowStateToSave;
+			settings.FormRect_Main = new Rectangle( this.FormPositionToSave.Left, this.FormPositionToSave.Top, this.FormPositionToSave.Width, this.FormPositionToSave.Height );
 			SettingsHandler.SaveAppSettings( settings );
 		}
 
 		private void frmMain_Resize( object sender, EventArgs e )
 		{
-			if(this.WindowState == FormWindowState.Normal && !bFullScreen)
+			if( !bFullScreen )
 			{
-				NormalWindowStateFormRect = new Rectangle( this.Left, this.Top, this.Width, this.Height );
+				if( this.WindowState == FormWindowState.Normal || this.WindowState == FormWindowState.Maximized )
+				{
+					this.WindowStateToSave = this.WindowState;
+				}
+				if( this.WindowState == FormWindowState.Normal )
+				{
+					this.FormPositionToSave = new Rectangle( this.Left, this.Top, this.Width, this.Height );
+				}
 			}
 
 			SetScaleMode( CurrentScaleMode, false );
 			Util.CenterControl( lblHeader, picLogo.Image.Height / 2 + 20 );
 		}
 
+		private void frmMain_Move( object sender, EventArgs e )
+		{
+			if( this.WindowState == FormWindowState.Normal && !bFullScreen )
+			{
+				this.FormPositionToSave = new Rectangle( this.Left, this.Top, this.Width, this.Height );
+			}
+		}
+
+
 		private void frmMain_Shown( object sender, EventArgs e )
 		{
 			if( settings.FirstTimeUsing )
 			{
+				this.WindowStateToSave = this.WindowState;
+				this.FormPositionToSave = new Rectangle( this.Left, this.Top, this.Width, this.Height );
+
 				settings.FirstTimeUsing = false;
 				if( MessageBox.Show( "New users should read 'Getting Started' in the help file. Open it now?", "Welcome to " + Util.GetAppName(), MessageBoxButtons.YesNo ) == System.Windows.Forms.DialogResult.Yes )
 				{
@@ -532,11 +548,9 @@ namespace PhotoSift
 				bFullScreen = true;
 
 				lblInfoLabel.Visible = true;
-				NormalWindowState = this.WindowState;
+				WindowStateToReturnToAfterFullscreen = this.WindowState;
 				this.WindowState = FormWindowState.Normal;
 				this.FormBorderStyle = FormBorderStyle.None;
-
-				NormalWindowStateFormRect = new Rectangle( this.Left, this.Top, this.Width, this.Height );
 
 				Screen currentScreen = Screen.FromControl( this );
 				this.Location = new Point( Screen.GetWorkingArea( this ).Left, Screen.GetWorkingArea( this ).Top );
@@ -553,9 +567,9 @@ namespace PhotoSift
 				ShowMenu();
 				mnuFullscreen.Checked = false;
 				ShowCursor();
-				this.Location = new Point( NormalWindowStateFormRect.Left, NormalWindowStateFormRect.Top );
-				this.ClientSize = new Size( NormalWindowStateFormRect.Width, NormalWindowStateFormRect.Height );
-				this.WindowState = NormalWindowState;
+				this.Location = new Point( FormPositionToSave.Left, FormPositionToSave.Top );
+				this.ClientSize = new Size( FormPositionToSave.Width, FormPositionToSave.Height );
+				this.WindowState = WindowStateToReturnToAfterFullscreen;
 
 				bFullScreen = false;	// because resize event triggers above we want to keep this last
 			}
@@ -1324,6 +1338,7 @@ namespace PhotoSift
 			public override Color MenuItemSelectedGradientBegin { get { return settings.CustomMenuColorHightlight; } }
 			public override Color MenuItemSelectedGradientEnd { get { return settings.CustomMenuColorHightlight; } }
 		}
+
 
 		// --------------------------------------------------------------------
 
