@@ -120,9 +120,9 @@
 			this.lblStatus.ForeColor = System.Drawing.Color.Gray;
 			this.lblStatus.Location = new System.Drawing.Point(2, 274);
 			this.lblStatus.Name = "lblStatus";
-			this.lblStatus.Size = new System.Drawing.Size(53, 16);
+			this.lblStatus.Size = new System.Drawing.Size(59, 16);
 			this.lblStatus.TabIndex = 8;
-			this.lblStatus.Text = "lblMode";
+			this.lblStatus.Text = "lblStatus";
 			this.lblStatus.Visible = false;
 			// 
 			// lblInfoLabel
@@ -161,6 +161,7 @@
 			this.picCurrent.TabIndex = 6;
 			this.picCurrent.TabStop = false;
 			this.picCurrent.Visible = false;
+			this.picCurrent.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picCurrent_MouseDown);
 			this.picCurrent.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picCurrent_MouseMove);
 			this.picCurrent.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picCurrent_MouseUp);
 			// 
@@ -655,7 +656,6 @@
 			this.panelMain.Name = "panelMain";
 			this.panelMain.Size = new System.Drawing.Size(472, 292);
 			this.panelMain.TabIndex = 11;
-			this.panelMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelMain_MouseUp);
 			// 
 			// timerMouseHider
 			// 
@@ -688,7 +688,6 @@
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmMain_KeyDown);
 			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.frmMain_KeyPress);
 			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.frmMain_KeyUp);
-			this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.frmMain_MouseUp);
 			this.Move += new System.EventHandler(this.frmMain_Move);
 			this.Resize += new System.EventHandler(this.frmMain_Resize);
 			((System.ComponentModel.ISupportInitialize)(this.picCurrent)).EndInit();

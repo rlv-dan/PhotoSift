@@ -78,8 +78,9 @@ namespace PhotoSift
 		private int ResizeCurrentHeight;
 		private int ResizeCurrentWidth;
 		private float CurrentAspectRatio = 1;
-		private bool bMouseHold = false;
-		private Point LastMouseHoldPoint = new Point( -1, -1 );
+		private Point MouseDownPoint = new Point( -1, -1 );
+		private bool bMouseIsDragging = false;
+		private Point LastMouseDraggingPoint = new Point( -1, -1 );
 		//
 
 
@@ -97,7 +98,17 @@ namespace PhotoSift
 			winApi.HookMouse();
 
 			this.MouseWheel += new MouseEventHandler( MouseWheelEvent );
-			foreach( Control control in Controls ) control.MouseMove += RedirectMouseMove;
+
+			// forward events when picCurrent does not cover entire form
+			this.MouseUp += new System.Windows.Forms.MouseEventHandler( picCurrent_MouseUp );
+			this.panelMain.MouseUp += new System.Windows.Forms.MouseEventHandler( picCurrent_MouseUp );
+			// forward click on labels
+			this.lblInfoLabel.MouseDown += new System.Windows.Forms.MouseEventHandler( picCurrent_MouseDown );
+			this.lblInfoLabel.MouseMove += new System.Windows.Forms.MouseEventHandler( picCurrent_MouseMove );
+			this.lblInfoLabel.MouseUp += new System.Windows.Forms.MouseEventHandler( picCurrent_MouseUp );
+			this.lblStatus.MouseDown += new System.Windows.Forms.MouseEventHandler( picCurrent_MouseDown );
+			this.lblStatus.MouseMove += new System.Windows.Forms.MouseEventHandler( picCurrent_MouseMove );
+			this.lblStatus.MouseUp += new System.Windows.Forms.MouseEventHandler( picCurrent_MouseUp );
 			
 			// Load settings
 			settings = SettingsHandler.LoadAppSettings();
@@ -362,6 +373,7 @@ namespace PhotoSift
 			this.Text = "Loading...";
 			lblInfoLabel.Text = this.Text;
 			lblHeader.Visible = false;
+			lblStatus.Visible = false;
 			this.bAlreadyLoading = true;	// solves a rare concurrency problem
 			Application.DoEvents();
 			this.bAlreadyLoading = false;
@@ -811,9 +823,9 @@ namespace PhotoSift
 				else
 				{
 					// hold mode
-					if( bMouseHold )
+					if( bMouseIsDragging )
 					{
-						if( LastMouseHoldPoint.X != -1 )
+						if( LastMouseDraggingPoint.X != -1 )
 						{
 							int totWidth = panelMain.Width;
 							int picWidth = picCurrent.Width;
@@ -822,7 +834,7 @@ namespace PhotoSift
 
 							if( picWidth > totWidth )
 							{
-								int newX = picCurrent.Left + mouseX - LastMouseHoldPoint.X;
+								int newX = picCurrent.Left + mouseX - LastMouseDraggingPoint.X;
 								if( newX < totWidth - picWidth ) newX = totWidth - picWidth;
 								if( newX > 0 ) newX = 0;
 								picCurrent.Left = newX;
@@ -830,14 +842,14 @@ namespace PhotoSift
 
 							if( picHeight > totHeight )
 							{
-								int newY = picCurrent.Top + mouseY - LastMouseHoldPoint.Y;
+								int newY = picCurrent.Top + mouseY - LastMouseDraggingPoint.Y;
 								if( newY < totHeight - picHeight ) newY = totHeight - picHeight;
 								if( newY > 0 ) newY = 0;
 								picCurrent.Top = newY;
 
 							}
 						}
-						LastMouseHoldPoint = new Point( mouseX, mouseY );
+						LastMouseDraggingPoint = new Point( mouseX, mouseY );
 					}
 				}
 			}

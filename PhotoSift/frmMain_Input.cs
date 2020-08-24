@@ -354,41 +354,33 @@ namespace PhotoSift
 
 		// -- Handle mouse events -----------------------------------------------------------------------------------
 
-		private void RedirectMouseMove( object sender, MouseEventArgs e )
+		private void picCurrent_MouseDown( object sender, MouseEventArgs e )
 		{
-			Control control = (Control)sender;
-			Point screenPoint = control.PointToScreen( new Point( e.X, e.Y ) );
-			Point formPoint = PointToClient( screenPoint );
-			MouseEventArgs args = new MouseEventArgs( e.Button, e.Clicks, formPoint.X, formPoint.Y, e.Delta );
-			picCurrent_MouseMove( sender, args );
+			if( picCurrent.Image == null ) return;
+
+			MouseDownPoint = new Point( e.X, e.Y );
 		}
 
 		private void picCurrent_MouseMove( object sender, MouseEventArgs e )
 		{
 			if( picCurrent.Image == null ) return;
 
-			// hold mouse button
+			// detect if using dragging with mouse
 			if( e.Button == System.Windows.Forms.MouseButtons.Left )
 			{
-				bMouseHold = true;
+				if( MouseDownPoint.X != e.X || MouseDownPoint.Y != e.Y)
+				{
+					bMouseIsDragging = true;
+				}
+				
 			}
-		}
-
-		private void panelMain_MouseUp( object sender, MouseEventArgs e )
-		{
-			picCurrent_MouseUp( sender, e );	// forward event
-		}
-
-		private void frmMain_MouseUp( object sender, MouseEventArgs e )
-		{
-			picCurrent_MouseUp( sender, e );	// forward event
 		}
 
 		private void picCurrent_MouseUp( object sender, MouseEventArgs e )
 		{
 			if( picCurrent.Image == null ) return;
 
-			if( !bMouseHold )
+			if( !bMouseIsDragging )
 			{
 				if( e.Button == System.Windows.Forms.MouseButtons.Left )
 				{
@@ -409,8 +401,9 @@ namespace PhotoSift
 					RotateFlipImage( RotateFlipType.RotateNoneFlipX );
 				}
 			}
-			bMouseHold = false;
-			LastMouseHoldPoint = new Point( -1, -1 );
+
+			bMouseIsDragging = false;
+			LastMouseDraggingPoint = new Point( -1, -1 );
 			ShowCursor();
 		}
 
