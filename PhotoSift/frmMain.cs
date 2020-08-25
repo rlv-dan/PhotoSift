@@ -59,6 +59,9 @@ namespace PhotoSift
 		private int FullScreenCursorLastMouseX = -1;
 		private bool bPreventAutoHideCursor = false;
 
+		private Color originalToolstripMenuItemTextColor;
+		private static List<ToolStripItem> modifiedToolstripMenuItems = new List<ToolStripItem>();
+
 		// Variables managing the scale modes
 		private enum ScaleMode
 		{
@@ -132,6 +135,8 @@ namespace PhotoSift
 			ShowHideLabels();
 			UpdateMenuEnabledDisabled();
 
+			this.originalToolstripMenuItemTextColor = this.menuStripMain.ForeColor;
+
 			// Attempt to load files or folders passed via command line
 			string[] args = Util.ParseArguments( Environment.CommandLine );
 			if( args.Length > 0 ) AddFiles( args ); else ShowNextPic( 0 );
@@ -193,11 +198,16 @@ namespace PhotoSift
 			{
 				menuStripMain.Renderer = new CustomMenuRenderer( settings );
 			}
-			/* todo: reset menu renderer (problem: text colors are overwritten in CustomMenuRenderer, making it impossible to simply revert like this)
 			else
 			{
 				menuStripMain.Renderer = new ToolStripProfessionalRenderer();
-			}*/
+				
+				// because text colors are overwritten in CustomMenuRenderer we need to manually restores the original color
+				foreach( var item in modifiedToolstripMenuItems )
+				{
+					item.ForeColor = this.originalToolstripMenuItemTextColor;
+				}
+			}
 		}
 
 		private void frmMain_FormClosing( object sender, FormClosingEventArgs e )
@@ -1299,15 +1309,18 @@ namespace PhotoSift
 
 			protected override void OnRenderItemText( ToolStripItemTextRenderEventArgs e )
 			{
+				if( !modifiedToolstripMenuItems.Contains( e.Item ) ) modifiedToolstripMenuItems.Add( e.Item );
 				e.Item.ForeColor = settings.CustomMenuColorText;
 				base.OnRenderItemText( e );
 			}
 			protected override void OnRenderItemCheck( ToolStripItemImageRenderEventArgs e )
 			{
+				if( !modifiedToolstripMenuItems.Contains( e.Item ) ) modifiedToolstripMenuItems.Add( e.Item );
 				e.Graphics.DrawString( "ü", new Font( "Wingdings", e.ToolStrip.Font.Size + 4 ), new SolidBrush( settings.CustomMenuColorText ), e.ImageRectangle );	// draw a checkmark
 			}
 			protected override void OnRenderArrow( ToolStripArrowRenderEventArgs e )
 			{
+				if( !modifiedToolstripMenuItems.Contains( e.Item ) ) modifiedToolstripMenuItems.Add( e.Item );
 				e.ArrowColor = settings.CustomMenuColorText;
 				base.OnRenderArrow( e );
 			}
@@ -1353,8 +1366,7 @@ namespace PhotoSift
 
 
 		// --------------------------------------------------------------------
-
-
+		
 	}
 
 }
