@@ -23,6 +23,7 @@ using System.Text;
 using System.Drawing;
 using System.Threading;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace PhotoSift
 {
@@ -118,26 +119,29 @@ namespace PhotoSift
                 }
                 catch (Exception ex)
                 {
-                    System.Console.WriteLine("ImageCache ERROR: " + ex.ToString());
-                    System.Console.WriteLine("ImageCache exception HResult: " + ex.HResult);
+					const long ERROR_FILE_NOT_FOUND = 0x02;
+					const long ERROR_SHARING_VIOLATION = 0x20;
+					const long ERROR_LOCK_VIOLATION = 0x21;
 
-                    // only attempt retries if the reason for the failure was a sharing violation
-                    // or a file not found error; otherwise assume the error is permanent
-                    if (ex.HResult == unchecked((int)0x80070020) ||
-                        ex.HResult == unchecked((int)0x80070002)) // ERROR_SHARING_VIOLATION or ERROR_FILE_NOT_FOUND
+					long win32ErrorCode = Marshal.GetHRForException(ex) & 0xFFFF;	// pre .NET 4.5
+					//long win32ErrorCode = ex.HResult & 0xFFFF; // use this instead on .NET 4.5+
+
+                    System.Console.WriteLine("ImageCache ERROR: " + ex.ToString());
+					System.Console.WriteLine( "ImageCache exception HResult: " + win32ErrorCode );
+
+                    // only attempt retries if the reason for the failure is that file is in use or not found error; otherwise assume the error is permanent
+					if( win32ErrorCode != ERROR_SHARING_VIOLATION && 
+						win32ErrorCode != ERROR_LOCK_VIOLATION && 
+						win32ErrorCode != ERROR_FILE_NOT_FOUND )
                     {
-                        System.Console.WriteLine(" ==> ERROR_SHARING_VIOLATION.");
-                    }
-                    else
-                    {
-                        done = true;
+						done = true; 
                     }
                 }
                 if (!done)
                 {
                     retry++;
                     System.Console.WriteLine(" failed to load image, attempting retry #" + retry);
-                    // minor delay as workaround for moved files being occasionally still locked by the AV
+                    // minor delay as workaround for moved files being occasionally still locked by e.g. AntiVirus software
                     System.Threading.Thread.Sleep(100);
                     
                 }
