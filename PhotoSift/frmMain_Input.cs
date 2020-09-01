@@ -93,36 +93,19 @@ namespace PhotoSift
 		{
 			ForceShowFullscreenCursor();
 
-			var dialog = new Ris.Shuriken.FolderSelectDialog
+			FolderBrowserDialog fb = new FolderBrowserDialog();
+			fb.Description = "Select a folder with images to add:";
+			fb.SelectedPath = settings.LastFolder_AddFolder;
+			fb.ShowDialog();
+			if( fb.SelectedPath != "" )
 			{
-				InitialDirectory = settings.LastFolder_AddFolder,
-				Title = "Select a folder with images to add:",
-				multiSelect = true
-			};
-			if (dialog.Show(Handle))
-			{
-				string path = dialog.FileName;
-				string[] paths = dialog.FileNames;
-				if( paths == null )
-				{
-					paths = new string[] { path };
-				}
 				panelMain.Cursor = Cursors.WaitCursor;
-				AddFiles(paths);
-
-				settings.LastFolder_AddFolder = path;
-				if( paths.Length > 0 )
-				{
-					var parentDir = System.IO.Directory.GetParent( paths[0] );
-					if( parentDir != null )
-					{
-						settings.LastFolder_AddFolder = parentDir.FullName;
-					}
-				}
-
+				AddFiles( new string[] { fb.SelectedPath } );
+				settings.LastFolder_AddFolder = fb.SelectedPath;
 				panelMain.Cursor = Cursors.Arrow;
 			}
 			HideFullscreenForcedCursor();
+
 		}
 
 		private void mnuAddInRandomOrder_Click( object sender, EventArgs e )
@@ -171,15 +154,13 @@ namespace PhotoSift
 
 		private void mnuSetTargetFolder_Click(object sender, EventArgs e)
 		{
-			var dialog = new Ris.Shuriken.FolderSelectDialog
+			FolderBrowserDialog fb = new FolderBrowserDialog();
+			fb.Description = "Select a folder:";
+			fb.SelectedPath = settings.TargetFolder;
+			fb.ShowDialog();
+			if( fb.SelectedPath != "" )
 			{
-				InitialDirectory = settings.TargetFolder,
-				Title = "Select a folder:"
-			};
-			if (dialog.Show(Handle))
-			{
-				string path = dialog.FileName;
-				settings.TargetFolder = path;
+				settings.TargetFolder = fb.SelectedPath;
 			}
 		}
 
