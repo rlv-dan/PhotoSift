@@ -225,6 +225,23 @@ namespace PhotoSift
 			iCurrentPic = pics.Count - 1;
 			ShowNextPic( 0 );
 		}
+		private void mnuNavigateToPosition_Click( object sender, EventArgs e )
+		{
+			var newPosition = (iCurrentPic + 1).ToString();
+			if( Util.InputBox( "Go to Position", "Enter a new position between 1 and " + pics.Count + ":", ref newPosition ) == System.Windows.Forms.DialogResult.OK )
+			{
+				int pos;
+				if( Int32.TryParse( newPosition, out pos ) )
+				{
+					pos = pos - 1;
+					if( pos >= 0 && pos < pics.Count && pos != iCurrentPic )
+					{
+						var relativePos = pos - iCurrentPic;
+						ShowNextPic( relativePos );
+					}
+				}
+			}
+		}
 		private void mnuNavigateForwardMedium_Click( object sender, EventArgs e )
 		{
 			ShowNextPic( settings.MediumJump );
