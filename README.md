@@ -3,7 +3,7 @@ PhotoSift
 
 PhotoSift is a free utility helping you to quickly organize unsorted image libraries. The basic idea is to load the program with images, then show and inspect each image and press a key on the keyboard. The image will then be moved or copied to a folder of your choice corresponding to that key, and the next images is displayed. This allows you to rapidly go through and organize your large amounts of pictures.
 
-Download the application at http://rlvision.com/photosift
+Download the application at https://rlvision.com/photosift
 
 * Developed with C#, targeting .Net 2.0
 * Multithreaded cache-ahead image loading
@@ -13,4 +13,4 @@ Download the application at http://rlvision.com/photosift
 * Can rename and delete files if needed
 * Portable, settings are saved as XML in application folder
 
-<img src="http://rlvision.com/photosift/screenshot.png">
+<img src="https://rlvision.com/photosift/screenshot.png">
